@@ -1,0 +1,13 @@
+snippet #! "bash shebang" bA
+#!/usr/bin/env bash
+set -euo pipefail
+trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error"' EXIT
+
+#
+# `date +%Y%m%d`WF - init
+#    ${1:[c-b/c-z jump]}
+#
+
+${0}
+endsnippet
+

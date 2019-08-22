@@ -1,0 +1,89 @@
+! to reload
+! xrdb ~/.Xdefaults
+
+! use alt+key to do things
+*eightBitInput: 	false
+*metaSendsEscape:	true
+
+! bold/underline at the same time 
+*VT100.veryBoldColors: 6
+
+ 
+*faceName: Iosevka:pixelsize=21
+URxvt.font: xft:Iosevka:pixelsize=21
+!*faceName:      	Hack
+!*faceName:      	Hasklig
+!*faceName:      	FiraCode
+!*faceName:      	DejaVu Sans Mono:pixelsize=10
+!*faceName:      	ProFont
+!*faceName:      	Monaco
+!*faceName:      	EnvyCodeR
+*dynamicColors: 	true
+
+UXTerm*background:    	#222222
+UXTerm*foreground:    	peachpuff
+
+URxvt*background:    	#222222
+URxvt*foreground:    	peachpuff
+URxvt*scrollBar:        false
+! URxvt*font:             xft:DejaVu Sans Mono:pixelsize=18
+! fix missing underscore from msfonts? nope
+Rxvt.lineSpace: 1
+!*font:             xft:Monaco:pixelsize=18
+
+URxvt.perl-ext-common:  default,matcher,resize-font,keyboard-select
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+
+!URxvt.keysym.M-C-minus:     resize-font:smaller
+!URxvt.keysym.M-C-plus:     resize-font:bigger
+URxvt.urlLauncher:      /usr/bin/chromium
+URxvt.matcher.button:   1
+! osX does not have termcap info for rxvt
+URxvt*termName:         xterm-256color
+
+! Bells are urgent, for windows manager
+! rxvt-unicode
+*urgentOnBell:  true
+! xterm
+*bellIsUrgent:  true
+
+! Black
+*color0:      rgb:00/00/00
+*color8:      rgb:54/50/54
+
+! Red
+*color1:      rgb:a8/00/00
+*color9:      rgb:f8/54/50
+
+! Green
+*color2:      rgb:00/a8/00
+*color10:     rgb:50/fc/50
+
+! Yellow
+*color3:      rgb:a8/54/00
+*color11:     rgb:f8/fc/50
+
+! Blue
+*color4:      rgb:00/00/a8
+*color12:     rgb:50/54/f8
+
+! Magneta
+*color5:      rgb:a8/00/a8
+*color13:     rgb:f8/54/f8
+
+! Cyan
+*color6:      rgb:00/a8/a8
+*color14:     rgb:50/fc/f8
+
+! White
+*color7:      rgb:a8/a8/a8
+*color15:     rgb:f8/fc/f8
+
+! yeah console configure
+yeahconsole*consoleHeight: 10
+
+xterm*dynamicColors: true
+urxvt*dynamicColors: on
+
+! vim: et sw=2 syn=xdefaults

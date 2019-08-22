@@ -1,0 +1,26 @@
+snippet #! "Rshebang" bA
+#!/usr/bin/env Rscript
+
+# `date +%Y%m%d`WF - init
+#   $1
+
+$2
+endsnippet
+
+snippet f< "function"
+${1:fc} <- function(${2:x}) {
+  ${0:print($2)}
+}
+endsnippet
+	
+snippet f "anon function"
+function(${1:x}) ${2:print(x)}
+endsnippet
+
+snippet if "if"
+if (${1:cond}) {
+  ${2:body}
+}
+$0
+endsnippet
+	
