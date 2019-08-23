@@ -29,10 +29,10 @@ for gitpkg in wf-utils fuzzy_arg plum; do
 done
 
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole)
 for syspkg in ${SYSPKGS}; do
    command -v $syspkg >/dev/null && continue
-   echo "missing system package '$syspkg'. use you the package manager to get" 
+   echo "missing system package '$syspkg'. use the package manager to get it (pacman -S $syspkg || apt install $syspkg)" 
    exit 1
 done
 
@@ -44,5 +44,7 @@ for pkg in vim xbindkeys x11 R i3 easystroke; do
    stow $pkg -t ~ -d ~/config/
 done
 
+# system config. need sudo/root
+stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
 
 

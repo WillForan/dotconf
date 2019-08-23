@@ -14,3 +14,5 @@ see `install.bash`
   * i3 (jumpback within monitor, swap monitor workspaces)
   * xbindkeys - i3, zim, playerctrl, pidgin
 * `sp` bash sshpass function looks in `~/passwd/ssh/` for hosts likely defined in `.ssh/config`
+* bash <kbd>alt+L</kbd> changes terminal colors using [`dynamic-colors`](https://github.com/sos4nt/dynamic-colors)
+* passhole `ph` is used to access keepass file stored next to ssh passwords

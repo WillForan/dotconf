@@ -9,5 +9,6 @@
       source $HOME/.bashrc
       # TODO: use lighter sxhc?
       xbindkeys
+      easystroke &
       # window management
       i3
