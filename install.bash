@@ -47,4 +47,7 @@ done
 # system config. need sudo/root
 stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
 
+stow emacs -t ~/.emacs.d/
+stow bin -t ~/bin/
+
 

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# -*- sh-shell: bash -*-
+e(){
+    # launch emacs with gui and fork if have display
+    # otherwise use -t for terminal
+    # e -t => force terminal mode
+    #   'emacsclient -t -t' is okay
+    # first pass created without seeing
+    # https://www.emacswiki.org/emacs/EmacsPipe
+    # new frame, no wait
+    local args="-t"
+    [[ -n "$DISPLAY" && ! "$@" =~ ^-t ]] && args="-c -n" 
+    emacsclient -a "" $args $@
+}
+[[ $(basename "$0") == "e" ]] && e $@
