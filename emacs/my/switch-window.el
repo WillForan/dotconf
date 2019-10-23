@@ -1,5 +1,5 @@
 ;; 20171229 -- switch window, keybindings and home row key selection
-(use-package switch-window
+(use-package switch-window :ensure t :defer t
   :config
   (setq switch-window-shortcut-style 'qwerty)
   (setq switch-window-qwerty-shortcuts
