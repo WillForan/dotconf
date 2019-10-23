@@ -2,7 +2,7 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode 0)
 (menu-bar-mode 0)
-(global-linum-mode 1)
+; (global-linum-mode 1)
 
 
 ;; shift-insert like terminal: x11 primary clipboard
@@ -16,10 +16,10 @@
 (setq-default frame-title-format '("%f [emacs %m]"))
 
 ;; Font
-(set-default-font "Source Code Pro 14")
+;(set-default-font "Source Code Pro 14") ;; 20191022
 ;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
 ; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-; (set-default-font "DejaVu Sans Mono-14"); 20180810
+(set-default-font "DejaVu Sans Mono-14"); 20180810
 
 ;; persistant history (20171107)
 (savehist-mode 1)
