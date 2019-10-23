@@ -3,13 +3,25 @@
   :init
   :config
     (evil-mode 1)
+    ;; default to emacs for these
+    (dolist (mode (list
+		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
+		  'Magit-mode
+		  'notmuch-hello-mode 'notmuch-tree-mode))
+       (evil-set-initial-state mode 'emacs))
     ;; evil addons
     (use-package evil-escape :ensure t
       :config
-	(setq-default evil-escape-key-sequence "jj")
-	;; jj kills visual mode :( maybe switch to jk
+	(setq-default evil-escape-key-sequence "kj")
+	;; kj kills visual mode :( maybe switch to jk
 	(setq-default evil-escape-delay 0.2)
 	(evil-escape-mode 1))
+    ;; surround word commands- 20180629 - ysiw' -> surround word with quotes
+    ;; use S in visual mode
+    (use-package evil-surround :ensure t
+      :config
+      (global-evil-surround-mode 1))
+    ;; load evil leader
     (use-package evil-leader :ensure t
       :config
        (global-evil-leader-mode)

@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: #!
+# key: #!
+# --
+#!/usr/bin/env Rscript
+
+#
+# $0
+# `(format-time-string "%Y%m%d")` WF - $1
+#
+
+library(dplyr)
+library(tidyr)
+
+$2
