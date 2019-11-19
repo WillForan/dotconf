@@ -3,6 +3,10 @@
   :init
   :config
     (evil-mode 1)
+    ;; _ is part of a word
+    ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
+    (setq-default evil-symbol-word-search t) 
+
     ;; default to emacs for these
     (dolist (mode (list
 		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
