@@ -3,5 +3,4 @@
   :config
    (setq yas/indent-line nil)
    (yas-minor-mode)
-   (yas-reload-all)
-)
+   (yas-reload-all))
