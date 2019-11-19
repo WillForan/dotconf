@@ -4,7 +4,7 @@
 (load "~/.emacs.d/my/my.el")
 ;; use-package defintions for packages (a la spacemace layers?)
 (mapcar #'my/use
-   '(base backup
+   '(base backup primary-clip
      package quelpa
      evil theme 
      xterm-color
@@ -12,6 +12,7 @@
      org tramp
      ace switch-window
      yas company helm
-     zim-wiki-mode screensend))
+     zim-wiki-mode screensend
+     R))
 
 ;(if (string-equal (system-name) "reese") (progn ))
