@@ -11,7 +11,7 @@
       '(
 	(R . t)      ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"
 	(python . t)
-	(ipython . t)
+	;(ipython . t) ; (wrong-type-argument stringp sh)
 	(octave . t)
 	(perl . t)
 	(ruby . t)

@@ -5,11 +5,12 @@
 #   # stow bash -t ~ -d ~/config/ # brings in too much. just want this file
 #   ln -s ~/config/.bashrc ~/
 
+# extra binaries
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-# extra binaries
-export PATH="$HOME/bin:$HOME/src/utils/plum:$PATH"
 
 # ctrl-r for alt-. using \ea or ^x^a
 source $HOME/src/utils/fuzzy_arg/fuzzy_arg.bash
@@ -39,3 +40,7 @@ _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 HISTSIZE=10000
 shopt -s histappend
 shopt -s cmdhist    # multi-line command written as one line in history file
+
+# perl
+#cpanm --local-lib=~/perl5 local::lib &&
+eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)

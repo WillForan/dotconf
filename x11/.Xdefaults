@@ -31,13 +31,18 @@ URxvt*scrollBar:        false
 Rxvt.lineSpace: 1
 !*font:             xft:Monaco:pixelsize=18
 
-URxvt.perl-ext-common:  default,matcher,resize-font,keyboard-select
-URxvt.keysym.M-Escape: perl:keyboard-select:activate
-URxvt.keysym.M-s: perl:keyboard-select:search
+! need: i urxvt-font-size-git urxvt-perls
+URxvt.perl-ext-common:  default,matcher,font-size,clipboard,url-select,keyboard-select
+URxvt.url-select.launcher:  firefox
+URxvt.url-select.underline: true
+! keybindings
+URxvt.keysym.M-s:           perl:keyboard-select:search
+URxvt.keysym.M-Escape:      perl:keyboard-select:activate
+URxvt.keysym.M-u:           perl:url-select:select_next
+! doesnt work
+URxvt.keysym.M-Down:       font-size:decrease
+URxvt.keysym.M-Up:         font-size:increase
 
-!URxvt.keysym.M-C-minus:     resize-font:smaller
-!URxvt.keysym.M-C-plus:     resize-font:bigger
-URxvt.urlLauncher:      /usr/bin/chromium
 URxvt.matcher.button:   1
 ! osX does not have termcap info for rxvt
 URxvt*termName:         xterm-256color

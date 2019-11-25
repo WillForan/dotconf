@@ -3,3 +3,5 @@
   :config
    (global-git-gutter-mode t)
 )
+
+(use-package magit :ensure t)
