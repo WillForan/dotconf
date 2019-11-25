@@ -2,4 +2,4 @@
 (use-package yasnippet
   :config
    (setq yas/indent-line nil)
-)
+   (yas-global-mode))

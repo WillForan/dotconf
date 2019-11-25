@@ -12,3 +12,10 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+
+; need to make recipies?
+; (use-package 'el-get :ensure t
+;   :config
+;   (el-get-bundle base16-unikitty-dark
+;     :url "https://raw.githubusercontent.com/joshwlewis/base16-unikitty/master/output/dark/emacs/build/base16-unikitty-dark-theme.el"
+; ))

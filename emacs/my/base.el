@@ -19,7 +19,7 @@
 ;(set-default-font "Source Code Pro 14") ;; 20191022
 ;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
 ; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-(set-default-font "DejaVu Sans Mono-14"); 20180810
+(set-default-font "DejaVu Sans Mono-16"); 20180810 20191027 incl to 16
 
 ;; persistant history (20171107)
 (savehist-mode 1)

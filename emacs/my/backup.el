@@ -12,5 +12,5 @@
   version-control t
   vc-make-backup-files t
   ;; autosave #blah# files
-  auto-save-file-name-transforms `((".*" "~/.emacs-saves/" t)))
+  auto-save-file-name-transforms `((".*" "~/.emacs.d/saves/" t)))
 
