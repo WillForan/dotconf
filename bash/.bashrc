@@ -6,7 +6,7 @@
 #   ln -s ~/config/.bashrc ~/
 
 # extra binaries
-export PATH="$HOME/bin:$HOME/src/utils/plum:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
