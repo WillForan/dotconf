@@ -29,4 +29,17 @@
     (use-package evil-leader :ensure t
       :config
        (global-evil-leader-mode)
-       (evil-leader/set-leader "<SPC>")))
+       (evil-leader/set-leader "<SPC>"))
+
+    ;; leader keybindings -- consider hydra instead?
+    (evil-leader/set-key "a" 'ace-jump-char-mode)
+    (evil-leader/set-key "s" 'projectile-ag)
+    ; f defined in folding.el
+
+    (evil-leader/set-key "i" 'imenu)
+
+    (evil-leader/set-key "h" 'backward-sexp)
+    (evil-leader/set-key "j" 'down-list)
+    (evil-leader/set-key "k" 'up-list)
+    (evil-leader/set-key "l" 'forward-sexp)
+    (evil-leader/set-key ";" 'eval-region))

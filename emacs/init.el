@@ -6,7 +6,7 @@
 (mapcar #'my/use
    '(base backup primary-clip
      package quelpa
-     evil theme 
+     evil theme rainbow
      xterm-color
      git
      org tramp

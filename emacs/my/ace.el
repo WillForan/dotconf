@@ -3,5 +3,5 @@
 (use-package ace-jump-mode :ensure t
  :config
   (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
+  ; defined in evil-mode setup to SPC a; 20191124
 )

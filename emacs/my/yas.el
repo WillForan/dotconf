@@ -2,5 +2,5 @@
 (use-package yasnippet :ensure t :defer t
   :config
    (setq yas/indent-line nil)
-   (yas-minor-mode)
-   (yas-reload-all))
+   (yas-reload-all)
+   (yas-minor-mode))

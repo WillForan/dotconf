@@ -5,7 +5,6 @@
 ;; 20191116 - one frame (x11 window) for each emacs window (pane)
 ;; https://www.emacswiki.org/emacs/download/oneonone.el
 
-
 (defun my/edit ()
   "List files for editing local config"
   (interactive)
