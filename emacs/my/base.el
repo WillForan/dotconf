@@ -1,6 +1,7 @@
 ;; base emacs config. assume my.el already laoded
 (setq inhibit-startup-screen t)
-(tool-bar-mode 0)
+;; no display, toolbar already off (dne)
+(when (display-graphic-p) (tool-bar-mode 0))
 (menu-bar-mode 0)
 (set-default-font "Source Code Pro 14")
 (setq inhibit-startup-screen t)
@@ -8,7 +9,6 @@
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
 ;; store recent files
 (recentf-mode 1)
-g;
 
 ;; Termux has hunspell
 (when (equal nil (executable-find "ispell"))

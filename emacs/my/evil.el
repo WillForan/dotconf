@@ -37,6 +37,10 @@
     ; f defined in folding.el
 
     (evil-leader/set-key "i" 'imenu)
+    (evil-leader/set-key "g" 'magit-status)
+    (evil-leader/set-key "w" 'save-buffer)
+    (evil-leader/set-key "x" 'helm-M-x)
+    (evil-leader/set-key "0" 'switch-window-then-delete)
 
     (evil-leader/set-key "h" 'backward-sexp)
     (evil-leader/set-key "j" 'down-list)
