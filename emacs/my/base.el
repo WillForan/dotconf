@@ -5,7 +5,8 @@
 (setq inhibit-startup-screen t)
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
-
+;; store recent files
+(recentf-mode 1)
 ; org babel
 (org-babel-do-load-languages
  'org-babel-load-languages
@@ -13,4 +14,6 @@
    (R . t)
    (shell .t)))
 
-
+;; Termux has hunspell
+(when (equal nil (executable-find "ispell"))
+  (setq ispell-program-name (executable-find "hunspell")))
