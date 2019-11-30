@@ -5,5 +5,4 @@
     (setq quelpa-update-melpa-p nil)
   :config
     (quelpa '(screensend :fetcher github :repo "WillForan/screensend.el" :branch "more-tmux"))
-    (quelpa '(zim-wiki-mode :fetcher github :repo "WillForan/zim-wiki-mode"))
-)
+    (quelpa '(zim-wiki-mode :fetcher github :repo "WillForan/zim-wiki-mode")))
