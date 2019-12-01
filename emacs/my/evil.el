@@ -34,9 +34,11 @@
     ;; leader keybindings -- consider hydra instead?
     (evil-leader/set-key "a" 'ace-jump-char-mode)
     (evil-leader/set-key "s" 'projectile-ag)
+    (evil-leader/set-key "p" 'helm-projectile)
     ; f defined in folding.el
 
     (evil-leader/set-key "i" 'imenu)
+    (evil-leader/set-key "g" 'magit-status)
 
     (evil-leader/set-key "h" 'backward-sexp)
     (evil-leader/set-key "j" 'down-list)
