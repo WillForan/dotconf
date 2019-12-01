@@ -4,6 +4,7 @@ alias s='ssh -AY'
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias dt='sudo dmesg|tail'
+alias v='vim'
 
 # package managemnet
 alias i='yay --noconfirm -S'
