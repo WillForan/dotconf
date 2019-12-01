@@ -14,6 +14,7 @@ set -euo pipefail
 trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
 cd $(dirname $0)
 CFGDIR=$(pwd)
+! test -d $HOME/bin  && mkdir $_
 
 #
 # 20190822WF - init
@@ -28,11 +29,18 @@ for gitpkg in wf-utils fuzzy_arg plum; do
    [ ! -d "$UTILDIR/$gitpkg" ] && git clone https://github.com/WillForan/$gitpkg $UTILDIR/$gitpkg
 done
 
+if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
+  curl -L https://github.com/Jguer/yay/releases/download/v9.4.2/yay_9.4.2_x86_64.tar.gz > yay.tar.gz
+  tar -xzvf yay.tar.gz
+  mv yay*/yay $HOME/bin
+  rm -r yay*/ yay.tar.gz
+fi
+
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole stow sshpass syncthing)
 for syspkg in ${SYSPKGS}; do
    command -v $syspkg >/dev/null && continue
-   echo "missing system package '$syspkg'. use the package manager to get it (pacman -S $syspkg || apt install $syspkg)" 
+   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)" 
    exit 1
 done
 
@@ -44,10 +52,10 @@ for pkg in vim xbindkeys x11 R i3 easystroke; do
    stow $pkg -t ~ -d ~/config/
 done
 
-# system config. need sudo/root
-stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
-
 stow emacs -t ~/.emacs.d/
 stow bin -t ~/bin/
+
+# system config. need sudo/root
+sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
 
 

@@ -5,14 +5,17 @@
 #   # stow bash -t ~ -d ~/config/ # brings in too much. just want this file
 #   ln -s ~/config/.bashrc ~/
 
-# If not running interactively, don't do anything
+# where is .bashrc actually stored?  probably $HOME/config/bash
+_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
+
+# where to find binaires outside of package manager
+# includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
+. $_BASHCFGDIR/paths.bash
+
+
+# If not running interactively, be done -- only handle paths
 [[ $- != *i* ]] && return
 
-# extra binaries
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
-
-# cpanm setup w/ local::lib if we have lib dir in home
-test -d $HOME/perl5/lib/perl5 && eval $(perl -I $_ -Mlocal::lib)
 
 # ctrl-r for alt-. using \ea or ^x^a
 source $HOME/src/utils/fuzzy_arg/fuzzy_arg.bash
@@ -31,9 +34,7 @@ eval "$(fasd --init auto)"
 # change color scheme using uses 'dynamic-colors-git'
 bind -x '"\el":"dynamic-colors cycle"'
 
-# where is .bashrc actually stored?  probably $HOME/config/bash
 # need that to source additional settings
-_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 . $_BASHCFGDIR/PS1.bash
 . $_BASHCFGDIR/aliases.bash
 
@@ -42,13 +43,3 @@ _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 HISTSIZE=10000
 shopt -s histappend
 shopt -s cmdhist    # multi-line command written as one line in history file
-
-# pyenv setup if we have pyenv
-command -v pyenv >/dev/null && {
-   export PYENV_ROOT="$HOME/.pyenv"
-   export PATH="$PYENV_ROOT/bin:$PATH"
-   eval "$(pyenv init -)"
-}
-
-# org export
-export PATH="$PATH:$HOME/src/utils/org-export"

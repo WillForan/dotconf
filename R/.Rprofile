@@ -53,7 +53,7 @@ updatePrompt <- function(...) {options(prompt=format(Sys.time(), "\n# %X\n#> "))
  updatePrompt()
 
  # console R session, add color
- library(colorout)
+ # library(colorout)
 }
 
 

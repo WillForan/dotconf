@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: r #!
+# key: #!
+# --
+#!/usr/bin/env Rscript
+#
+#  ${1: }
+#
+# `(insert (format-time-string "%Y%m%d"))` WF -- ${1:init}
+
+${3: }

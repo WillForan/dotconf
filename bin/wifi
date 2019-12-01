@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# find interface
+home=/home/foranw
+IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
+[ -z "$IF" ] && echo 'no interface' && exit 1
+
+# make sure we sudo
+[ $(id -u) -ne 0 ] && {
+  sudo $0
+  exit
+}
+
+# shut down if already running
+killall wpa_supplicant
+dhcpcd -k
+killall dhcpcd
+
+# start up
+wpa_supplicant -c $home/passwd/wifi/abraham_linksys.wifi -B -i $IF
+dhcpcd $IF
