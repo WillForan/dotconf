@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
+#
+# connect to wifi
+#
+# if connecting to open wifi network, use network name as first arg
+
+# needed because sudo will have wrong HOME
+home=/home/foranw
 
 # find interface
-home=/home/foranw
-IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
+#IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
+IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/')
 [ -z "$IF" ] && echo 'no interface' && exit 1
 
 # make sure we sudo
 [ $(id -u) -ne 0 ] && {
-  sudo $0
+  sudo $0 $@
   exit
 }
 
@@ -16,6 +23,16 @@ killall wpa_supplicant
 dhcpcd -k
 killall dhcpcd
 
-# start up
-wpa_supplicant -c $home/passwd/wifi/abraham_linksys.wifi -B -i $IF
+## start up
+# default to home wifi if not args
+# otherwise use input arg as essid to find wpasupplicant file
+# if no file, assume open wifi
+[ $# -eq 0 ] && essid=abraham_linksys || essid=$1
+if test -r $home/passwd/wifi/$essid.wifi; then
+   wpa_supplicant -c $_ -B -i $IF
+else
+   iwconfig $IF essid $essid
+   iwconfig $IF up
+fi
+
 dhcpcd $IF

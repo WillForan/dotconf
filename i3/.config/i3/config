@@ -235,11 +235,14 @@ bindsym $mod+x [urgent=latest] focus
 # within monitor workspace jump-back
 bindsym $mod+Shift+b  workspace back_and_forth
 bindsym $mod+b        nop back_within_output
-exec --no-startup-id  ~/src/utils/wf-utils/i3/i3-back_within_output
+exec --no-startup-id  /home/foranw/src/utils/wf-utils/i3/i3-back_within_output
 
 # swap workspaces on monitors
-bindsym $mod+Shift+S exec ~/src/utils/wf-utils/i3/swapscreens.py
+bindsym $mod+Shift+S exec /home/foranw/src/utils/wf-utils/i3/swapscreens.py
 #
 # switch monitors, "o" from awesome, cycles through outputs
 bindsym $mod+o move container to output left
 bindsym $mod+Shift+O move workspace to output left
+
+# start xinitrc b/c lightdm xsession-xinit doesnt work?
+exec  --no-startup-id /home/foranw/.xinitrc

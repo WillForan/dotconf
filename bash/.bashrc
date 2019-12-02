@@ -5,10 +5,15 @@
 #   # stow bash -t ~ -d ~/config/ # brings in too much. just want this file
 #   ln -s ~/config/.bashrc ~/
 
-# extra binaries
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+# where is .bashrc actually stored?  probably $HOME/config/bash
+_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
-# If not running interactively, don't do anything
+# where to find binaires outside of package manager
+# includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
+. $_BASHCFGDIR/paths.bash
+
+
+# If not running interactively, be done -- only handle paths
 [[ $- != *i* ]] && return
 
 
@@ -29,9 +34,7 @@ eval "$(fasd --init auto)"
 # change color scheme using uses 'dynamic-colors-git'
 bind -x '"\el":"dynamic-colors cycle"'
 
-# where is .bashrc actually stored?  probably $HOME/config/bash
 # need that to source additional settings
-_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 . $_BASHCFGDIR/PS1.bash
 . $_BASHCFGDIR/aliases.bash
 
@@ -40,7 +43,3 @@ _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 HISTSIZE=10000
 shopt -s histappend
 shopt -s cmdhist    # multi-line command written as one line in history file
-
-# perl
-#cpanm --local-lib=~/perl5 local::lib &&
-eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
