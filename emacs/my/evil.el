@@ -38,6 +38,9 @@
 
     (evil-leader/set-key "i" 'imenu)
 
+    (evil-leader/set-key "g" 'magit-status)
+    (evil-leader/set-key "<SPC>" 'other-window)
+
     (evil-leader/set-key "h" 'backward-sexp)
     (evil-leader/set-key "j" 'down-list)
     (evil-leader/set-key "k" 'up-list)
