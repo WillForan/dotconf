@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# hander to send magnet links to rtorrent host as files in watch dir
+# use firefox about:config => network.protocol-handler.expose.magnet
+# https://wiki.archlinux.org/index.php/RTorrent#Saving_magnet_links_as_torrent_files_in_watch_folder
+
+# must look like a magnet link
+if ! [[ "$1" =~ xt=urn:btih:([^&/]+) ]]; then
+   [ -n "$DISPLAY" ] && notify-send "bad magnet link $1"
+   exit 1;
+fi
+host=h # defined in ~/.ssh/config
+watch='.rtorrent/watch/' # defined in h:.rtorrent.rc
+echo "d10:magnet-uri${#1}:${1}e" |
+   ssh $host "cat > $watch/meta-${BASH_REMATCH[1]}.torrent"
+notify-send "sent magnet link to $host: $1"
