@@ -38,6 +38,8 @@ fi
 
 # check for needed system packages
 SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole stow sshpass syncthing)
+# also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
+command -v xinput && xinput list | grep -qi touchpad && SYSPKG+=("libinput-gestures")
 for syspkg in ${SYSPKGS}; do
    command -v $syspkg >/dev/null && continue
    echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)" 
@@ -54,6 +56,7 @@ done
 
 stow emacs -t ~/.emacs.d/
 stow bin -t ~/bin/
+stow libinput-gestures/ -t ~/.config
 
 # system config. need sudo/root
 sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/

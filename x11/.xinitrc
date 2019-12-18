@@ -11,7 +11,12 @@
               --left-of DVI-D-1;;
          yogert)
             xrandr | grep -q HDMI1\ connected &&
-            xrandr --output HDMI1 --above LVDS1 --mode 1360x768;;
+            xrandr --output HDMI1 --above LVDS1 --mode 1360x768
+            libinput-gestures-setup restart
+            #synid=$(xinput list|perl -lne 'print $1 and exit if /Synaptics.*id=(\d+)/i')
+            #xinput set-prop $synid 303 1 # enable tap
+            xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
+            ;;
       esac
       # make sure xbindkeys can find everything in the path
       source $HOME/.bashrc

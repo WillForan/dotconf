@@ -35,16 +35,26 @@
     (evil-leader/set-key "a" 'ace-jump-char-mode)
     (evil-leader/set-key "s" 'projectile-ag)
     (evil-leader/set-key "p" 'helm-projectile)
-    ; f defined in folding.el
+    ;; f defined in folding.el
+    ;; z for zim set in zim-wiki.el
+    ;;  (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
 
     (evil-leader/set-key "i" 'imenu)
     (evil-leader/set-key "g" 'magit-status)
     (evil-leader/set-key "w" 'save-buffer)
     (evil-leader/set-key "x" 'helm-M-x)
+    (evil-leader/set-key "<SPC>" 'helm-M-x)
     (evil-leader/set-key "0" 'switch-window-then-delete)
+    (evil-leader/set-key "1" 'switch-window-then-maximize)
+
+    ;; what lines have we visited
+    (evil-leader/set-key "m" 'helm-mark-ring)
 
     (evil-leader/set-key "h" 'backward-sexp)
     (evil-leader/set-key "j" 'down-list)
     (evil-leader/set-key "k" 'up-list)
     (evil-leader/set-key "l" 'forward-sexp)
-    (evil-leader/set-key ";" 'eval-region))
+    (evil-leader/set-key ";" 'eval-region)
+
+    (evil-leader/set-key "o" #'org-open-at-point)
+    )
