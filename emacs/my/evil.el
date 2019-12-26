@@ -1,4 +1,13 @@
 ;; modal editor
+(defun my/eval-region-and-kbquit ()
+  "eval selection and clear selection"
+  (interactive)
+  (if (region-active-p)
+      (eval-region (region-beginning) (region-end))
+      ;; this doesn't work ... yet
+      (progn (evil-visual-line) (my/eval-region-and-kbquit)))
+  (keyboard-quit))
+
 (use-package evil :ensure t
   :init
   :config
@@ -43,11 +52,10 @@
     (evil-leader/set-key "x" 'helm-M-x)
     (evil-leader/set-key "0" 'switch-window-then-delete)
 
-    (evil-leader/set-key "g" 'magit-status)
     (evil-leader/set-key "<SPC>" 'other-window)
 
     (evil-leader/set-key "h" 'backward-sexp)
     (evil-leader/set-key "j" 'down-list)
     (evil-leader/set-key "k" 'up-list)
     (evil-leader/set-key "l" 'forward-sexp)
-    (evil-leader/set-key ";" 'eval-region))
+    (evil-leader/set-key ";" #'my/eval-region-and-kbquit))
