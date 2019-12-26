@@ -3,10 +3,13 @@
 ;; no display, toolbar already off (dne)
 (when (display-graphic-p) (tool-bar-mode 0))
 (menu-bar-mode 0)
-(set-default-font "Source Code Pro 14")
 (setq inhibit-startup-screen t)
+
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
+;; selection to xclipboard (20191202)
+(setq x-select-enable-primary t)
+
 ;; store recent files
 (recentf-mode 1)
 
@@ -33,7 +36,7 @@
 ;(set-default-font "Source Code Pro 14") ;; 20191022
 ;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
 ; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-(set-frame-font "DejaVu Sans Mono-16" nil t); 20180810; 20191116 fix
+(set-frame-font "DejaVu Sans Mono-14" nil t); 20180810; 20191116 fix
 
 ;; persistant history (20171107)
 (savehist-mode 1)
