@@ -17,3 +17,17 @@
     (projectile-find-file)
   )
 )
+
+(defun my/dokuwiki ()
+  "Connects to the dokuwiki."
+  (interactive)
+  (my/use 'dokuwiki)
+  (dokuwiki-login)
+  (dokuwiki-list-pages)
+  (dokuwiki-mode)
+  )
+
+(defun my/clip-fname ()
+  "buffer filename to clipboard"
+  (interactive)
+  (kill-new (buffer-file-name)))
