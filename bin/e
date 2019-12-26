@@ -10,6 +10,7 @@ e(){
     # new frame, no wait
     local args="-t"
     [[ -n "$DISPLAY" && ! "$@" =~ ^-t ]] && args="-c -n" 
-    emacsclient -a "" $args $@
+    set -x
+    emacsclient -a '' $args "$@"
 }
-[[ $(basename "$0") == "e" ]] && e $@
+[[ $(basename "$0") == "e" ]] && e "$@"

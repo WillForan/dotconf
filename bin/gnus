@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# expect e to be in path (wrapper for `emacsclient -a""` )
+
+# if no input args
+[ $# -eq 0 ] && e -e "(progn (gnus) (gnus-group-read-group 20 nil \"[gmail]/Important\") (gnus-summary-sort-by-date 'rev))" && exit
+
+if [[ $1 =~ ^mailto: ]]; then
+  e -e "(progn (gnus-url-mailto \"$1\") (set-buffer-modified-p nil))"
+else
+   e -e "(progn (gnus-url-mailto \"\") (set-buffer-modified-p nil) (insert \"$1\")"
+fi
