@@ -25,6 +25,7 @@
   :init
     (add-hook 'zim-wiki-mode-hook #'flyspell-mode)
     (add-hook 'zim-wiki-mode-hook #'(lambda () (git-gutter-mode 0)))
+    (add-hook 'zim-wiki-mode-hook #'auto-save-visited-mode)
   :config
     (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
     (my/home-wiki))
