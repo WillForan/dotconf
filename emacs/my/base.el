@@ -17,6 +17,9 @@
 (when (equal nil (executable-find "ispell"))
   (setq ispell-program-name (executable-find "hunspell")))
 
+;; disable message for every word. improve pefromance? 20191227 
+;; https://www.emacswiki.org/emacs/FlySpell
+(setq flyspell-issue-message-flag nil)
 
 ; (global-linum-mode 1)
 
