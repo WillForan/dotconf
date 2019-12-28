@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# 20191229 - update home's bin directory
+stow -t ~/bin -d ~/config bin
+
+
