@@ -13,7 +13,7 @@ alias q='yay --color auto -Ss'
 
 # functions
 n() { ls -tlc $@|head;}
-sp() { sshpass -f ~/passwd/ssh/$1 ssh $1; }
+sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 
 ip_list_local(){
    ssh admin@192.168.1.1 "
