@@ -20,6 +20,7 @@
 ;; disable message for every word. improve pefromance? 20191227 
 ;; https://www.emacswiki.org/emacs/FlySpell
 (setq flyspell-issue-message-flag nil)
+; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
 
 ; (global-linum-mode 1)
 
