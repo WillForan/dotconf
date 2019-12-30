@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# 20191228 - query asus router for connected ips
+. $(dirname $(readlink -f $0))/../bash/aliases.bash # get `sp` => alias sshpass w/password file 
+# router defined in `.ssh/config` (192.168.1.1)
+sp router "/sbin/arp -a|sed -n 's/.*\(192.168.1.[0-9]\+\).*/\1/p'|while read ip; do ping -W 1 -c 1 \$ip >/dev/null && echo \$ip; done"

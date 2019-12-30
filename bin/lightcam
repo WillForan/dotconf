@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# 20191229 - set brightness based on webcam
+# ffmpeg: grab .1 seconds of webcam (video0)
+# imagmagick: average to 1 pixel in gray scale
+# sed: extact grey level and compare to 100
+# light: max screen brightness if above thres. min otherwise
+ffmpeg -i /dev/video0 -ss 0.1 -frames 1 -f image2pipe -vcodec png  - \
+  | convert - -depth 8 -colorspace Gray -resize '1x1!' -format %c histogram:info:- \
+  | tee >(cat >&2) \
+  | sed 's/.*(\([0-9]\+\)).*/\1/' \
+  | xargs -n1 test 100 -lt  \
+  && light -S 20 \
+  || light -S 1

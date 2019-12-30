@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# 20191229 - update home's bin directory
+#          - if given argument, update that packages symlinks
+configdir=$(dirname $(readlink -f $0))/..
+[ $# -eq 0 ] && pkg=bin || pkg="$1"
+[ ! -d $configdir ] &&
+    echo "no stow package $pkg in $configdir! $(find $configdir -maxdepth 1 -type f)" &&
+    exit 1
+
+stowto() { stow -d $configdir -t $1 $pkg; }
+
+case $pkg in
+  bin)   stowto ~/bin;;
+  emacs) stowto ~/.emacs.d;;
+  vim|xbindkeys|x11|R|i3|easystroke) stowto ~;;
+  *) echo "$pkg not defined in $0"; exit 1;;
+esac
+
+
