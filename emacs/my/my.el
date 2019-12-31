@@ -31,3 +31,19 @@
   "buffer filename to clipboard"
   (interactive)
   (kill-new (buffer-file-name)))
+
+(defun my/loadinit ()
+     "load default set of 'layers'"
+     (interactive)
+     ;; use-package defintions for packages (a la spacemace layers?)
+     (mapcar #'my/use
+     '(base backup primary-clip
+ 	package quelpa
+ 	evil theme rainbow
+ 	xterm-color
+ 	git
+ 	org tramp
+ 	ace switch-window
+ 	yas company helm
+ 	zim-wiki-mode screensend
+ 	R)))
