@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# connect computer via android 
+# android require:
+#   debug mode (adb access)
+#   aztether (app, fspot)
+# linux require:
+#   android-tools (adb)
+#   openvpn
+
+# killall connections
+sudo dhcpcd -k
+
+# config. all in one place. changes tracked here
+cfg=$(mktemp /tmp/azlinkXXX.ovpn)
+cat > $cfg <<HERE
+dev tun
+
+remote 127.0.0.1 41927 tcp-client
+proto tcp-client
+ifconfig 192.168.56.2 192.168.56.1
+route 0.0.0.0 128.0.0.0
+route 128.0.0.0 128.0.0.0
+socket-flags TCP_NODELAY
+#keepalive 10 30
+ping 10
+dhcp-option DNS 192.168.56.1
+HERE
+
+cat <<HEREDOC | sudo tee /etc/resolv.conf 
+nameserver 192.168.56.1
+HEREDOC
+
+# connect to device
+adb wait-for-device
+adb forward tcp:41927 tcp:41927
+sudo openvpn --config $cfg
+mtr google.com
