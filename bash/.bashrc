@@ -31,6 +31,9 @@ source $HOME/src/utils/fuzzy_arg/fuzzy_new_complete.bash
 # N.B. 's' alias overwritten to 'ssh' later
 eval "$(fasd --init auto)"
 
+# history expand with space. !![space] ^tyop^typo[space]
+bind Space:magic-space
+
 # change color scheme using uses 'dynamic-colors-git'
 bind -x '"\el":"dynamic-colors cycle"'
 
