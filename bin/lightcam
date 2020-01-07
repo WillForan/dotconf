@@ -10,5 +10,5 @@ ffmpeg -i /dev/video0 -ss 0.1 -frames 1 -f image2pipe -vcodec png  - \
   | tee >(cat >&2) \
   | sed 's/.*(\([0-9]\+\)).*/\1/' \
   | xargs -n1 test 100 -lt  \
-  && light -S 20 \
+  && light -S 50 \
   || light -S 1

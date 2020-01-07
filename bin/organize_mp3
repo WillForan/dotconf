@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+cd "$HOME/Soulseek Downloads/complete"
+exiftool '-filename</mnt/storage/Music/Sorted/$myArtist/${Year}_$myAlbum/${myTrack}-$myTitle.%e' \
+   -r -ext mp3 -ext ogg -ext flac -ext m4a ./
+
+# remove empty directories
+while [ $(find -type d -empty|wc -l) -gt 0 ]; do
+   find -type d -empty -exec rmdir {} \+
+done
+
+# depends on ExifTool config file like:
+: <<'HEREDOC' ~/.ExifTool_config 
+ sub rmjunk {
+  $_=shift;
+  # remove extra spaces
+  s/\s+/ /g;
+  s/^\s|\s$//g;
+  # remove anything thats not alphanumeric or space
+  s:[^A-Za-z0-9 ]:_:g;
+  s/^_|_+|_$//g;
+  return($_)
+ };
+ 
+ %Image::ExifTool::UserDefined = (
+     'Image::ExifTool::Composite' => {
+         myArtist => { Require => 'Artist', ValueConv => 'rmjunk($val)' },
+         myAlbum =>  { Require => 'Album',  ValueConv => 'rmjunk($val)' },
+         myTitle =>  { Require => 'Title',  ValueConv => 'rmjunk($val)' },
+         myTrack => {
+             Require => 'Track',
+             # only get first integer
+             ValueConv => '$val=~/(\d+)/; $1',
+             # an optional PrintConv may be used to format the value
+             PrintConv => 'sprintf("%02s", $val)',
+         },
+     },
+ );
+ 1;  #end
+
+HEREDOC

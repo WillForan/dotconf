@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 #
-# connect to wifi
+# connect to wifi using creds stored in syncthing
 #
 # if connecting to open wifi network, use network name as first arg
 
 # needed because sudo will have wrong HOME
-home=/home/foranw
+# and wifi settings are in $HOME/passwd/wifi/$essid.wifi
+home=$(readlink -f $0|cut -f1-3 -d/)
+DEFAULT_WIFI=abraham_linksys
 
 # find interface
 #IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
@@ -14,7 +16,7 @@ IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/')
 
 # make sure we sudo
 [ $(id -u) -ne 0 ] && {
-  sudo $0 $@
+  sudo $0 "$@"
   exit
 }
 
@@ -27,12 +29,12 @@ killall dhcpcd
 # default to home wifi if not args
 # otherwise use input arg as essid to find wpasupplicant file
 # if no file, assume open wifi
-[ $# -eq 0 ] && essid=abraham_linksys || essid=$1
+[ $# -eq 0 ] && essid="$DEFAULT_WIFI" || essid="$1"
 if test -r $home/passwd/wifi/$essid.wifi; then
    wpa_supplicant -c $_ -B -i $IF
 else
-   iwconfig $IF essid $essid
-   iwconfig $IF up
+   ifconfig $IF up
+   iwconfig $IF essid "$essid"
 fi
 
 dhcpcd $IF
