@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# search using recoll
+# use fzf to parse results
+# tab to preview ith mocp "playit"
+# enter to add to playlist
+
+f=$(recoll -c /mnt/storage/Music/ -b -t 'mime:audio/*' "$@" |
+ sed -n 's|^file://||p' |
+ fzf --bind 'tab:execute(mocp -l {} 2>/dev/null)'
+)
+
+[ -z "$f" -o ! -r "$f" ] && exit 404
+
+mocp -a $f
