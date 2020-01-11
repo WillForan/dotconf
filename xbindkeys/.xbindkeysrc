@@ -14,6 +14,8 @@
   Mod4 + Tab
 "rofi -combi-modi run,window,ssh -show combi"
   Mod4+d
+"plyrctrl gui"
+  Mod4+m
 
 ####
 # move/rename windows and workspaces

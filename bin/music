@@ -1,22 +1,49 @@
 #!/usr/bin/env bash
+set -x
+MUSICROOT=/mnt/storage/Music/
 
 # search using recoll
-# use fzf to parse results
+# use fzf/rofi to parse results
 # tab to preview ith mocp "playit"
 # enter to add to playlist
 
-cmd=recollq
-! command -v $cmd >/dev/null && cmd=recoll
-f=$($cmd -c /mnt/storage/Music/ -b -t 'mime:audio/*' "$@" |
+# use recollq (cli, not whole recoll) if avaliable
+searchcmd=recollq
+command -v $searchcmd >/dev/null || searchcmd=recoll
+
+## how do we pick from list
+_fzf() {
+ f=$(fzf \
+    --bind='ctrl-y:execute(echo {} | xclip -i)' \
+    --bind 'tab:execute(mocp -l {} 2>/dev/null)')
+
+  [ -z "$f" -o ! -r "$f" ] && exit 44
+  mocp -a "$f"
+}
+_rofi() {
+   f=$(rofi -i -dmenu -p "file:" )
+   [ -z "$f" -o ! -r "$f" ] && exit 44
+   s=$(echo -e "append\nplayit\ncopy" |rofi -dmenu -p "action:")
+   [ -z "$s" ] && exit 1
+   case $s in
+      append) mocp -a "$f";;
+      playit) mocp -l "$f";;
+      # copy to clipboard and quit
+      copy)   echo "$f" | xclip -i; exit 0;;
+      *) exit 1;;
+   esac
+}
+
+# "gui" as first argument - use rofi
+selectcmd=_fzf
+[ "$#" -ge 1 -a "$1" == "gui" ] && shift && selectcmd=_rofi
+
+$searchcmd -c $MUSICROOT -b -t 'mime:audio/*' "$@" |
  sed -n 's|^file://||p' |
- fzf \
-  --bind='ctrl-y:execute(echo {} | xclip -i)' \
-  --bind 'tab:execute(mocp -l {} 2>/dev/null)'
-)
+ $selectcmd
 
-[ -z "$f" -o ! -r "$f" ] && exit 44
+# resume/start -- if append and paused
+mocp -i 2>/dev/null|grep -q 'State: PAUSE' && mocp -U
+mocp -i 2>/dev/null|grep -q 'State: STOP' && mocp -p
 
-mocp -a "$f"
-
-# 
 # mocp -i 2>/dev/null|sed -n 's/File: //p'

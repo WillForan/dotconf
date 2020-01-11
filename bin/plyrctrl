@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+opts="play-pause|stop|next|prev|metadata|choose"
+[ $# -ne 1 ] && echo "USAGE: $0 [gui|$opts]" && exit 1
+gui=""
+[ "$1" == "gui" ] &&
+   cmd=$(echo "$opts" | rofi -dmenu -sep '|' -p 'cmd') ||
+   cmd="$1"
+   gui="gui"
+[ -z "$cmd" ] && exit 0
+case $cmd in
+ choose) 
+    music $gui $(echo -n | rofi -dmenu -p "file search")
+    exit 0;;
+ metadata) 
+   playerctl metadata 2>/dev/null |
+    perl -lne '
+      $a{$1}=$2 if /.*?:(album|artist|title)\s+(.*)/;
+      END{print join " - ", map {s/"/_/g;$_} @a{qw/artist title album/}}' |
+    xargs -I{} notify-send "{}"
+   exit 0;;
+ # took care of odd balls. rest just goes to playerctrl
+ $opts) playerctl $cmd;;
+ *) echo "unknown cmd '$cmd'"; exit 1;;
+esac
