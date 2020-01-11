@@ -7,9 +7,14 @@
 
 f=$(recoll -c /mnt/storage/Music/ -b -t 'mime:audio/*' "$@" |
  sed -n 's|^file://||p' |
- fzf --bind 'tab:execute(mocp -l {} 2>/dev/null)'
+ fzf \
+  --bind='ctrl-y:execute(echo {} | xclip -i)' \
+  --bind 'tab:execute(mocp -l {} 2>/dev/null)'
 )
 
-[ -z "$f" -o ! -r "$f" ] && exit 404
+[ -z "$f" -o ! -r "$f" ] && exit 44
 
-mocp -a $f
+mocp -a "$f"
+
+# 
+# mocp -i 2>/dev/null|sed -n 's/File: //p'
