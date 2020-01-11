@@ -5,7 +5,9 @@
 # tab to preview ith mocp "playit"
 # enter to add to playlist
 
-f=$(recoll -c /mnt/storage/Music/ -b -t 'mime:audio/*' "$@" |
+cmd=recollq
+! command -v $cmd >/dev/null && cmd=recoll
+f=$($cmd -c /mnt/storage/Music/ -b -t 'mime:audio/*' "$@" |
  sed -n 's|^file://||p' |
  fzf --bind 'tab:execute(mocp -l {} 2>/dev/null)'
 )
