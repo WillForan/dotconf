@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -x
+killstream(){ kill $(cat /tmp/p-ice.pid); }
+trap 'killstream' ERR SIGKILL
+
+[ $# -eq 0 ] && cmd="play" || cmd="$1"
+export MPD_HOST="$(cat passwd/config/mpd_host)"
+stream="http://$MPD_HOST:6601/mpd.ogg"
+case $cmd in
+ p|play|r)  $0 kill; mpc play; mplayer $stream & echo $! > /tmp/p-ice.pid;; 
+ u|pause)   mpc pause; killstream;;
+ k|kill)    killstream;;
+ *) echo "unknown argument '$@'. try: play, pause, or kill"; exit 1;;
+esac
