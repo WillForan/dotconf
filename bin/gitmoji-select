@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# insert gitmoji from fzf/rofi
+# use "xdo" to type it
+# 20200129 - init
+#  depends: jq, dc, xargs, xdotool (optionally type)
+
+[ $# -gt 0 -a "$1" == "xdo" ] &&
+   cmd="xdotool type" ||
+   cmd="echo"
+
+## do we need to re cache
+CACHE=$HOME/.local/share/gitmoji
+get() {
+   curl "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/src/data/gitmojis.json" |
+   jq -r '.[]|.[]|[.emoji, .code, .description]|@tsv' > $CACHE
+}
+sec() { date +%s "$@"; }
+[ ! -r $CACHE ] && get
+cachedate="$(stat -c '%y' $CACHE)"
+# more than a week old (604800 seconds)
+echo $(sec) $(sec -d "$cachedate") "- 60 60 * 24 * 7 * / p" | dc | xargs test 1 -le && get
+
+[ -t 1 ] && select=fzf || select="rofi -dmenu"
+cat $CACHE | $select | cut -f1 | xargs $cmd
