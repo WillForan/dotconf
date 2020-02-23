@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# https://unix.stackexchange.com/questions/424602/is-it-possible-to-set-a-constant-lowest-cpu-frequency-under-the-modern-pstate
+[ $# -eq 0 ] && echo "USAGE: $(basename $0) [low|min|max|powersave]" && exit 1
+set -x
+freq(){
+   GorS="$1"; shift
+   sudo cpupower frequency-$GorS $@
+}
+max=$(freq info |awk '(/limits/){print $(NF-1)$NF}')
+min=$(freq info |perl -lne 'print $1.$2 if m/limits: (\d+) (.Hz)/')
+case $1 in
+   low)
+      freq set -g performance
+      freq set -u 1Ghz;;
+   min)
+      freq set -g performance
+      freq set -u $min;;
+   max)
+      freq set -g performance
+      freq set -u $max;;
+   undo|normal|powersave|*)
+      freq set -g powersave
+      freq set -u $max;;
+esac
