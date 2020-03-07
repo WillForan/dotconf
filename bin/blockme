@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+if [ $(id -u) -ne 0 ]; then
+   sudo $0
+   exit
+fi
+# uncomment things after "TIMESUCK" in hosts file
+# where we redirect distractions to local host
+sudo sed -ie '/TIMESUCK/,$ s/^# *127/127/' /etc/hosts
+
+# if we don't have a list of TIMESUCKs add default
+! grep -q TIMESUCK /etc/hosts && cat >> /etc/hosts <<HEREDOC
+# TIMESUCK
+127.0.0.1 digg.com slashdot.org news.ycombinator.com
+127.0.0.1 reddit.com old.reddit.com www.reddit.com
+HEREDOC
