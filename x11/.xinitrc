@@ -18,9 +18,19 @@ case $HOSTNAME in
       (sudo ifconfig wlp0s26u1u4i2 up;
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
       ;;
+  s2)
+      # hdmi only if we have it
+      xrandr | grep -q HDMI1\ connected &&
+         xrandr --output HDMI1 --mode 1280x720 --output LVDS1 --off ||
+         xrandr --output LVDS1 --mode 1366x768
+      ;;
+
 esac
 # make sure xbindkeys can find everything in the path
 source $HOME/.bashrc
+
+# no bell
+xset b off
 # capslock is control
 setxkbmap -layout us -option ctrl:nocaps
 # TODO: use lighter sxhc?
