@@ -9,7 +9,7 @@ alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
 # package managemnet
 alias i='yay --noconfirm -S'
-alias q='yay --color auto -Ss'
+alias pq='yay --color auto -Ss'
 
 # functions
 n() { ls -tlc $@|head;}
@@ -25,4 +25,4 @@ ip_list_local(){
 }
 
 # remote ssh
-alias work="sshpass -f ~/passwd/ssh/p ssh -t p '~/private/sshpass-1.06/sshpass -f ~/passwd/m ssh -t m ssh -o StrictHostKeyChecking=no foranw@10.145.64.121'"
+alias work="sshpass -f ~/passwd/ssh/p ssh -t p '~/private/sshpass-1.06/sshpass -f ~/passwd/m ssh -t m ssh -o StrictHostKeyChecking=no  -i /disk/mace2/scan_data/WPC-4951/id foranw@10.145.64.121'"
