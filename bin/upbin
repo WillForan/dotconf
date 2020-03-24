@@ -10,7 +10,7 @@ configdir=$(dirname $(readlink -f $0))/..
 stowto() { stow -d $configdir -t $1 $pkg; }
 
 case $pkg in
-  bin)   stowto ~/bin;;
+   bin)   (cd $configdir; git pull); stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   vim|xbindkeys|x11|R|i3|easystroke) stowto ~;;
   *) echo "$pkg not defined in $0"; exit 1;;

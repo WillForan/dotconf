@@ -7,6 +7,8 @@
   (use-package ob-async :ensure t) ; use :async in src_block header
   (use-package org-bullets
     :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+  
+  (setq org-babel-python-command "python3")
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
 	(R . t)      ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"
