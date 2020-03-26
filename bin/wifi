@@ -11,7 +11,7 @@ DEFAULT_WIFI=abraham_linksys
 
 # find interface
 #IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
-IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/')
+IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
 [ -z "$IF" ] && echo 'no interface' && exit 1
 
 # make sure we sudo

@@ -41,9 +41,11 @@
        (evil-leader/set-leader "<SPC>"))
 
     ;; leader keybindings -- consider hydra instead?
-    (evil-leader/set-key "a" #'ace-jump-char-mode)
+    (evil-leader/set-key "a" #'avy-goto-char-in-line)
+    (evil-leader/set-key "l" #'avy-goto-line)
     (evil-leader/set-key "s" #'projectile-ag)
     (evil-leader/set-key "p" #'helm-projectile)
+    (evil-leader/set-key "n" #'neotree-find)
     ;; f defined in folding.el
     ;; z for zim set in zim-wiki.el
     ;;  (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
@@ -60,6 +62,7 @@
 
     (evil-leader/set-key ";" #'my/eval-region-and-kbquit)
     (evil-leader/set-key "o" #'org-open-at-point)
+    (evil-leader/set-key "f" #'company-files)
 
     ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "i" #'imenu)

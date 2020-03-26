@@ -13,6 +13,7 @@
     ;;   i jupyter perl-cpanplus-dist-arch perl-moose
     ;;   cpanp install Devel::IPerl
    ) 
+  (setq org-babel-python-command "python3")
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
 	(R . t)      ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"

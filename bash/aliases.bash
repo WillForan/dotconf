@@ -5,11 +5,15 @@ alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias dt='sudo dmesg|tail'
 alias v='vim'
+# prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
 # package managemnet
 alias i='yay --noconfirm -S'
-alias q='yay --color auto -Ss'
+alias pq='yay --color auto -Ss'
+
+# git - status short with no untracked
+alias gs='git status -s -uno'
 
 # functions
 n() { ls -tlc $@|head;}

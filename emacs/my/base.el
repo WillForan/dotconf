@@ -53,6 +53,12 @@
 ;; 20180625 -- S- arrow to move around
 (windmove-default-keybindings)
 
+;; dont do the crazy comment indent (20200224)
+(electric-indent-mode 0)
+
+;; use python3 in python-mode 20200225
+(setq python-shell-interpreter "python3")
+
 ;; org babel -- see org.el (?)
 ;(org-babel-do-load-languages
 ; 'org-babel-load-languages

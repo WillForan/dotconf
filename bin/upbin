@@ -9,6 +9,10 @@ configdir=$(dirname $(readlink -f $0))/..
 
 stowto() { test -d $1 || mkdir $1; stow -d $configdir -t $1 $pkg; }
 
+# make sure we're up-to-date
+cd $configdir
+git pull 
+
 case $pkg in
   # in there own place
   bin)   stowto ~/bin;;
