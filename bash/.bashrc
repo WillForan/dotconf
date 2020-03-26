@@ -12,6 +12,9 @@ _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
 . $_BASHCFGDIR/paths.bash
 
+# where to get music from
+test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
+
 
 # If not running interactively, be done -- only handle paths
 [[ $- != *i* ]] && return
@@ -21,6 +24,10 @@ _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 source $HOME/src/utils/fuzzy_arg/fuzzy_arg.bash
 #  \en for new file list
 source $HOME/src/utils/fuzzy_arg/fuzzy_new_complete.bash
+
+# kitty terminal
+command -v kitty >/dev/null &&
+   source <(kitty + complete setup bash)
 
 # fzf keys
 #  CTRL-R - Paste the selected command from history into the command line
