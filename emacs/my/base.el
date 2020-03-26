@@ -35,6 +35,7 @@
 
 ;; title has filename in it
 (setq-default frame-title-format '("%f [emacs %m]"))
+(setq-default icon-title-format frame-title-format)
 
 ;; Font
 ;(set-default-font "Source Code Pro 14") ;; 20191022
