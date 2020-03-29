@@ -12,7 +12,9 @@ stowto() { test -d $1 || mkdir $1; stow -d $configdir -t $1 $pkg; }
 
 # make sure we're up-to-date
 cd $configdir
-git pull 
+
+# only pull if no changes in last day
+[ $(find . -ctime -1 | wc -l) -gt 0 ] || git pull
 
 case $pkg in
   # in there own place
@@ -21,11 +23,8 @@ case $pkg in
   # inside ~
   vim|xbindkeys|x11|R|i3|easystroke) stowto ~;;
   # inside ~/.config
-  kitty) stowto ~/.config/$pkg;;
-  # where dynamic-colors-git archlinux package will look
-  dynamic-colors) stowto /usr/share/dynamic-colors/colorschemes;;
   kitty|keepmenu) stowto ~/.config/$pkg;;
+  # where dynamic-colors-git archlinux package will look
+  dynamic-colors) stowto /usr/share/dynamic-colors;;
   *) echo "$pkg not defined in $0"; exit 1;;
 esac
-
-
