@@ -24,6 +24,7 @@ case $pkg in
   kitty) stowto ~/.config/$pkg;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) stowto /usr/share/dynamic-colors/colorschemes;;
+  kitty|keepmenu) stowto ~/.config/$pkg;;
   *) echo "$pkg not defined in $0"; exit 1;;
 esac
 

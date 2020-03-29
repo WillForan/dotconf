@@ -31,8 +31,10 @@ source $HOME/.bashrc
 
 # no bell
 xset b off
+#setxkbmap -layout us -option ctrl:nocaps
 # capslock is control
-setxkbmap -layout us -option ctrl:nocaps
+setxkbmap -layout us -option "caps:ctrl_modifier"
+
 # TODO: use lighter sxhc?
 xbindkeys
 # mouse gesture actions (plum)
