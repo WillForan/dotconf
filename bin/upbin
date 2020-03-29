@@ -20,7 +20,7 @@ case $pkg in
   # inside ~
   vim|xbindkeys|x11|R|i3|easystroke) stowto ~;;
   # inside ~/.config
-  kitty) stowto ~/.config/$pkg;;
+  kitty|keepmenu) stowto ~/.config/$pkg;;
   *) echo "$pkg not defined in $0"; exit 1;;
 esac
 
