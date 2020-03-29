@@ -7,6 +7,7 @@ configdir=$(dirname $(readlink -f $0))/..
     echo "no stow package $pkg in $configdir! $(find $configdir -maxdepth 1 -type f)" &&
     exit 1
 
+# N.B. $pkg from outside function scope
 stowto() { test -d $1 || mkdir $1; stow -d $configdir -t $1 $pkg; }
 
 # make sure we're up-to-date
@@ -21,6 +22,8 @@ case $pkg in
   vim|xbindkeys|x11|R|i3|easystroke) stowto ~;;
   # inside ~/.config
   kitty) stowto ~/.config/$pkg;;
+  # where dynamic-colors-git archlinux package will look
+  dynamic-colors) stowto /usr/share/dynamic-colors/colorschemes;;
   *) echo "$pkg not defined in $0"; exit 1;;
 esac
 
