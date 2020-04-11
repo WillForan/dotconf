@@ -15,6 +15,8 @@
     ;; _ is part of a word
     ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
     (setq-default evil-symbol-word-search t) 
+    ;; search history (up/down) -- 20200404
+    (evil-select-search-module 'evil-search-module 'evil-search)
 
     ;; default to emacs for these
     (dolist (mode (list
