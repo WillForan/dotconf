@@ -5,6 +5,7 @@ alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias dt='sudo dmesg|tail'
 alias v='vim'
+alias t='tmux'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 

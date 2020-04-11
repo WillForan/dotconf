@@ -1,5 +1,7 @@
 #
-# PATHS mostly for things not handled by the package manager
+# PATHS 
+#  - utils not yet packaged
+#  - language modules: python (pyenv), perl (cpanm), node (npm)
 #
 
 export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
@@ -13,14 +15,19 @@ command -v pyenv >/dev/null && {
 # cpanm setup w/ local::lib if we have lib dir in home
 test -d $HOME/perl5/lib/perl5 && eval $(perl -I $_ -Mlocal::lib)
 
-# org export
-export PATH="$PATH:$HOME/src/utils/org-export"
-# work functions (mkifdiff, mkls, mkstat, m, etc)
-export PATH="$PATH:$HOME/src/work/lncdtools"
+# things that might exist
+for d in \
+ /usr/lib/weechat/python/matrix/contrib/ `# matrix_decrypt, matrix_sso_helper, and matrix_upload` \
+ $HOME/src/utils/org-export `# github pages: willforan.github.io `\
+ $HOME/src/work/lncdtools   `# work functions (mkifdiff, mkls, mkstat, m, etc)` \
+ /opt/ni_tools/afni         `# NIMH nueroimaging` \
+ $HOME/src/cIQ/bin          `# garmin connect IQ unzipped SDK` \
+ ; do
+   test -d "$d" && PATH="$PATH:$d"
+done
+export PATH
 
-# matrix_decrypt, matrix_sso_helper, and matrix_upload
-test -d /usr/lib/weechat/python/matrix/contrib/ &&
-   export PATH="$PATH:$_"
-
-# garmin connect IQ unzipped SDK
-test -d $HOME/src/cIQ/bin && export PATH="$PATH:$_"
+# 20200408
+# only needs to happen once?
+#   npm config set prefix ~/.local  # ~/.local/bin
+export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
