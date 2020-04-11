@@ -1,6 +1,11 @@
 #!/usr/bin/env perl
 use strict; use warnings;
-use List::Util 'sum';
+
+# NOTES:
+#  how do we send 'super' key (alone or as key combo)
+#  ctrl + key not seen by termux (but e.g ctl+a is not sent, while ctl+j sends 'j')
+#  "Return" (12) doesn't enter in termux (ctrl-J works, but ctl must be toggled on screen)
+#  alt-tab eaten by os. not set
 
 # control characters from
 # https://github.com/KDE/kdeconnect-kde/blob/master/plugins/remotekeyboard/remotekeyboardplugin.cpp
