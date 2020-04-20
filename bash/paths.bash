@@ -28,6 +28,6 @@ done
 export PATH
 
 # 20200408
-# only needs to happen once?
-#   npm config set prefix ~/.local  # ~/.local/bin
+# only needs to happen once. slow to run. grep first to check
+grep prefix= ~/.npmrc  -q 2>/dev/null || npm config set prefix ~/.local
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
