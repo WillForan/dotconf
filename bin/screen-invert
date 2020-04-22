@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# 20200422 flip/toggle display and touchscreen
+#
+
+TOUCH="ELAN Touchscreen"
+MONT=LVDS1
+if ! xinput  | grep "$TOUCH" -q; then
+   echo "No '$TOUCH'!? you probably dont want to do this"
+   echo "(or DISPLAY is not set)"
+   exit 1
+fi
+
+# want to invert
+r=inverted
+t="-1 0 1 0 -1 1 0 0 1"
+# or go back
+if xrandr |grep ^$MONT|sed 's/(.*//'|grep -q inverted; then
+  r=normal; t="1 0 0 0 1 0 0 0 1"
+fi
+
+xrandr --output $MONT --rotate $r
+xinput set-prop "$TOUCH" 'Coordinate Transformation Matrix' $t
