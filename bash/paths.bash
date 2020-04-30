@@ -2,7 +2,7 @@
 # PATHS mostly for things not handled by the package manager
 #
 
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$HOME/src/utils/dynamic-colors/bin:$PATH"
 # pyenv setup if we have pyenv
 command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
