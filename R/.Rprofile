@@ -32,7 +32,7 @@ updatePrompt <- function(...) {options(prompt=format(Sys.time(), "\n# %X\n#> "))
         radian.browse_prompt = "\033[0;33mBrowse[{}]>\033[0m ",
         radian.enable_reticulate_prompt = TRUE
       )
-     library(colorout)
+     #library(colorout)
 
    }
 
@@ -73,7 +73,7 @@ if (F){
  devtools::install_github(c("yihui/servr", "hafen/rmote"))
  rmote::start_rmote()
 }
-library(colorout)
+#library(colorout)
 # update all packages
 update_packages <- function() install.packages(rownames(installed.packages()))
 

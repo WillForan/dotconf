@@ -17,6 +17,17 @@
 "plyrctrl gui"
   Mod4+m
 
+"amixer set Master toggle"
+ XF86AudioMute
+"amixer set Master 10%+"
+ XF86AudioRaiseVolume
+"amixer set Master 10%-"
+ XF86AudioLowerVolume
+
+"light -A 5"
+ XF86MonBrightnessUp
+"light -U 5"
+ XF86MonBrightnessDown
 ####
 # move/rename windows and workspaces
 "/home/foranw/src/utils/wf-utils/i3/i3-ws-menu workspace"
@@ -62,6 +73,9 @@
 
 "/home/foranw/src/utils/wf-utils/mail/rofi_mail.bash"
   Mod4 + Shift + m
+
+"keepmenu"
+  Mod4 + p
 
 
 "plum"

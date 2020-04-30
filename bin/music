@@ -15,13 +15,14 @@ command -v $searchcmd >/dev/null || searchcmd=recoll
 _fzf() {
  f=$(fzf \
     --bind='ctrl-y:execute(echo {} | xclip -i)' \
-    --bind 'tab:execute(mocp -l {} 2>/dev/null)')
+    --bind 'tab:execute(mocp -l {} 2>/dev/null)'\
+    --select-1)
 
   [ -z "$f" -o ! -r "$f" ] && exit 44
   mocp -a "$f"
 }
 _rofi() {
-   f=$(rofi -i -dmenu -p "file:" )
+   f=$(sed "s:$MUSICROOT::" | rofi -i -dmenu -p "file:" |sed "s:^:$MUSICROOT:")
    [ -z "$f" -o ! -r "$f" ] && exit 44
    s=$(echo -e "append\nplayit\ncopy" |rofi -dmenu -p "action:")
    [ -z "$s" ] && exit 1

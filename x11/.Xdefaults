@@ -9,8 +9,8 @@
 *VT100.veryBoldColors: 6
 
  
-*faceName: Iosevka:pixelsize=21
-URxvt.font: xft:Iosevka:pixelsize=21
+*faceName: Iosevka:pixelsize=21,xft:Symbola
+URxvt.font: xft:Iosevka:pixelsize=21,xft:Symbola
 !*faceName:      	Hack
 !*faceName:      	Hasklig
 !*faceName:      	FiraCode

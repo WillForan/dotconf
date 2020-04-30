@@ -1,0 +1,42 @@
+# barriers -c ~/config/barriers/yogert.sgc -f --no-tray
+section: screens
+	s2:
+		halfDuplexCapsLock = false
+		halfDuplexNumLock = false
+		halfDuplexScrollLock = false
+		xtestIsXineramaUnaware = false
+		preserveFocus = false
+		switchCorners = none 
+		switchCornerSize = 0
+	yogert:
+		halfDuplexCapsLock = false
+		halfDuplexNumLock = false
+		halfDuplexScrollLock = false
+		xtestIsXineramaUnaware = false
+		preserveFocus = false
+		switchCorners = none 
+		switchCornerSize = 0
+end
+
+section: aliases
+end
+
+section: links
+	s2:
+		down = yogert
+      up = yogert
+	yogert:
+		up = s2
+      down = s2
+end
+
+section: options
+	relativeMouseMoves = false
+	screenSaverSync = true
+	win32KeepForeground = false
+	clipboardSharing = true
+	switchCorners = none 
+	switchCornerSize = 0
+	keystroke(Super+`) = switchInDirection(up)
+end
+
