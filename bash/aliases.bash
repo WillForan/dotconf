@@ -9,8 +9,8 @@ alias t='tmux'
 alias wh='which'
 alias bn=basename
 alias dn=dirname
-#alias x='xargs -r'
-alias x='env_parallel -X -r'
+alias x='xargs -r'
+alias px='env_parallel -X -r'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
