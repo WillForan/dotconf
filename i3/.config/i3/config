@@ -245,5 +245,10 @@ bindsym $mod+Shift+S exec /home/foranw/src/utils/wf-utils/i3/swapscreens.py
 bindsym $mod+o move container to output left
 bindsym $mod+Shift+O move workspace to output left
 
+# 20200515 - quick notes show hide
+bindsym $mod+minus move scratchpad
+bindsym $mod+Shift+minus scratchpad show
+bindsym $mod+grave [title="emacs.*wiki"] scratchpad show # also toggles
+
 # start xinitrc b/c lightdm xsession-xinit doesnt work?
 exec  --no-startup-id /home/foranw/.xinitrc

@@ -54,3 +54,6 @@ bind -x '"\el":"dynamic-colors fzf"'
 HISTSIZE=10000
 shopt -s histappend
 shopt -s cmdhist    # multi-line command written as one line in history file
+
+# GNU parallel
+command -v env_parallel >/dev/null && source $(which env_parallel.bash)

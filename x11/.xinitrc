@@ -38,7 +38,9 @@ setxkbmap -layout us -option "caps:ctrl_modifier"
 # TODO: use lighter sxhc?
 xbindkeys
 # mouse gesture actions (plum)
-easystroke &
+#easystroke & # commented out (20200515)
+# composite manager if needed (20200515)
+command -v picom && picom &
 # window management only if needed 
 # could call .xinitrc from i3/config
 pgrep i3 || i3
