@@ -61,6 +61,9 @@
 
     (evil-leader/set-key "<SPC>" #'helm-M-x)
 
+    ;; 20200508 - language server. also my/use: lsp
+    (evil-leader/set-key "/" #'lsp-command-map)
+
     ;; what lines have we visited
     (evil-leader/set-key "m" #'helm-mark-ring)
 

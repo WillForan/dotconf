@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 case $HOSTNAME in
    kt)
-      # old TV with overscan issue VGA setting
-      xrandr | grep -q HDMI-1\ connected &&
-      xrandr --output HDMI-1 --mode 1920x1080i \
-        --transform 1.05,0,-49,0,1.06,-31,0,0,1 \
-        --panning 1920x1080 \
-        --pos 0x0 \
-        --left-of DVI-D-1;;
+      # 20200815 - moved upstairs
+      xrandr --output DVI-D-1 --right-of HDMI-1;;
+      # 20200526 - new curbed samsung w/ HDMI-DV1
+      # xrandr --output HDMI-1 --mode 1920x1080;;
+      # # old TV with overscan issue VGA setting
+      # xrandr | grep -q HDMI-1\ connected &&
+      # xrandr --output HDMI-1 --mode 1920x1080i \
+      #   --transform 1.05,0,-49,0,1.06,-31,0,0,1 \
+      #   --panning 1920x1080 \
+      #   --pos 0x0 \
+      #   --left-of DVI-D-1;;
    yogert)
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768

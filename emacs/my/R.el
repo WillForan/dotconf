@@ -2,4 +2,5 @@
   :config
   ;; dont block when running R
   (setq ess-eval-visibly 'nowait)
+  (which-function-mode 1)
  )

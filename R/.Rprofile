@@ -38,7 +38,10 @@ updatePrompt <- function(...) {options(prompt=format(Sys.time(), "\n# %X\n#> "))
 
   # nothing below is good for a dumb/emacs/rstudio R instance
   # only useful if we are using interative mode (and we arent in R studio)
-  if(isdumb || !interactive()) return()
+  if(isdumb || !interactive()) {
+      options(pillar.subtle = F, crayon.enabled = F)
+      return()
+  }
 
   ## PROMPT
   # add blue and pink colors to the prompt

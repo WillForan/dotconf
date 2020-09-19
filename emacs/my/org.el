@@ -32,8 +32,17 @@
         ))
 
   ;; must be afer org load-language -- function doesn't exist?
-  (org-babel-jupyter-override-src-block "python")
-  (org-babel-jupyter-override-src-block "perl")
-  (org-babel-jupyter-override-src-block "julia")
+  ;(org-babel-jupyter-override-src-block "python")
+  ;(org-babel-jupyter-override-src-block "perl")
+  ;(org-babel-jupyter-override-src-block "julia")
   ;; revert with (org-babel-jupyter-restore-src-block "...")
-  )
+  
+
+  ;; keep ids ordered for better version control of minor changes
+  ;; 20200609 - https://www.reddit.com/r/orgmode/comments/aagmfh/export_to_html_with_useful_nonrandom_ids_and
+  (defun org-export-deterministic-reference (references)
+   	(let ((new 0))
+   	     (while (rassq new references) (setq new (+ new 1))) 
+   	     new))
+  (advice-add #'org-export-new-reference :override #'org-export-deterministic-reference)
+)
