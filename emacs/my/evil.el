@@ -47,7 +47,9 @@
     (evil-leader/set-key "l" #'avy-goto-line)
     (evil-leader/set-key "s" #'projectile-ag)
     (evil-leader/set-key "p" #'helm-projectile)
+    (evil-leader/set-key "G" #'helm-projectile-find-file-in-known-projects)
     (evil-leader/set-key "n" #'neotree-find)
+
     ;; f defined in folding.el
     ;; z for zim set in zim-wiki.el
     ;;  (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
@@ -67,8 +69,17 @@
     (evil-leader/set-key "f" #'company-files)
 
     ;; testing -- not sure about these (sexp movements)
+    (evil-leader/set-key "b" #'switch-to-buffer)
     (evil-leader/set-key "i" #'imenu)
     (evil-leader/set-key "h" #'backward-sexp)
     (evil-leader/set-key "j" #'down-list)
     (evil-leader/set-key "k" #'up-list)
     (evil-leader/set-key "l" #'forward-sexp))
+
+;; 20200607 - add jj for evil escape
+(use-package key-chord :ensure t
+  :after evil
+  :config
+  (key-chord-mode 1)
+  (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state)
+  (key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
