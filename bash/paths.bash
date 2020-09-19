@@ -5,6 +5,13 @@
 #
 
 export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+
+# ruby gems (for xiki -- but that was 2012 version!) 20200531
+command -v ruby >/dev/null &&
+ PATH="$PATH:$(ls -d $HOME/.gem/ruby/*/bin|sed -n '$p')"
+# 20200531 xiki from git (no gem install)
+test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
+
 # pyenv setup if we have pyenv
 command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
@@ -31,3 +38,4 @@ export PATH
 # only needs to happen once. slow to run. grep first to check
 grep prefix= ~/.npmrc  -q 2>/dev/null || npm config set prefix ~/.local
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
+export PATH=$PATH:/opt/afni/
