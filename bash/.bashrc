@@ -47,6 +47,8 @@ bind -x '"\el":"dynamic-colors cycle"'
 # need that to source additional settings
 . $_BASHCFGDIR/PS1.bash
 . $_BASHCFGDIR/aliases.bash
+# . $_BASHCFGDIR/xsh
+
 
 ## bash settings
 [ -n "$DISPLAY" ] && xset b off # no system bell if running X
