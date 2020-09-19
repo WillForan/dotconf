@@ -78,6 +78,12 @@
   Mod4 + p
 
 
+# shift+insert is x11 primary
+# but not everywhere
+# Shift + Insert
+"xdotool click 2"
+  Control+Shift + Insert
+
 "plum"
   Mod4 + g
 
