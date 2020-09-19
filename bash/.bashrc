@@ -56,3 +56,13 @@ shopt -s cmdhist    # multi-line command written as one line in history file
 
 # GNU parallel
 command -v env_parallel >/dev/null && source $(which env_parallel.bash)
+
+# auto-inserted by @update.afni.binaries :
+export PATH=$PATH:/opt/ni_tools/afni
+
+# set up tab completion for AFNI programs
+if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
+then
+   . $HOME/.afni/help/all_progs.COMP.bash
+fi
+

@@ -18,10 +18,14 @@ test -d $HOME/perl5/lib/perl5 && eval $(perl -I $_ -Mlocal::lib)
 # things that might exist
 for d in \
  /usr/lib/weechat/python/matrix/contrib/ `# matrix_decrypt, matrix_sso_helper, and matrix_upload` \
- $HOME/src/utils/org-export `# github pages: willforan.github.io `\
- $HOME/src/work/lncdtools   `# work functions (mkifdiff, mkls, mkstat, m, etc)` \
- /opt/ni_tools/afni         `# NIMH nueroimaging` \
- $HOME/src/cIQ/bin          `# garmin connect IQ unzipped SDK` \
+ $HOME/src/utils/org-export   `# github pages: willforan.github.io `\
+ $HOME/src/work/lncdtools     `# work functions (mkifdiff, mkls, mkstat, m, etc)` \
+ /opt/ni_tools/afni           `# NIMH nueroimaging` \
+ /opt/ni_tools/fmri_processing_scripts  \
+ /opt/ni_tools/c3d/bin \
+ /opt/ANTs/bin\
+ $HOME/src/cIQ/bin            `# garmin connect IQ unzipped SDK` \
+ /usr/share/perl6/vendor/bin/ `# raku/perl6 for zef`\
  ; do
    test -d "$d" && PATH="$PATH:$d"
 done
