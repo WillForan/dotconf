@@ -18,6 +18,14 @@
   )
 )
 
+(defun my/use-url (url)
+  "Download and load url. right now just loads basename from pkgs directory"
+  (let ((pkg-dir "~/.emacs.d/pkgs/"))
+    ;; TODO: exists or download to pkg-dir
+    (load-file (expand-file-name (concat pkg-dir (file-name-base url) ".el")))
+  )
+)
+
 (defun my/dokuwiki ()
   "Connects to the dokuwiki."
   (interactive)
