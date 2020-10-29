@@ -54,4 +54,5 @@
  	ace switch-window
  	yas company helm
  	zim-wiki-mode screensend
+	helm-swoop
  	R)))
