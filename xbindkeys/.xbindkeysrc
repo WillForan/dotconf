@@ -99,6 +99,9 @@
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
  Mod1 + Tab
 
+"~/.emacs_anywhere/bin/run"
+ Control + Mod4 + e
+
 ####
 
 "flameshot gui"
