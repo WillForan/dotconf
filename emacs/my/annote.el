@@ -32,3 +32,30 @@
   (advice-add 'spray-quit :after 'my/yes-cursor)
  :bind (:map spray-mode-map ("C-c c" . my/toggle-cursor))
 )
+
+;; 2020110x neuron for zettelkasten. markdown. non standard link syntax
+;; "rib" and "shake" to make static http for exploring notes
+(defun my/sluggify (title)
+ (s-join "-" (split-string (s-downcase title))))
+ 
+(use-package neuron-mode :ensure t :defer t
+  :init
+    (add-hook 'neuron-mode-hook 'flyspell-mode)
+ :config
+    (setq neuron-id-format 'my/sluggify)
+    (setq neuron-default-zettelkasten-directory "~/notes/zettel/"))
+
+;; 20201110 - like neuron but for org mode
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/notes/org-files/")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))

@@ -13,6 +13,7 @@
     ;;   i jupyter perl-cpanplus-dist-arch perl-moose
     ;;   cpanp install Devel::IPerl
    ) 
+  (require 'org-tempo) ;; 20201014 removed from default settings. add back
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
