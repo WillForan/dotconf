@@ -1,3 +1,5 @@
+(use-package org-noter-pdftools :ensure t :defer t)
+
 (use-package pdf-tools :ensure t :defer t
   :pin manual ;; need to redo pdf-tools-install compile after upgrade
   :config
