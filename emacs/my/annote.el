@@ -52,6 +52,11 @@
       (after-init . org-roam-mode)
       :custom
       (org-roam-directory "~/notes/org-files/")
+      (org-roam-capture-immediate-template
+          '("d" "default" plain #'org-roam-capture--get-point "%?"
+	    :file-name "${slug}-%<%Y%m%d%H%M%S>"
+	    :head "#+title: ${title}\n#+created: %T\n"
+	    :unnarrowed t))
       :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n f" . org-roam-find-file)
@@ -59,3 +64,28 @@
               :map org-mode-map
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate))))
+
+(use-package deft :ensure t
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (evil-set-initial-state 'deft-mode 'emacs)
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/notes/org-files" ))
+
+;; 20201114S 
+;; https://github.com/tmalsburg/helm-bibtex
+(use-package helm-bibtex :ensure t
+  :custom
+
+  (bibtex-completion-bibliography
+      '("~/notes/org-files/ZoteroLibrary.bib"))
+  (org-ref-default-bibliography bibtex-completion-bibliography)
+  (bibtex-completion-pdf-field "file")
+  (bibtex-completion-notes-path "~/notes/org-files")
+  ;; https://emacs.stackexchange.com/questions/57558/helm-bibtex-and-zotero-with-better-bibtex-cannot-find-pdf
+  ; (setq org-ref-get-pdf-filename-function '#org-ref-get-pdf-filename-helm-bibtex)
+)
