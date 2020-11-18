@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# left and right both send '0' value for release. but center does not!
+# clear any modifies we might have pushed
+# devices sends BTN_TOUCH with value (?expect MSC_SCAN value?)
+
+left(){    xdotool keydown Control_L; }
+center(){  xdotool key Escape; }
+right(){   xdotool keydown Alt_L; }
+release(){ xdotool keyup Control_L keyup Alt_L; }
+
+INPUT=/dev/input/event22
+
+sudo evtest $INPUT|while read line; do
+  [[ $line =~ BTN_TOUCH.*value.([0-9a-z]+) ]] || continue
+  case ${BASH_REMATCH[1]} in
+    0) release;;
+    1) left;;
+    2) center;;
+    4) right;;
+  esac
+done
