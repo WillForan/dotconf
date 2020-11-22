@@ -1,9 +1,5 @@
 (use-package org :defer t
   :config
-  (use-package ob-ipython :ensure t)
-  (use-package ob-async :ensure t) ; use :async in src_block header
-  (use-package org-bullets
-    :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
   ; don't ask about evaluting code: 2017-06-26
   (setq org-confirm-babel-evaluate nil)
   ; loaded languages
@@ -47,3 +43,8 @@
    	     new))
   (advice-add #'org-export-new-reference :override #'org-export-deterministic-reference)
 )
+
+(use-package ob-ipython :ensure t :after org)
+(use-package ob-async :ensure t :after org) ; use :async in src_block header
+(use-package org-bullets :ensure t :after org
+  :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))

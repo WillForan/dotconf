@@ -47,12 +47,13 @@
      (mapcar #'my/use
      '(base backup primary-clip
  	package quelpa
- 	evil theme rainbow
+ 	evil rainbow
  	xterm-color
  	git
- 	org tramp
+ 	tramp
  	ace switch-window
  	yas company helm
  	zim-wiki-mode screensend
-	helm-swoop
- 	R)))
+	swiper helm-swoop
+ 	R
+	org theme)))
