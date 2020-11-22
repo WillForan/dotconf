@@ -32,7 +32,8 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 #bindsym $mod+Return exec urxvt
-bindsym $mod+Return exec kitty
+#bindsym $mod+Return exec kitty # 20190822
+bindsym $mod+Return exec uxterm # 20201019
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -96,27 +97,27 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
+bindsym $mod+1 workspace 1:quick
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
+bindsym $mod+4 workspace 4:note
 bindsym $mod+5 workspace 5:web
 bindsym $mod+6 workspace 6:com
 bindsym $mod+7 workspace 7:zim
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
+bindsym $mod+8 workspace 8:cite
+bindsym $mod+9 workspace 9:music
 bindsym $mod+0 workspace 10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+1 move container to workspace 1:quick
 bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+4 move container to workspace 4:note
 bindsym $mod+Shift+5 move container to workspace 5:web
 bindsym $mod+Shift+6 move container to workspace 6:com
 bindsym $mod+Shift+7 move container to workspace 7:zim
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+8 move container to workspace 8:cite
+bindsym $mod+Shift+9 move container to workspace 9:music
 bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
@@ -176,7 +177,7 @@ for_window [class="Uzbl"]     focus
 for_window [class="Chromium"] focus
 for_window [class="Firefox"]  focus
 
-assign [class="spotify"]  → 9:distract
+assign [class="spotify"]  → 9:music
 for_window [class="spotify"] focus; border 1pixel
 
 # communication
@@ -191,6 +192,7 @@ for_window [title="NEWMAIL"]  focus
 
 #for_window [class="Zim"]     → 7:zim
 assign [class="Zim"]  7:zim
+assign [class="Zotero"]  8:cite
 
 #assign [title="MATLAB"] → 8:ML
 
@@ -210,6 +212,9 @@ assign [class="Zim"]  7:zim
 #AFNI
 for_window [class="AFNI"]  floating enable
 for_window [class="TopLevelShell"]  floating enable
+for_window [title="xzoom.*"]  floating enable
+for_window [title="xmag"]  floating enable
+for_window [title="Magnifying Glass"]  floating enable
 
 # R figure
 for_window [class="r_x11"]  floating enable
@@ -249,6 +254,8 @@ bindsym $mod+Shift+O move workspace to output left
 bindsym $mod+minus move scratchpad
 bindsym $mod+Shift+minus scratchpad show
 bindsym $mod+grave [title="emacs.*wiki"] scratchpad show # also toggles
+# 20201019 
+bindsym $mod+u border toggle
 
 # start xinitrc b/c lightdm xsession-xinit doesnt work?
 exec  --no-startup-id /home/foranw/.xinitrc
