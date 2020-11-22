@@ -7,8 +7,8 @@
 export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
 
 # ruby gems (for xiki -- but that was 2012 version!) 20200531
-command -v ruby >/dev/null &&
- PATH="$PATH:$(ls -d $HOME/.gem/ruby/*/bin|sed -n '$p')"
+test -d $HOME/.gem/ruby &&
+ PATH="$PATH:$(ls -d $_/*/bin|sed -n '$p')"
 # 20200531 xiki from git (no gem install)
 test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
 
@@ -31,6 +31,7 @@ for d in \
  /opt/ni_tools/fmri_processing_scripts  \
  /opt/ni_tools/c3d/bin \
  /opt/ANTs/bin\
+ /opt/ni_tools/mrpeek\
  $HOME/src/cIQ/bin            `# garmin connect IQ unzipped SDK` \
  /usr/share/perl6/vendor/bin/ `# raku/perl6 for zef`\
  ; do
