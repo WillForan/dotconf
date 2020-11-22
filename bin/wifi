@@ -22,7 +22,7 @@ IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
 
 # shut down if already running
 killall wpa_supplicant
-dhcpcd -k
+dhcpcd -k $IF
 killall dhcpcd
 
 ## start up
