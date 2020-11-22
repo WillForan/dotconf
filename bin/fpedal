@@ -1,14 +1,28 @@
 #!/usr/bin/env bash
+INPUT=/dev/input/by-id/usb-VEC_VEC_USB_Footpedal-event-if00 
 # left and right both send '0' value for release. but center does not!
 # clear any modifies we might have pushed
 # devices sends BTN_TOUCH with value (?expect MSC_SCAN value?)
 
 left(){    xdotool keydown Control_L; }
-center(){  xdotool key Escape; }
-right(){   xdotool keydown Alt_L; }
+center(){  esc_or_scroll; }
+right(){   alt_or_up; }
 release(){ xdotool keyup Control_L keyup Alt_L; }
 
-INPUT=/dev/input/event22
+active_win(){ xdotool getwindowfocus getwindowname;}
+alt_or_up(){
+   case "$(active_win)" in
+         *Firefox) xdotool click 4;;
+         *)        xdotool keydown Alt_L;;
+   esac
+   
+}
+esc_or_scroll(){
+   case "$(active_win)" in
+         *Firefox) xdotool click 5;;
+         *)        xdotool key Escape;;
+   esac
+}
 
 sudo evtest $INPUT|while read line; do
   [[ $line =~ BTN_TOUCH.*value.([0-9a-z]+) ]] || continue
