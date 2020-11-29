@@ -49,8 +49,11 @@
 "/home/foranw/src/utils/wf-utils/zim/convo_jump.bash"
   Mod4 + Mod1 + c
 
-"ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"
-  Mod4 + p 
+"keepmenu"
+  Mod4 + p
+
+# "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"
+#   Mod4 + p 
 
 "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i' --tabbed"
   Mod4 + Shift + p 
@@ -64,8 +67,8 @@
 "/home/foranw/src/utils/wf-utils/i3/i3-window-to-zim-workspace.bash"
   Mod4 + Shift + z
 
-"/home/foranw/src/world/utils/flameshot/flameshot gui"
-  Mod4 +  Mod1 + p
+# "/home/foranw/src/world/utils/flameshot/flameshot gui"
+#   Mod4 +  Mod1 + p
 
 # media
 "/home/foranw/src/utils/wf-utils/playerctr_rofi"
@@ -74,9 +77,12 @@
 "/home/foranw/src/utils/wf-utils/mail/rofi_mail.bash"
   Mod4 + Shift + m
 
-"keepmenu"
-  Mod4 + p
 
+# shift+insert is x11 primary
+# but not everywhere
+# Shift + Insert
+"xdotool click 2"
+  Control+Shift + Insert
 
 "plum"
   Mod4 + g
@@ -92,6 +98,9 @@
 
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
  Mod1 + Tab
+
+"~/.emacs_anywhere/bin/run"
+ Control + Mod4 + e
 
 ####
 

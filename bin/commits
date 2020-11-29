@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+#
+# list commits made today using the github api
+#
+
+# USAGE:
+#  commits [FROMTIME [USER]]
+#
+# FROMTIME - days from current seconds. floored to day
+#            default to 0 -- just whats happened today
+# USER     - github username
+
+# defaults
+FROMTIME=0
+USER=WillForan
+
+# args
+[ $# -ge 1 ] && FROMTIME="$1"
+[ $# -ge 2 ] && USER="$2"
+
+# convert to seconds
+let FROMTIME=$FROMTIME*60*60*24
+# get
+curl -sL https://api.github.com/users/$USER/events | 
+  jq -r '
+    .[]|
+    .created_at as $date|
+    .repo.name as $repo |
+    .payload.commits[0].message as $m |
+    select($m != null)|
+    select($date >= (now-'''$FROMTIME'''|strftime("%Y-%m-%d")))|
+    [$repo,$date,$m]|
+    @tsv'

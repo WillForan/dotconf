@@ -18,6 +18,14 @@
   )
 )
 
+(defun my/use-url (url)
+  "Download and load url. right now just loads basename from pkgs directory"
+  (let ((pkg-dir "~/.emacs.d/pkgs/"))
+    ;; TODO: exists or download to pkg-dir
+    (load-file (expand-file-name (concat pkg-dir (file-name-base url) ".el")))
+  )
+)
+
 (defun my/dokuwiki ()
   "Connects to the dokuwiki."
   (interactive)
@@ -39,11 +47,13 @@
      (mapcar #'my/use
      '(base backup primary-clip
  	package quelpa
- 	evil theme rainbow
+ 	evil rainbow
  	xterm-color
  	git
- 	org tramp
+ 	tramp
  	ace switch-window
  	yas company helm
  	zim-wiki-mode screensend
- 	R)))
+	swiper helm-swoop
+ 	R
+	org theme)))

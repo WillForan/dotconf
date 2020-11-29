@@ -7,7 +7,7 @@
 # needed because sudo will have wrong HOME
 # and wifi settings are in $HOME/passwd/wifi/$essid.wifi
 home=$(readlink -f $0|cut -f1-3 -d/)
-DEFAULT_WIFI=abraham_linksys
+DEFAULT_WIFI=abraham_linksys #_5G
 
 # find interface
 #IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
@@ -22,7 +22,7 @@ IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
 
 # shut down if already running
 killall wpa_supplicant
-dhcpcd -k
+dhcpcd -k $IF
 killall dhcpcd
 
 ## start up
@@ -32,7 +32,7 @@ killall dhcpcd
 [ $# -eq 0 ] && essid="$DEFAULT_WIFI" || essid="$1"
 if test -r $home/passwd/wifi/${essid//[^A-Za-z0-9]/_}.wifi; then
    wpa_supplicant -c $_ -B -i $IF
-elif [ $1 == "select" ]; then
+elif [ "$essid" == "select" ]; then
   ifconfig $IF up
   iwlist scanning |
      perl -lne 'print $1 if m/ESSID:(.*)/' |

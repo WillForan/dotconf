@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
 case $HOSTNAME in
    kt)
-      # old TV with overscan issue VGA setting
-      xrandr | grep -q HDMI-1\ connected &&
-      xrandr --output HDMI-1 --mode 1920x1080i \
-        --transform 1.05,0,-49,0,1.06,-31,0,0,1 \
-        --panning 1920x1080 \
-        --pos 0x0 \
-        --left-of DVI-D-1;;
+      # 20200815 - moved upstairs
+      xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
+      # 20200526 - new curbed samsung w/ HDMI-DV1
+      # xrandr --output HDMI-1 --mode 1920x1080;;
+      # # old TV with overscan issue VGA setting
+      # xrandr | grep -q HDMI-1\ connected &&
+      # xrandr --output HDMI-1 --mode 1920x1080i \
+      #   --transform 1.05,0,-49,0,1.06,-31,0,0,1 \
+      #   --panning 1920x1080 \
+      #   --pos 0x0 \
+      #   --left-of DVI-D-1;;
+      (cd $HOME/Photos/wallpaper/ &&
+       feh --bg-scale shozo_shimamoto.jpeg  JeanGiraud_Moebius_canyon.png)
+      ;;
    yogert)
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768
@@ -35,12 +42,16 @@ xset b off
 # capslock is control
 setxkbmap -layout us -option "caps:ctrl_modifier"
 
+test -r ~/.Xdefaults && xrdb -merge $_
+
+
+autokey-gtk &
 # TODO: use lighter sxhc?
 xbindkeys
 # mouse gesture actions (plum)
 #easystroke & # commented out (20200515)
 # composite manager if needed (20200515)
-command -v picom && picom &
+#command -v picom && picom &
 # window management only if needed 
 # could call .xinitrc from i3/config
 pgrep i3 || i3

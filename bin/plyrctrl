@@ -15,9 +15,10 @@ case $cmd in
  metadata) 
    playerctl metadata 2>/dev/null |
     perl -lne '
+      s/"/_/g;
       $a{$1}=$2 if /.*?:(album|artist|title)\s+(.*)/;
       END{print join " - ", map {s/"/_/g;$_} @a{qw/artist title album/}}' |
-    xargs -I{} notify-send "{}"
+    xargs -0I{} notify-send "{}"
    exit 0;;
  # took care of odd balls. rest just goes to playerctrl
  # $opts) -- does not work :(, | doesnt mean or if in var

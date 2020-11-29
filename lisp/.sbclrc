@@ -1,0 +1,3 @@
+;;; 20200521
+#-quicklisp
+(load "/usr/lib/quicklisp/setup")
