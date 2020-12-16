@@ -8,6 +8,7 @@
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
+
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
 . $_BASHCFGDIR/paths.bash
@@ -67,4 +68,5 @@ if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
 then
    . $HOME/.afni/help/all_progs.COMP.bash
 fi
+export XDG_RUNTIME_DIR='/run/user/1000'
 
