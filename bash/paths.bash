@@ -4,7 +4,7 @@
 #  - language modules: python (pyenv), perl (cpanm), node (npm)
 #
 
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$HOME/src/utils/dynamic-colors/bin:$PATH"
 
 # ruby gems (for xiki -- but that was 2012 version!) 20200531
 test -d $HOME/.gem/ruby &&

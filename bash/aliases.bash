@@ -1,6 +1,7 @@
 # generic 
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
+alias t='tmux'
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias dt='sudo dmesg|tail'

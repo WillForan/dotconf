@@ -44,6 +44,7 @@ bind Space:magic-space
 
 # change color scheme using uses 'dynamic-colors-git'
 bind -x '"\el":"dynamic-colors cycle"'
+bind -x '"\el":"dynamic-colors fzf"'
 
 # need that to source additional settings
 . $_BASHCFGDIR/PS1.bash
