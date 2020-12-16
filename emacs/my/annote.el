@@ -1,8 +1,17 @@
-(setq 
-   my/zotbib '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
-   my/notesdir "~/notes/org-files/"
-   my/litdir  (concat my/notesdir "lit/")
-   my/jrnldir (concat my/notesdir "weekly/"))
+;; variables for note taking
+(defvar my/zotbib
+  '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
+  "zotero bibtex output file, set in zotero preferences")
+(defvar my/notesdir
+  "~/notes/org-files/"
+  "where org-roam org files are")
+(defvar my/litdir
+  (concat my/notesdir "lit/")
+  "location of org-noter org files")
+(defvar my/jrnldir
+  (concat my/notesdir "weekly/")
+  "location of journal org files (org-journal)")
+
 ;; 2018-09-28: zotero integration with orgmode; 20201118 - unused?
 ;  (use-package zotxt :ensure t) ; M-x org-zotxt-mode
 (use-package reftex :defer t :custom (reftex-default-bibliography '(my/zotbib)))
@@ -18,7 +27,8 @@
 (use-package org-noter :ensure t :defer t 
     :config
     (setq org-noter-auto-save-last-location t)
-    (setq org-noter-notes-search-path '(my/litdir)))
+    ;(setq org-noter-notes-search-path '("~/notes/org-files/lit/"))
+    (setq org-noter-notes-search-path (list my/litdir)))
 
 (use-package org-noter-pdftools :ensure t :defer t)
 
@@ -58,7 +68,7 @@
       :ensure t
       :config
 	(require 'org-roam-protocol) 
-	(add-hook 'org-roam-mode 'flyspell-mode)
+	(add-hook 'org-roam-mode-hook 'flyspell-mode)
       :hook
       (after-init . org-roam-mode)
       :custom
@@ -152,3 +162,32 @@
   :NOTER_PAGE: \n  :END:\n\n"))))
 
 ;;(setq org-protocol-default-template-key nil)
+
+; 20201122 start adding def :drill: with show1cloze
+;  still want to select tags and refine more
+;  see my/drill
+(defun my/drill-roam-cmd (drill-cmd)
+  "run DRILL-CMD on recusive list of org roam files.
+  recursive search in my/notesdir: all .org that dont start with a dot"
+  (let
+    ((org-drill-scope
+      (directory-files-recursively my/notesdir "^[^.].*.org$")))
+    (funcall drill-cmd)))
+(defun my/drill-roam ()
+   "use all org-roam files in drill.
+   recursive search in my/notesdir: all .org that dont start with a dot"
+   (interactive)
+   (my/drill-roam-cmd #'org-drill)) ;(if (equal current-prefix-arg nil) '#org-drill '#org-drill-again))
+   ;(my/drill-roam-cmd (if (current-prefix-arg) '#org-drill '#org-drill-again)))
+
+(use-package org-drill :ensure t
+  :config (setq org-drill-scope 'directory))
+
+(use-package synosaurus :ensure t
+  :bind
+  ("C-c C-s r" . synosaurus-choose-and-replace)
+  :config
+  (setq 
+   synosaurus-choose-method 'ido
+   synosaurus-backend 'synosaurus-backend-wordnet
+))
