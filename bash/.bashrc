@@ -8,6 +8,7 @@
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
+
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
 . $_BASHCFGDIR/paths.bash
@@ -43,6 +44,7 @@ bind Space:magic-space
 
 # change color scheme using uses 'dynamic-colors-git'
 bind -x '"\el":"dynamic-colors cycle"'
+bind -x '"\el":"dynamic-colors fzf"'
 
 # need that to source additional settings
 . $_BASHCFGDIR/PS1.bash
@@ -67,6 +69,7 @@ if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
 then
    . $HOME/.afni/help/all_progs.COMP.bash
 fi
+export XDG_RUNTIME_DIR='/run/user/1000'
 
 # curl -L https://install.perlbrew.pl | bash
 source ~/perl5/perlbrew/etc/bashrc

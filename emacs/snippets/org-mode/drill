@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: drill
+# key: <d
+# --
+** $1 :drill:
+    :PROPERTIES:
+    :DRILL_CARD_TYPE: show1cloze
+    :END:
+  $0

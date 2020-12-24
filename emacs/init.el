@@ -5,3 +5,4 @@
 (my/loadinit) ;; load most files in my/*el -- hardcoded selection
 
 ;(if (string-equal (system-name) "reese") (progn ))
+(put 'erase-buffer 'disabled nil)

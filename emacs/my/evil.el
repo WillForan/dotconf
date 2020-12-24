@@ -15,13 +15,18 @@
     ;; _ is part of a word
     ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
     (setq-default evil-symbol-word-search t) 
+    
+    ;;20201120 update requires explicit undo model
+    (global-undo-tree-mode)
+    (setq evil-undo-system 'undo-tree)
+
     ;; search history (up/down) -- 20200404
     (evil-select-search-module 'evil-search-module 'evil-search)
 
     ;; default to emacs for these
     (dolist (mode (list
 		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
-		  'Magit-mode
+		  'Magit-mode 'magit-mode 
 		  'notmuch-hello-mode 'notmuch-tree-mode))
        (evil-set-initial-state mode 'emacs))
     ;; evil addons
@@ -86,3 +91,12 @@
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state)
   (key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
+
+;; 20201121 
+;; crib from http://blog.binchen.org/posts/how-to-use-expand-region-efficiently.html
+;; cite:binHowUseExpandregion2013
+(use-package expand-region :ensure t :after evil
+ :config
+  (setq expand-region-contract-fast-key "z")
+  (evil-leader/set-key "xx" 'er/expand-region))
+  
