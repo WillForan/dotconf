@@ -71,3 +71,5 @@ then
 fi
 export XDG_RUNTIME_DIR='/run/user/1000'
 
+# curl -L https://install.perlbrew.pl | bash
+source ~/perl5/perlbrew/etc/bashrc
