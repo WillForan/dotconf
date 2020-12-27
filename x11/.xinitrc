@@ -44,8 +44,9 @@ setxkbmap -layout us -option "caps:ctrl_modifier"
 
 test -r ~/.Xdefaults && xrdb -merge $_
 
+# clipboard manager: greenclip
+#  systemctl --user start greenclip.service
 
-autokey-gtk &
 # TODO: use lighter sxhc?
 xbindkeys
 # mouse gesture actions (plum)
@@ -54,4 +55,5 @@ xbindkeys
 #command -v picom && picom &
 # window management only if needed 
 # could call .xinitrc from i3/config
+(sleep 5; autokey-gtk) &
 pgrep i3 || i3
