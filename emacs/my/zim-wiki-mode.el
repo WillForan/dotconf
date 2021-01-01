@@ -1,7 +1,8 @@
 ;; local journaling wiki
 (defun my/wiki-goto-now ()
-   (zim-wiki-goto-now (expand-file-name zim-wiki-my-root))
-)
+   "now page for locally set notebook"
+   (interactive)
+   (zim-wiki-goto-now (expand-file-name zim-wiki-my-root)))
 (defun my/work-wiki ()
   "switch to work wiki settings"
   (interactive)
@@ -27,14 +28,25 @@
    (insert (string-join (list header-level date header-level) " "))))
 
 
-(use-package zim-wiki-mode :defer t
+
+; 20200625 - broke?!
+;(use-package outline-mode :ensure t)
+
+(use-package outline-magic :ensure t
+  :after outline-mode
+  :config
+    (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
+
+(use-package zim-wiki-mode :defer f
   ; :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa
   :bind ("C-c C-n" . my/wiki-goto-now)
+  :after outline-magic
   :init
     (add-hook 'zim-wiki-mode-hook #'flyspell-mode)
     (add-hook 'zim-wiki-mode-hook #'(lambda () (git-gutter-mode 0)))
     (add-hook 'zim-wiki-mode-hook #'auto-save-visited-mode)
   :config
+    ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
     (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
     ;(my/home-wiki)
 )
