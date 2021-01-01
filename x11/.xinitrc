@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+samsung_tv(){
+   # 20201129 - overscan issues for upstars tv
+   xrandr --output HDMI1 --mode 1280x720 --transform 1.04,0,-27,0,1.05,-14,0,0,1 --panning 1280x720 --pos 0x0 $@
+}
+
 case $HOSTNAME in
    kt)
       # 20200815 - moved upstairs
@@ -28,7 +34,7 @@ case $HOSTNAME in
   s2)
       # hdmi only if we have it
       xrandr | grep -q HDMI1\ connected &&
-         xrandr --output HDMI1 --mode 1280x720 --output LVDS1 --off ||
+         samsung_tv --output LVDS1 --off ||
          xrandr --output LVDS1 --mode 1366x768
       ;;
 
