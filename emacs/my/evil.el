@@ -17,8 +17,8 @@
     (setq-default evil-symbol-word-search t) 
     
     ;;20201120 update requires explicit undo model
-    (global-undo-tree-mode)
-    (setq evil-undo-system 'undo-tree)
+    (global-undo-tree-mode 1)
+    (evil-set-undo-system 'undo-tree)
 
     ;; search history (up/down) -- 20200404
     (evil-select-search-module 'evil-search-module 'evil-search)
@@ -63,6 +63,7 @@
     (evil-leader/set-key "w" #'save-buffer)
     (evil-leader/set-key "0" #'switch-window-then-delete)
     (evil-leader/set-key "1" #'switch-window-then-maximize)
+    (evil-leader/set-key "q" #'my/other-window-kill)
 
     (evil-leader/set-key "<SPC>" #'helm-M-x)
 
