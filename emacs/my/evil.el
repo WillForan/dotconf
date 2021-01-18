@@ -27,7 +27,8 @@
     (dolist (mode (list
 		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
 		  'Magit-mode 'magit-mode 
-		  'notmuch-hello-mode 'notmuch-tree-mode))
+		  'notmuch-hello-mode 'notmuch-tree-mode
+		  'sly-popup-buffer-mode 'sly-db-mode))
        (evil-set-initial-state mode 'emacs))
     ;; evil addons
     (use-package evil-escape :ensure t

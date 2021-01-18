@@ -68,4 +68,5 @@
  	zim-wiki-mode screensend
 	swiper helm-swoop
  	R
+	lisp
 	org theme)))
