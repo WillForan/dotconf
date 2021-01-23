@@ -1,0 +1,30 @@
+IMAPAccount gmailimap
+ Host imap.gmail.com
+ User willforan
+ PassCmd "pass gmail/willforan"
+ SSLType IMAPS
+ CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+## Stores
+IMAPStore gmailremote
+ Account      gmailimap
+
+MaildirStore gmaillocal
+ Path         /mnt/t11/mail/willforan@gmail.com/
+ Inbox        /mnt/t11/mail/willforan@gmail.com/Inbox
+
+
+# setup filter+labels: priority -> imapprimary
+Channel gmail-primary
+ Master :gmailremote:"imapprimary"
+ Slave :gmaillocal:
+
+Channel gmail-sent
+ Master :gmailremote:"[Gmail]/Sent Mail"
+ Slave :gmaillocal:sent
+ Create Slave
+
+Group gmail
+ Channel gmail-primary
+ Channel gmail-sent
+
