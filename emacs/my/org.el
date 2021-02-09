@@ -1,5 +1,8 @@
 (use-package org :defer t
   :config
+  ; spelling. finally added 20210209
+  (add-hook 'org-mode-hook 'flyspell-mode)
+
   ; don't ask about evaluting code: 2017-06-26
   (setq org-confirm-babel-evaluate nil)
   ; loaded languages
