@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+cache=~/.cache/qtile-actions.txt
+[ ! -r $cache ] && quicktile --show-actions > $cache
+grep '^ [a-z]' $cache |rofi -dmenu|xargs -r quicktile
