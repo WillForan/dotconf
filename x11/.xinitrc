@@ -55,10 +55,14 @@ test -r ~/.Xdefaults && xrdb -merge $_
 
 # TODO: use lighter sxhc?
 xbindkeys
+# 20210108 - add facny notification deamon
+command -v deadd-notification-center && $_ &
+
 # mouse gesture actions (plum)
 #easystroke & # commented out (20200515)
 # composite manager if needed (20200515)
-#command -v picom && picom &
+# enabled again (20210111)  need for DeskDockServer (and maybe citrix?)
+command -v picom && picom -bi 1 # -b =daemon, -i1 = inactive opacity disabled 
 # window management only if needed 
 # could call .xinitrc from i3/config
 (sleep 5; autokey-gtk) &
