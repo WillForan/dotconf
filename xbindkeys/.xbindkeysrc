@@ -12,7 +12,7 @@
 
 "rofi -show" 
   Mod4 + Tab
-"rofi -combi-modi run,window,ssh -show combi"
+"rofi -show combi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window'"
   Mod4+d
 " rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
   Mod4+Shift+v
@@ -83,7 +83,8 @@
 # shift+insert is x11 primary
 # but not everywhere
 # Shift + Insert
-"xdotool click 2"
+#"xdotool click 2"
+"cua_paste_primary"
   Control+Shift + Insert
 
 "plum"
