@@ -22,6 +22,7 @@ case $HOSTNAME in
        feh --bg-scale shozo_shimamoto.jpeg  JeanGiraud_Moebius_canyon.png)
       ;;
    yogert)
+      xrandr --output LVDS1 --mode 1600x900
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768
       libinput-gestures-setup restart
