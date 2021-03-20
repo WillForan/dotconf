@@ -32,8 +32,10 @@ case $HOSTNAME in
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
       ;;
   s2)
-      # hdmi only if we have it
-      xrandr | grep -q HDMI1\ connected &&
+     # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
+     greenclip daemon &
+     # hdmi only if we have it
+     xrandr | grep -q HDMI1\ connected &&
          samsung_tv --output LVDS1 --off ||
          xrandr --output LVDS1 --mode 1366x768
       ;;
