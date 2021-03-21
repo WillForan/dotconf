@@ -40,6 +40,18 @@
   (interactive)
   (kill-new (buffer-file-name)))
 
+(defun my/other-window-kill ()
+  "A window just opened w/o focus. buffer name has a *. kill it"
+  (interactive)
+  (let* ((cur (selected-window))
+        (next (next-window))
+	(next-buffer (window-buffer (next-window)))
+        (next-name (buffer-name next-buffer)))
+     (if (string-match-p "*" next-name) 
+       (kill-buffer next-buffer)))
+)
+
+
 (defun my/loadinit ()
      "load default set of 'layers'"
      (interactive)
@@ -56,4 +68,5 @@
  	zim-wiki-mode screensend
 	swiper helm-swoop
  	R
+	lisp
 	org theme)))

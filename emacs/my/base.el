@@ -3,6 +3,11 @@
 ;; no display, toolbar already off (dne)
 (when (display-graphic-p) (tool-bar-mode 0))
 (menu-bar-mode 0)
+;; 20210209 lucid scroll bars are ugly but very functional
+;(toggle-scroll-bar 0) 
+; 20210209 just disable on minibuffer
+(set-window-scroll-bars (minibuffer-window) nil nil)
+
 (setq inhibit-startup-screen t)
 
 ;; shift-insert like terminal: x11 primary clipboard
@@ -59,9 +64,15 @@
 ;; use python3 in python-mode 20200225
 (setq python-shell-interpreter "python3")
 
-;; org babel -- see org.el (?)
-;(org-babel-do-load-languages
-; 'org-babel-load-languages
-; '((python . t)
-;   (R . t)
-;   (shell .t)))
+(defvar my/zotbib
+  '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
+  "zotero bibtex output file, set in zotero preferences")
+(defvar my/notesdir
+  "~/notes/org-files/"
+  "where org-roam org files are")
+(defvar my/litdir
+  (concat my/notesdir "lit/")
+  "location of org-noter org files")
+(defvar my/jrnldir
+  (concat my/notesdir "weekly/")
+  "location of journal org files (org-journal)")
