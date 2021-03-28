@@ -27,13 +27,15 @@ source $HOME/src/utils/fuzzy_arg/fuzzy_arg.bash
 source $HOME/src/utils/fuzzy_arg/fuzzy_new_complete.bash
 
 # kitty terminal
-command -v kitty >/dev/null &&
-   source <(kitty + complete setup bash)
+#command -v kitty >/dev/null &&
+#   source <(kitty + complete setup bash)
 
 # fzf keys
 #  CTRL-R - Paste the selected command from history into the command line
 #  ALT-C - cd into the selected directory
-. /usr/share/fzf/key-bindings.bash
+# emacs 
+[[ $TERM != "dumb" ]]  &&
+    . /usr/share/fzf/key-bindings.bash
 
 # autojump aliases: z a sd sf d f
 # N.B. 's' alias overwritten to 'ssh' later
@@ -43,7 +45,7 @@ eval "$(fasd --init auto)"
 bind Space:magic-space
 
 # change color scheme using uses 'dynamic-colors-git'
-bind -x '"\el":"dynamic-colors cycle"'
+#bind -x '"\el":"dynamic-colors cycle"'
 bind -x '"\el":"dynamic-colors fzf"'
 
 # need that to source additional settings
@@ -72,4 +74,15 @@ fi
 export XDG_RUNTIME_DIR='/run/user/1000'
 
 # curl -L https://install.perlbrew.pl | bash
-source ~/perl5/perlbrew/etc/bashrc
+test -r $HOME/perl5/perlbrew/etc/bashrc && . $_
+
+# freesurfer setup
+setup_freesurfer(){
+ export FREESURFER_HOME=/opt/ni_tools/freesurfer
+ source $FREESURFER_HOME/SetUpFreeSurfer.sh
+}
+
+# gitmoji
+_bash_insert() { perl -le 'ioctl(STDIN,0x5412,$_) for split "", join " ", @ARGV' -- "$@";}
+gitmoji_bash() { _bash_insert $(gitmoji-select echo); }
+bind -x '"\eG":"gitmoji_bash"'
