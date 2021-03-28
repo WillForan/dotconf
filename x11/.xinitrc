@@ -45,6 +45,7 @@ source $HOME/.bashrc
 
 # no bell
 xset b off
+# setxkbmap -layout us,apl -variant ,dyalog -option grp:switch # hold right alt + key for apl
 #setxkbmap -layout us -option ctrl:nocaps
 # capslock is control
 setxkbmap -layout us -option "caps:ctrl_modifier"
