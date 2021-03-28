@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# where is TabFS
+mnt=$HOME/src/utils/TabFS/fs/mnt 
+# 20210313 - link is broke? not sure why
+# but current id is still in the link (999 in by-id/999windows/1)
+cur=$(readlink $mnt/tabs/last-focused |grep -Po '(?<=/)\d+(?=[w/])')
+[ $# -eq 0 ] && info=url || info="$1"
+cat $mnt/tabs/by-id/$cur/$info.txt
