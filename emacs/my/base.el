@@ -1,4 +1,20 @@
-;; base emacs config. assume my.el already laoded
+;;;; base emacs config. assume my.el already laoded
+
+;; path locations
+;; ~/notes/org-files tracked in syncthing
+(defvar my/zotbib
+  '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
+  "zotero bibtex output file, set in zotero preferences")
+(defvar my/notesdir
+  "~/notes/org-files/"
+  "where org-roam org files are")
+(defvar my/litdir
+  (concat my/notesdir "lit/")
+  "location of org-noter org files")
+(defvar my/jrnldir
+  (concat my/notesdir "weekly/")
+  "location of journal org files (org-journal)")
+
 (setq inhibit-startup-screen t)
 ;; no display, toolbar already off (dne)
 (when (display-graphic-p) (tool-bar-mode 0))
@@ -26,6 +42,7 @@
 ;; https://www.emacswiki.org/emacs/FlySpell
 (setq flyspell-issue-message-flag nil)
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
+; see C-;
 
 ; (global-linum-mode 1)
 
@@ -35,7 +52,7 @@
 ;; write over highlighted selection (20171107)
 (delete-selection-mode 1)
 
-;; dont ask about symlinks in vcs
+;; dont ask about symlinks in version control (git)
 (setq vc-follow-symlinks nil)
 
 ;; title has filename in it
@@ -64,15 +81,16 @@
 ;; use python3 in python-mode 20200225
 (setq python-shell-interpreter "python3")
 
-(defvar my/zotbib
-  '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
-  "zotero bibtex output file, set in zotero preferences")
-(defvar my/notesdir
-  "~/notes/org-files/"
-  "where org-roam org files are")
-(defvar my/litdir
-  (concat my/notesdir "lit/")
-  "location of org-noter org files")
-(defvar my/jrnldir
-  (concat my/notesdir "weekly/")
-  "location of journal org files (org-journal)")
+;; use comint file completion to approximate vim's C-x C-f
+;; TODO: why does comany-files need a leading path (e.g. ./)
+; M-\    gives a minibuffer list 
+; M-SPC completes and cycles through
+(global-set-key "\M-\\" 'comint-dynamic-complete-filename)
+(global-set-key "\M- " 'hippie-expand) ; overwrites 'just-one-space'
+
+; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
+(use-package cliphist :ensure t
+  :bind
+  ("C-c p" . cliphist-paste-item)
+  :config
+  (setq cliphist-linux-clipboard-managers '("greenclip" "clipit" "parcellite")))
