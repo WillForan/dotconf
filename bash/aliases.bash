@@ -1,12 +1,11 @@
 # generic 
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
-alias t='tmux'
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias dt='sudo dmesg|tail'
 alias v='vim'
-alias t='tmux'
+alias t='tmux -2'
 alias wh='which'
 alias bn=basename
 alias dn=dirname
@@ -14,6 +13,9 @@ alias x='xargs -r'
 alias px='env_parallel -X -r'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
+
+# browse with images
+alias w3m='w3m -sixel -o display_image=1'
 
 # package managemnet
 alias i='yay --noconfirm -S'
