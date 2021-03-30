@@ -18,7 +18,10 @@ CFGDIR=$(pwd)
 
 #
 # 20190822WF - init
+# 20210123   - add dryrun
 #
+
+[ -n "${DRYRUN:-}" ] && DRYRUN=echo || DRYRUN=
 
 # wf-utils used by i3 and xbindkeys
 # fuzzy_arg used by bashrc
@@ -46,19 +49,22 @@ for syspkg in ${SYSPKGS}; do
    exit 1
 done
 
+# TODO: run upbin $PKG for each package
+
 # just want bashrc, not the other source files
 [ ! -h ~/.bashrc ] && ln -s $CFGDIR/bash/.bashrc ~/.bashrc
 
 # for all packages (not */ because bash, maybe others soon)
-for pkg in vim xbindkeys x11 R i3 easystroke; do
-   stow $pkg -t ~ -d ~/config/
+for pkg in vim xbindkeys x11 R i3 easystroke mail; do
+   $DRYRUN stow $pkg -t ~ -d ~/config/
 done
 
-stow emacs -t ~/.emacs.d/
-stow bin -t ~/bin/
-stow libinput-gestures/ -t ~/.config
+$DRYRUN stow emacs -t ~/.emacs.d/
+$DRYRUN stow bin -t ~/bin/
+$DRYRUN stow libinput-gestures/ -t ~/.config
+$DRYRUN stow greenclip/ -t ~/.config
 
 # system config. need sudo/root
-sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
+$DRYRUN sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
 
 
