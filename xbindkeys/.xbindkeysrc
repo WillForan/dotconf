@@ -96,7 +96,9 @@
 "copyq toggle"
   Mod4 + q
 
-"emacsclient -c -n -e '(progn (switch-to-buffer nil) (setq frame-title-format "%b %f [emacs]"))'"
+# 20210331 - new frame hook, dont need this
+# (setq frame-title-format "%b %f [emacs]")
+"emacsclient -c -n -e '(progn (switch-to-buffer nil))'"
  Mod4+ Shift +Return
 
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"

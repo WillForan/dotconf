@@ -48,16 +48,18 @@
 	(next-buffer (window-buffer (next-window)))
         (next-name (buffer-name next-buffer)))
      (if (string-match-p "*" next-name) 
-       (kill-buffer next-buffer)))
-)
+       (kill-buffer next-buffer))))
 
+(defun my/frame-settings (_)
+  "load settings specific to frame display"
+  (my/use 'frame-settings))
 
 (defun my/loadinit ()
      "load default set of 'layers'"
      (interactive)
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
-     '(base backup primary-clip
+     '(base frame-settings backup primary-clip
  	package quelpa
  	evil rainbow
  	xterm-color

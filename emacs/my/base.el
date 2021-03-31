@@ -15,17 +15,6 @@
   (concat my/notesdir "weekly/")
   "location of journal org files (org-journal)")
 
-(setq inhibit-startup-screen t)
-;; no display, toolbar already off (dne)
-(when (display-graphic-p) (tool-bar-mode 0))
-(menu-bar-mode 0)
-;; 20210209 lucid scroll bars are ugly but very functional
-;(toggle-scroll-bar 0) 
-; 20210209 just disable on minibuffer
-(set-window-scroll-bars (minibuffer-window) nil nil)
-
-(setq inhibit-startup-screen t)
-
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
 ;; selection to xclipboard (20191202)
@@ -55,15 +44,7 @@
 ;; dont ask about symlinks in version control (git)
 (setq vc-follow-symlinks nil)
 
-;; title has filename in it
-(setq-default frame-title-format '("%f [emacs %m]"))
-(setq-default icon-title-format frame-title-format)
 
-;; Font
-;(set-default-font "Source Code Pro 14") ;; 20191022
-;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
-; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-(set-frame-font "DejaVu Sans Mono-14" nil t); 20180810; 20191116 fix
 
 ;; persistant history (20171107)
 (savehist-mode 1)
@@ -80,6 +61,8 @@
 
 ;; use python3 in python-mode 20200225
 (setq python-shell-interpreter "python3")
+
+(setq inhibit-startup-screen t)
 
 ;; use comint file completion to approximate vim's C-x C-f
 ;; TODO: why does comany-files need a leading path (e.g. ./)
