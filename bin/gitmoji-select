@@ -3,11 +3,20 @@
 # insert gitmoji from fzf/rofi
 # use "xdo" to type it
 # 20200129 - init
+# 20210219 - args: 'xdo' for rofi and autotype; 'autokey' for rofi but still return key
 #  depends: jq, dc, xargs, xdotool (optionally type)
 
-[ $# -gt 0 -a "$1" == "xdo" ] &&
-   cmd="xdotool type" ||
-   cmd="echo"
+cmd=echo
+select="fzf"
+while [ $# -gt 0 ]; do
+   case "$1" in
+          xdo*) cmd="xdotool type"; select="rofi -dmenu -i";;
+      autokey*)                     select="rofi -dmenu -i";;
+            *) echo "unkown option $1"; exit ;;
+  esac
+  shift
+done
+
 
 ## do we need to re cache
 CACHE=$HOME/.local/share/gitmoji
@@ -21,5 +30,4 @@ cachedate="$(stat -c '%y' $CACHE)"
 # more than a week old (604800 seconds)
 echo $(sec) $(sec -d "$cachedate") "- 60 60 * 24 * 7 * / p" | dc | xargs test 1 -le && get
 
-[ -t 1 ] && select=fzf || select="rofi -dmenu -i"
 cat $CACHE | $select | cut -f1 | xargs $cmd
