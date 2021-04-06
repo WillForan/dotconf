@@ -14,6 +14,9 @@ alias px='env_parallel -X -r'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
+# inside emacs open new file # 20210401
+alias en="emacsclient -n"
+
 # browse with images
 alias w3m='w3m -sixel -o display_image=1'
 
