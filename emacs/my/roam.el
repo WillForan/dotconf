@@ -4,12 +4,16 @@
 ;; so this goes here
 (use-package synosaurus :ensure t
   :bind
-  ("C-c C-s r" . synosaurus-choose-and-replace)
+  ("C-c d t" . synosaurus-choose-and-replace)
   :config
   (setq 
    synosaurus-choose-method 'ido
    synosaurus-backend 'synosaurus-backend-wordnet))
-
+; maybe try define-word
+(use-package wordnut :ensure t
+  :bind ("C-c d D" . wordnut-lookup-current-word))
+(use-package define-word :ensure t
+  :bind ("C-c d d" . define-word-at-point))
 
 (defun my/make-relative-to-buffer (path)
   "PATH relative to the current buffer"
@@ -74,7 +78,6 @@
               (("C-c n R" . helm-bibtex)))
 
 (use-package deft :ensure t
-  :after org-roam
   :bind
   ("C-c n D" . deft)
   :custom
@@ -90,7 +93,8 @@
  (org-journal-dir my/jrnldir)
  (add-to-list 'org-agenda-files (expand-file-name org-journal-dir))
  (org-journal-file-format "%G-%W.org")
-)
+ (global-set-key (kbd "C-c n d") #'my/link-date)
+ (global-set-key (kbd "C-c n n") #'my/goto-today))
 
 (use-package org-roam-bibtex :ensure t :defer t
  :after org-roam
