@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+env|grep -q ^DRYRUN=. && DRYRUN=echo
+# set folders as exacutiable and files as readable
+$DRYRUN find "$@" -type d -not -perm -o=x -exec chmod a+x {} \+
+$DRYRUN find "$@" -type f,d -not -perm -a=r -exec chmod a+r {} \+
