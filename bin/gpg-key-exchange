@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+[ $# -eq 0 ] && host=s2  || host="$@"
+ssh "$host" gpg --export-secret-keys  | gpg --import
