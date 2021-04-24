@@ -15,6 +15,8 @@
   (concat my/notesdir "weekly/")
   "location of journal org files (org-journal)")
 
+(setq org-agenda-files (list my/notesdir))
+
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
 ;; selection to xclipboard (20191202)

@@ -33,6 +33,9 @@
 ; (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 ; (set-face-attribute 'comint-highlight-prompt nil :inherit nil)
 ; (use-package ansi-color   :config  (ansi-color-for-comint-mode-on))
+; 20210401 - reboot and works with color?! using doom-solarazied-dark theme
+; this file wasn't sourced before hand.
+; still need export TERM=eterm-color for ls colors
 
 ; get tab complete on some functions. TODO: add fish
 (use-package bash-completion :ensure t

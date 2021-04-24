@@ -37,6 +37,8 @@
   :config
   ;;; spelling. finally added 20210209
   (add-hook 'org-mode-hook 'flyspell-mode)
+  ;; 20210417 - wrap lines
+  (add-hook 'org-mode-hook 'visual-line-mode)
   
   (setq org-use-speed-commands t)
   (add-to-list 'org-speed-commands-user
