@@ -27,9 +27,10 @@ test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
 
 # if emacs, set term. but dont set bindings
 if [ -n "$INSIDE_EMACS" ]; then
-    #TERM=xterm
-    TERM=eterm-color
-    :
+    export TERM=eterm-color \
+           EDITOR='emacsclient -n'
+
+    alias pass='EDITOR=emacsclient pass'
 else
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line

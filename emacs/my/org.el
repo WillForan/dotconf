@@ -39,6 +39,11 @@
   (add-hook 'org-mode-hook 'flyspell-mode)
   ;; 20210417 - wrap lines
   (add-hook 'org-mode-hook 'visual-line-mode)
+  ;; 20210428 - auto save to this file
+  ;; also see var auto-save-visited-file-name
+  ;; but this runs saving hooks
+  (add-hook 'org-mode-hook #'auto-save-visited-mode)
+
   
   (setq org-use-speed-commands t)
   (add-to-list 'org-speed-commands-user
@@ -106,3 +111,9 @@
    '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
    '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
    '(org-level-5 ((t (:inherit outline-5 :height 1.0))))))
+
+;; 20210421
+(use-package org-attach-screenshot :ensure t
+:config
+; copy to clipboard (C-c), output also saved to file
+(setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
