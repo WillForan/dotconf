@@ -36,7 +36,8 @@
     ;; default to emacs for these
     (dolist (mode (list
 		  'synosaurus-list-mode 'wordnut-mode
-		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
+		  'haskell-error-mode
+		  'spray 'help-mode 'elfeed-search-mode 'elfeed-show-mode
 		  'Magit-mode 'magit-mode 
 		  'notmuch-hello-mode 'notmuch-tree-mode
 		  'sly-popup-buffer-mode 'sly-db-mode 'sly-inspector-mode
@@ -118,5 +119,18 @@
 (use-package expand-region :ensure t :after evil
  :config
   (setq expand-region-contract-fast-key "z")
-  (evil-leader/set-key "xx" 'er/expand-region))
+  (evil-leader/set-key "xx" 'er/expand-region)
+
+  ;; 20210502
+  ;; https://wikemacs.org/wiki/Lisp_editing
+  ;; https://emacs.stackexchange.com/questions/16614/make-evil-mode-more-lisp-friendly
+  (defun evil-visual-char-or-expand-region ()
+    (interactive)
+    (if (region-active-p)
+          (call-interactively 'er/expand-region)
+      (evil-visual-char)))
+  
+  (define-key evil-normal-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map [escape] 'evil-visual-char))
   
