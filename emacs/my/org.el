@@ -69,9 +69,12 @@
 	(shell . t) ; req newer org mode
 	(J . t)
         (jupyter . t)
+        (plantuml . t)
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
         ))
+  ;; 20210408 - after installing with pacman
+  (setq org-plantuml-jar-path  "/usr/share/java/plantuml/plantuml.jar")
 
   ;; must be afer org load-language -- function doesn't exist?
   ;(org-babel-jupyter-override-src-block "python")
