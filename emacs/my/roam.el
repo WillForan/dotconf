@@ -5,6 +5,7 @@
 (use-package synosaurus :ensure t
   :bind
   ("C-c d t" . synosaurus-choose-and-replace)
+  ("C-c d T" . synosaurus-lookup)
   :config
   (setq 
    synosaurus-choose-method 'ido
@@ -72,8 +73,7 @@
               :map org-mode-map
               (("C-c n i" . org-roam-insert))
               (("C-c n I" . org-roam-insert-immediate)))
-
-              (("C-c n j" . org-journal-new-entry))
+              ;(("C-c n j" . org-journal-new-entry)) ; done in org-journal
               (("C-c n r" . orb-insert))
               (("C-c n R" . helm-bibtex)))
 
@@ -93,8 +93,10 @@
  (org-journal-dir my/jrnldir)
  (add-to-list 'org-agenda-files (expand-file-name org-journal-dir))
  (org-journal-file-format "%G-%W.org")
- (global-set-key (kbd "C-c n d") #'my/link-date)
- (global-set-key (kbd "C-c n n") #'my/goto-today))
+ :bind
+ (("C-c n d" . #'my/link-date)
+  ("C-c n n" . #'my/goto-today)
+  ("C-c n j" . #'org-journal-new-entry)))
 
 (use-package org-roam-bibtex :ensure t :defer t
  :after org-roam

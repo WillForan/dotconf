@@ -3,6 +3,7 @@ alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
+alias G='git'
 alias dt='sudo dmesg|tail'
 alias v='vim'
 alias t='tmux -2'
@@ -32,6 +33,10 @@ n() { ls -tlc $@|head;}
 sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 # which directory - 20200919
 wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
+
+# 20210421 - cd to a file.
+# doesnt work on symlinks (no easy way to tell if its a file or dir
+c() { [ $# -gt 0 -a -f "$1" ] && cd "$(dirname "$1")" || cd "$@"; }
 
 ip_list_local(){
    ssh admin@192.168.1.1 "

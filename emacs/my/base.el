@@ -15,6 +15,8 @@
   (concat my/notesdir "weekly/")
   "location of journal org files (org-journal)")
 
+(setq org-agenda-files (list my/notesdir))
+
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
 ;; selection to xclipboard (20191202)
@@ -77,3 +79,23 @@
   ("C-c p" . cliphist-paste-item)
   :config
   (setq cliphist-linux-clipboard-managers '("greenclip" "clipit" "parcellite")))
+
+
+; 20210331 recompile elc if newer code
+(setq load-prefer-newer t) 
+(use-package auto-compile :ensure t
+ :config
+    (auto-compile-on-load-mode)
+    (auto-compile-on-save-mode))
+
+;(use-package mood-line :ensure t :config (mood-line-mode))
+;(use-package smart-mode-line :ensure t :config (sml/setup))
+
+;; 20210428 tramp passwords stored
+;; (impl. for ginger where .ssh perms prevent key exchange)
+;; https://stackoverflow.com/questions/840279/passwords-in-emacs-tramp-mode-editing
+;; wont work for proxyjump (ssh:reese|ssh:ginger:/file): doesn't store ginger
+;; defaults to ~/.authinfo (not encrypted)
+(use-package password-cache :ensure t
+  :config
+  (setq password-cache-expiry nil))

@@ -7,3 +7,8 @@
   (add-hook 'lsp-managed-mode-hook 'lsp-diagnostics-modeline-mode))
 
 (use-package lsp-treemacs :ensure t)
+(use-package lsp-ivy :ensure t)
+(use-package lsp-haskell :ensure t 
+  :config
+  (add-hook 'haskell-mode-hook #'lsp)
+  (add-hook 'haskell-literate-mode-hook #'lsp))

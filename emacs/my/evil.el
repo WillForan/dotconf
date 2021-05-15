@@ -8,6 +8,16 @@
       (progn (evil-visual-line) (my/eval-region-and-kbquit)))
   (keyboard-quit))
 
+(defun my/evil-exclude-state ()
+ "get major mode of current buffer, add to kill ring, jump to this file
+  this would be better as a configure variable that can be edited and saved?"
+ (interactive)
+ (progn
+   (kill-new (concat "'" (symbol-name major-mode)))
+   (find-file-at-point "~/.emacs.d/my/evil.el") 
+   (re-search-forward ";; default to emacs for these\$")))
+
+
 (use-package evil :ensure t
   :init
   :config
@@ -25,11 +35,15 @@
 
     ;; default to emacs for these
     (dolist (mode (list
-		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
+		  'synosaurus-list-mode 'wordnut-mode
+		  'haskell-error-mode
+		  'spray 'help-mode 'elfeed-search-mode 'elfeed-show-mode
 		  'Magit-mode 'magit-mode 
 		  'notmuch-hello-mode 'notmuch-tree-mode
-		  'sly-popup-buffer-mode 'sly-db-mode))
+		  'sly-popup-buffer-mode 'sly-db-mode 'sly-inspector-mode
+                  'deft-mode 'special))
        (evil-set-initial-state mode 'emacs))
+    
     ;; evil addons
     (use-package evil-escape :ensure t
       :config
@@ -47,6 +61,10 @@
       :config
        (global-evil-leader-mode)
        (evil-leader/set-leader "<SPC>"))
+    
+    ;; does the opposite of J -- merge line up instead of down
+    ;; use after e.g. r!xclip -o
+    (define-key evil-normal-state-map (kbd "M-j") #'join-line)
 
     ;; leader keybindings -- consider hydra instead?
     (evil-leader/set-key "a" #'avy-goto-char-in-line)
@@ -92,7 +110,8 @@
   :config
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state)
-  (key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
+  ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body) ;rm 20210328
+  )
 
 ;; 20201121 
 ;; crib from http://blog.binchen.org/posts/how-to-use-expand-region-efficiently.html
@@ -100,5 +119,18 @@
 (use-package expand-region :ensure t :after evil
  :config
   (setq expand-region-contract-fast-key "z")
-  (evil-leader/set-key "xx" 'er/expand-region))
+  (evil-leader/set-key "xx" 'er/expand-region)
+
+  ;; 20210502
+  ;; https://wikemacs.org/wiki/Lisp_editing
+  ;; https://emacs.stackexchange.com/questions/16614/make-evil-mode-more-lisp-friendly
+  (defun evil-visual-char-or-expand-region ()
+    (interactive)
+    (if (region-active-p)
+          (call-interactively 'er/expand-region)
+      (evil-visual-char)))
+  
+  (define-key evil-normal-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map [escape] 'evil-visual-char))
   

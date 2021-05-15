@@ -21,16 +21,29 @@
 
     ; 20210328 - replace default history (comint-dynamic-list-input-ring)
     ; diff between input-ring and prompts is later is less styled and sorted?
-    (define-key comint-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
-    (define-key comint-mode-map (kbd "C-c l") 'helm-comint-prompts-all)
+    (define-key comint-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)
+    (define-key comint-mode-map (kbd "C-c l")   #'helm-comint-prompts-all)
+    ; C-c p is global: paste from clipboard manager (greenclip); 'P' here for prompt
+    (define-key comint-mode-map (kbd "C-c P")    #'helm-comint-prompts-all)
 )
 
 
 ;; jump to buffer (info and shell)
-(use-package helm-selector :ensure t :after 'helm
+; NB. M-RET is mapped to reset cwd?
+(use-package helm-selector :ensure t ;:after 'helm
   :bind
   ("C-h i" . 'helm-selector-info)
-  ("s-RET" . 'helm-selector-shell)
-  ("s-S-RET" . 'helm-selector-shell-other-window))
+  ("C-<return>" . 'helm-selector-shell) ; also lispy enter
+  ("C-c C-<return>" . 'helm-selector-shell)
+  ("C-M-<return>" . 'helm-selector-shell-other-window))
 
 (use-package helm-ls-git :ensure t :after 'helm)
+
+; 20210403 - undo helm for base packages. use  counsel (ivy)
+; NB. helm config still has shift varients for original emacs utilities
+(use-package ivy :ensure t :defer f ;; :after 'helm
+  :config
+  (ivy-mode) ; enable ivy for completion, e.g. my/edit
+  :bind
+    ("M-x" . counsel-M-x)
+    ("C-x C-f" . counsel-find-file))
