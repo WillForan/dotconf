@@ -3,7 +3,9 @@
 # connect computer via android 
 # android require:
 #   debug mode (adb access)
-#   aztether (app, fspot)
+#   azilink (tether app over adb bridge, not on f-droid)
+#   newest repo (20210524)  https://github.com/djevertguzman/azilink didn't work
+#   use 2.0.2 (2015) in zip file: https://github.com/aziwoqpd/azilink/releases/tag/release-2.0.2
 # linux require:
 #   android-tools (adb)
 #   openvpn
@@ -12,7 +14,7 @@
 sudo dhcpcd -k
 
 # config. all in one place. changes tracked here
-cfg=$(mktemp /tmp/azlinkXXX.ovpn)
+cfg=$(mktemp /tmp/azilinkXXX.ovpn)
 cat > $cfg <<HERE
 dev tun
 
