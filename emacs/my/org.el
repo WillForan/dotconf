@@ -34,6 +34,7 @@
   (call-interactively (my/org-show-just-me)))
 
 (use-package org :defer t
+  :bind ("C-c a" . #'org-agenda)
   :config
   ;;; spelling. finally added 20210209
   (add-hook 'org-mode-hook 'flyspell-mode)
@@ -43,6 +44,15 @@
   ;; also see var auto-save-visited-file-name
   ;; but this runs saving hooks
   (add-hook 'org-mode-hook #'auto-save-visited-mode)
+  ;20210504 pretty source block
+  ; https://www.reddit.com/r/emacs/comments/brt0sk/prettifysymbolsmode_is_so_cool/
+  ; https://stackoverflow.com/questions/24356401/how-to-append-multiple-elements-to-a-list-in-emacs-lisp
+  ;; (add-hook 'org-mode-hook (lambda () (
+  ;;   (setf prettify-symbols-alist
+  ;; 	  (cl-list* 
+  ;; 	   '("#+BEGIN_SRC"     . "λ")
+  ;; 	   '("#+END_SRC"       . "λ")
+  ;; 	   prettify-symbols-alist)))))
 
   
   (setq org-use-speed-commands t)
@@ -117,3 +127,4 @@
 :config
 ; copy to clipboard (C-c), output also saved to file
 (setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
+
