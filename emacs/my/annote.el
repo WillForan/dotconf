@@ -13,11 +13,24 @@
   ;(org-ref-completion-library 'org-ref-ivy-cite)
 )
 
+(defun my/noter-dir () "open noter dir. open notes"
+       (interactive)
+       (progn (dired my/litdir) (dired-hide-details-mode)))
+
+(defun my/journal-cite (citekey)
+  "add new link for citkey as journal entry
+useful with betterbibtex as the copy export for zotero ctrl+shift+c
+   xclip -o|sed 's/\\cite{\\|\\}$//g'|sed 1q|xargs -I{} echo  emacsclient -n -e '(my/journal-cite \"{}\")'
+"
+  (call-interactively 'org-journal-new-entry)
+  (orb-insert-edit-notes (list citekey)))
+
+
 (use-package org-noter :ensure t :defer t 
-    :config
-    (setq org-noter-auto-save-last-location t)
-    ;(setq org-noter-notes-search-path '("~/notes/org-files/lit/"))
-    (setq org-noter-notes-search-path (list my/litdir)))
+  :config
+  (setq org-noter-auto-save-last-location t)
+					;(setq org-noter-notes-search-path '("~/notes/org-files/lit/"))
+  (setq org-noter-notes-search-path (list my/litdir)))
 
 (use-package org-noter-pdftools :ensure t :defer t)
 
@@ -104,3 +117,13 @@
  "imghttps"
  :image-data-fun #'org-image-link)
 )
+
+
+;; calibre
+(use-package calibredb :ensure t :defer t
+  :init
+    (autoload 'calibredb "calibredb")
+  :config
+    (setq calibredb-root-dir "/mnt/storage/dl/books/calibre/")
+    (setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir))
+    (setq calibredb-library-alist '((calibredb-root-dir))))
