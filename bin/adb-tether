@@ -35,6 +35,7 @@ HEREDOC
 
 # connect to device
 adb wait-for-device
+adb shell monkey -p org.lfx.azilink 1 # launch tether app (added 20210612)
 adb forward tcp:41927 tcp:41927
 sudo openvpn --config $cfg
 mtr google.com
