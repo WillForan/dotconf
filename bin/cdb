@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+env|grep ^DRYRUN=.&&DRYRUN=echo||DRYRUN=
+USER=foranw
+PASSFILE=$HOME/passwd/calibre
+LIB=calibre
+URL="http://192.168.1.130:8081/#$LIB"
+[ $# -eq 0 ] && echo "EXAMPLE USAGE: cdb add path/to/*epub" && exit 1
+$DRYRUN calibredb --username $USER --password="<f:$PASSFILE>" --with-library="$URL" "$@"
+#
+# server must be started. like
+# calibre-server /path/to/calibre --port 8081 --auth=basic --disable-use-bonjour --enable-auth
+# # bonjour not on local, basic auth for fbreader (old android)
+#
+# also see updating metadata:
+# find calibre/ -iname "*$series*cb[zr]"|
+#   perl -F/ -slane '$id="";$sidx="";
+#      $id=$1 if $F[2] =~ m/(\d+)\)$/;
+#      $sidx=$1 if m/^[^\(]+ (\d+)/;
+#      print "cdb set_metadata -f series:$series -f series_index:$sidx $id # $_" if $sidx and $id;' \
+#   -- -series=$series
