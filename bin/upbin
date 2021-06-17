@@ -22,9 +22,10 @@ case $pkg in
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   # inside ~
-  vim|xbindkeys|x11|R|i3|easystroke|lisp|mail) stowto ~;;
+  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail) stowto ~;;
   # inside ~/.config
-  kitty|keepmenu|greenclip|libinput-gestures) stowto ~/.config/$pkg;;
+  kitty|keepmenu|libinput-gestures) stowto ~/.config/$pkg;;
+  greenclip) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) stowto /usr/share/dynamic-colors;;
   *) echo "$pkg not defined in $0"; exit 1;;

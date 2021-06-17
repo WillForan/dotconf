@@ -21,6 +21,9 @@ alias en="emacsclient -n"
 # browse with images
 alias w3m='w3m -sixel -o display_image=1'
 
+# readline wrapper around lisp (20210526)
+alias sbcl="rlwrap sbcl"
+
 # package managemnet
 alias i='yay --noconfirm -S'
 alias pq='yay --color auto -Ss'
@@ -36,7 +39,14 @@ wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
 
 # 20210421 - cd to a file.
 # doesnt work on symlinks (no easy way to tell if its a file or dir
-c() { [ $# -gt 0 -a -f "$1" ] && cd "$(dirname "$1")" || cd "$@"; }
+c() { [ $# -gt 0 -a -f "$1" ] && cd "$(dirname "$1")" || cd "$1"; }
+cdx() {
+   local d
+   [ $# -eq 0 ] && d="$HOME" || d="$1"
+   [ $d = "-" ] && cd - && return
+   [ ! -r "$1" ] && mkdir -p "$1"
+   cd "$1"
+}
 
 ip_list_local(){
    ssh admin@192.168.1.1 "

@@ -34,7 +34,9 @@
   (call-interactively (my/org-show-just-me)))
 
 (use-package org :defer t
-  :bind ("C-c a" . #'org-agenda)
+  :bind
+    ("C-c a" . #'org-agenda)
+    ("C-c l" . #'link-hint-open-link)
   :config
   ;;; spelling. finally added 20210209
   (add-hook 'org-mode-hook 'flyspell-mode)

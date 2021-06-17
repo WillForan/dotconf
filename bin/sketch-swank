@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-rlwrap sbcl  --eval '(ql:quickload :swank)' --eval '(swank:create-server)'
+rlwrap sbcl  --eval "(ql:quickload :swank)" --eval "(swank:create-server)"
