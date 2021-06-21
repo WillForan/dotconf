@@ -51,11 +51,15 @@ xset b off
 #setxkbmap -layout us -option ctrl:nocaps
 # capslock is control
 setxkbmap -layout us -option "caps:ctrl_modifier"
+# cap released with no other key is escape
+commmand -v xcape >/dev/null && xcape -e '#66=Escape'
+# see also: space2ctrl (s2cctl start)
 
 test -r ~/.Xdefaults && xrdb -merge $_
 
 # clipboard manager: greenclip
 #  systemctl --user start greenclip.service
+# NB. consumes cpu/power (constant polling to not break X11 clipboard ownership)
 
 # TODO: use lighter sxhc?
 xbindkeys
