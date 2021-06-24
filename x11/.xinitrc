@@ -6,13 +6,16 @@ samsung_tv(){
 }
 
 ## keyboard settings
-#setxkbmap -layout us -option ctrl:nocaps
-# capslock is control
-setxkbmap -layout us -option "caps:ctrl_modifier"
 # right click keyboard "menu" is hyper (for emacs keybindings)
 xmodmap -e "keysym Menu = Hyper_L"
 # apl chars using right alt + key
 setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
+#setxkbmap -layout us -option ctrl:nocaps
+# capslock is control
+setxkbmap -layout us -option "caps:ctrl_modifier"
+# cap released with no other key is escape
+commmand -v xcape >/dev/null && xcape -e '#66=Escape'
+# see also: space2ctrl (s2cctl start)
 
 test -r ~/.Xdefaults && xrdb -merge $_
 
@@ -59,6 +62,7 @@ xset b off
 
 # clipboard manager: greenclip
 #  systemctl --user start greenclip.service
+# NB. consumes cpu/power (constant polling to not break X11 clipboard ownership)
 
 # make sure xbindkeys can find everything in the path
 source $HOME/.bashrc

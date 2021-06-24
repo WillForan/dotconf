@@ -56,7 +56,7 @@ done
 [ ! -h ~/.bashrc ] && ln -s $CFGDIR/bash/.bashrc ~/.bashrc
 
 # for all packages (not */ because bash, maybe others soon)
-for pkg in vim xbindkeys x11 R i3 easystroke mail; do
+for pkg in vim xbindkeys x11 R i3 easystroke mail lisp; do
    $DRYRUN stow $pkg -t ~ -d ~/config/
 done
 
