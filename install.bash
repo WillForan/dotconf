@@ -33,7 +33,8 @@ for gitpkg in wf-utils fuzzy_arg plum; do
 done
 
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
-  curl -L https://github.com/Jguer/yay/releases/download/v9.4.2/yay_9.4.2_x86_64.tar.gz > yay.tar.gz
+  yay_ver=10.2.3 # 20210614
+  curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
   rm -r yay*/ yay.tar.gz
