@@ -1,0 +1,9 @@
+#!/usr/bin/env
+cd $(dirname $0)
+adb-unlock # another small local script
+adb shell monkey -p com.floriandraschbacher.deskdock.pro 1
+
+#pgrep barriers || tmux -t barrier \
+ barriers -c $HOME/config/barriers/kt.sgc
+#pgrep DeskDockServer || tmux -t barrier \
+ java -jar DeskDockServer_1.2.2.jar
