@@ -23,21 +23,27 @@ section: screens
 		preserveFocus = false
 		switchCorners = none 
 		switchCornerSize = 0
+   phone:
 end
 
 section: aliases
+ phone:
+    5f73105070
 end
 
 section: links
 	kt:
-		right = s2
-		left = yogert
+		left = phone
+      right = yogert
 	yogert:
-		left = s2
-		right = kt
-	s2:
 		left = kt
-		right = yogert
+		right = s2
+	s2:
+		left = yogert
+		right = phone
+   phone:
+      left = s2
+      right = kt
 end
 
 section: options
@@ -47,5 +53,8 @@ section: options
 	clipboardSharing = true
 	switchCorners = none 
 	switchCornerSize = 0
-   keystroke(Super+`) = switchInDirection(left)
+   keystroke(Super+Control+Up) = switchInDirection(up)
+   keystroke(Super+Control+Down) = switchInDirection(down)
+   keystroke(Super+Control+Left) = switchInDirection(left)
+   keystroke(Super+Control+Right) = switchInDirection(right)
 end

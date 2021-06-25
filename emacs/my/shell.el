@@ -21,7 +21,7 @@
 ;; Key bindings
 ; also see helm.el for C-l history and prompt jump
 ; replaces binding for backward-sentence, see helm.el for other comint settings
-(define-key comint-mode-map (kbd "M-a") 'my/comint-args)
+(define-key comint-mode-map (kbd "C-c M-a") 'my/comint-args)
 ; ^find^replace[space] replaces -- tab does this already?
 ; (define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
 

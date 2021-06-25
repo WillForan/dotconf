@@ -24,7 +24,8 @@ case $pkg in
   # inside ~
   stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail) stowto ~;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures) stowto ~/.config/$pkg;;
+  kitty|keepmenu|libinput-gestures|autokey) stowto ~/.config/$pkg;;
+  # greenclip.toml lives inside .config instead of it's own directory
   greenclip) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) stowto /usr/share/dynamic-colors;;

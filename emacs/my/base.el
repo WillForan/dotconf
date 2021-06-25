@@ -1,4 +1,4 @@
-;;;; base emacs config. assume my.el already laoded
+;;;; base emacs config. assume my.el already loaded
 
 ;; path locations
 ;; ~/notes/org-files tracked in syncthing
@@ -15,7 +15,10 @@
   (concat my/notesdir "weekly/")
   "location of journal org files (org-journal)")
 
-(setq org-agenda-files (list my/notesdir))
+;; (setq org-agenda-files nil)
+(if (boundp 'org-agenda-files)
+    (add-to-list 'org-agenda-files my/notesdir)
+    (setq org-agenda-files (list my/notesdir)))
 
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
@@ -73,6 +76,11 @@
 (global-set-key "\M-\\" 'comint-dynamic-complete-filename)
 (global-set-key "\M- " 'hippie-expand) ; overwrites 'just-one-space'
 
+
+; 20210504 - intially for R, but also lisps
+(global-prettify-symbols-mode +1)
+
+
 ; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
 (use-package cliphist :ensure t
   :bind
@@ -80,6 +88,8 @@
   :config
   (setq cliphist-linux-clipboard-managers '("greenclip" "clipit" "parcellite")))
 
+;; 20210508 default to turning key helping on
+(use-package which-key :ensure t :config (which-key-mode 1))
 
 ; 20210331 recompile elc if newer code
 (setq load-prefer-newer t) 

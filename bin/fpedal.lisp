@@ -1,6 +1,8 @@
 ;; what keys to push when pedals are used
 ; (use-pacakge 'alexandria)
 (in-package :cl-user)
+(ql:quickload '("cl-interpol" "cmd" "alexandria" "slynk"))
+(slynk:create-server :port 4008)
 (defpackage fpedal
   (:use :cl :alexandria)
   (:import-from :uiop)
@@ -19,10 +21,15 @@
        (:right   . ,(lambda () (key-down "Alt_L")))))
    (#?R"Firefox Developer Edition" . (
        (:release . ,(lambda () nil))
-       (:left    . ,(lambda () (key-down "4" :k "click")))
-       (:right   . ,(lambda () (key-down "5" :k "click")))))
+       (:center  . ,(lambda () (key-down "8" :k "click" ))) ; back history
+       (:left    . ,(lambda () (key-down "Page_Up" :k "key" )))
+       (:right   . ,(lambda () (key-down "Page_Down" :k "key")))
+       ;; (:left    . ,(lambda () (key-down "4" :k "click")))
+       ;; (:right   . ,(lambda () (key-down "5" :k "click")))
+       ))
    (#?R"emacs" . (
-       (:left    . ,(lambda () (key-down "Control_L+s" :k "key")))
+       ;; (:left    . ,(lambda () (key-down "Control_L+s" :k "key")))
+       (:left    . ,(lambda () (key-down "Control_L")))
        (:center  . ,(lambda () (key-down "Control_L+g" :k "key")))
        (:right   . ,(lambda () (key-down "Alt_L+x" :k "key")))))))
 
@@ -87,4 +94,7 @@
   ;; run with file. NB. don't save string. have no way to (close)?
   (with-open-stream (s (cmd-stream (c "sudo evtest " *ev-input*)))
     (loop for line = (read-line s) while line do (read-event-line line))))
-(watch-pedal)
+
+(setq *fpeadl-thread* (bt:make-thread  #'watch-pedal))
+;; see (bt:all-threads)
+;; 

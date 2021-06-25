@@ -6,4 +6,4 @@
   :config (global-diff-hl-mode))
 
 (use-package magit :ensure t)
-(use-package forge :ensure t :after magit)
+(use-package forge :ensure t :defer t :after magit)
