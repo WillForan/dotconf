@@ -16,13 +16,13 @@ MaildirStore gmaillocal
 
 # setup filter+labels: priority -> imapprimary
 Channel gmail-primary
- Master :gmailremote:"imapprimary"
- Slave :gmaillocal:
+ Far :gmailremote:"imapprimary"
+ Near :gmaillocal:
 
 Channel gmail-sent
- Master :gmailremote:"[Gmail]/Sent Mail"
- Slave :gmaillocal:sent
- Create Slave
+ Far :gmailremote:"[Gmail]/Sent Mail"
+ Near :gmaillocal:sent
+ Create Near
 
 Group gmail
  Channel gmail-primary
