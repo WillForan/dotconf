@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
+echo "# $(date) waiting for device"
 adb wait-for-device
+echo "# $(date) found. unlocking"
 #adb shell input keyevent 26 # will lock if already unlocked
 adb shell input keyevent 82  # wake up if asleep 
 adb shell input keyevent 82  # same effect as swipe up
