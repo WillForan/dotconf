@@ -214,6 +214,7 @@ assign [class="Zotero"]  8:cite
 #AFNI
 for_window [class="AFNI"]  floating enable
 for_window [class="TopLevelShell"]  floating enable
+for_window [title="afni_picker"]  floating enable
 for_window [title="xzoom.*"]  floating enable
 for_window [title="xmag"]  floating enable
 for_window [title="Magnifying Glass"]  floating enable

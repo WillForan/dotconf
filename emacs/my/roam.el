@@ -5,8 +5,9 @@
 (use-package synosaurus :ensure t
   :bind
   ("C-c d t" . synosaurus-choose-and-replace)
+  ("C-c d T" . synosaurus-lookup)
   :config
-  (setq 
+  (setq
    synosaurus-choose-method 'ido
    synosaurus-backend 'synosaurus-backend-wordnet))
 ; maybe try define-word
@@ -19,7 +20,7 @@
   "PATH relative to the current buffer"
   (if (buffer-file-name)
       (file-relative-name path
-			 (file-name-directory (buffer-file-name)))
+                      (file-name-directory (buffer-file-name)))
     path))
 
 
@@ -31,6 +32,27 @@
   "open todays journal page"
   (interactive)
   (find-file (my/todays-page)))
+
+(defun my/todays-id ()
+  "get or generate the id for todays day.
+  implemented 20210802 b/c org-roam V2 uses id: instead of file:
+  matches weekly journal id header e.g ^* Monday,
+"
+  (with-current-buffer
+      (find-file-noselect (my/todays-page))
+      (save-excursion
+	(end-of-buffer) 		; current date likely to be closer to end of buffer
+	(search-backward-regexp (format-time-string "^* %A,"))
+	(org-id-get-create))))
+
+(defun my/link-date-id ()
+  "link current in org-agenda date format to org-journal page"
+  (interactive)
+  (let* (
+	 (desc (org-timestamp-translate (org-timestamp-from-time nil)))
+	 (id (concat "id:" (my/todays-id)))
+	 (link (org-link-make-string  id desc)))
+    (insert link)))
 
 (defun my/link-date ()
   "link current in org-agenda date format to org-journal page"
@@ -47,35 +69,37 @@
 ;; 20201110 - like neuron but for org mode
 (use-package org-roam
       :ensure t
+      :init
+       (setq org-roam-v2-ack t)
       :config
-	(require 'org-roam-protocol) 
-	(add-hook 'org-roam-mode-hook 'flyspell-mode)
-      :hook
-      (after-init . org-roam-mode)
+       (require 'org-roam-protocol)
+       (add-hook 'org-roam-mode-hook 'flyspell-mode)
+       (org-roam-setup)
+      ;; :hook
+      ;; (after-init . org-roam-mode)
       :custom
       (org-roam-completion-system 'helm)
       (org-roam-directory my/notesdir)
       (org-roam-completion-everywhere t) ; previously org-roam-company
       (org-roam-capture-immediate-template
           '("d" "default" plain #'org-roam-capture--get-point "%?"
-	    :file-name "${slug}-%<%Y%m%d%H%M%S>"
-	    :head "#+title: ${title}\n#+created: %T\n"
-	    :unnarrowed t))
-      :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n t" . org-roam-tag-add)
-               ("C-c n d" . my/link-date)
-               ("C-c n n" . my/goto-today)
-               ("C-c n u" . org-roam-db-build-cache)
-               ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate)))
-
-              (("C-c n j" . org-journal-new-entry))
-              (("C-c n r" . orb-insert))
-              (("C-c n R" . helm-bibtex)))
+           :file-name "${slug}-%<%Y%m%d%H%M%S>"
+           :head "#+title: ${title}\n#+created: %T\n"
+           :unnarrowed t))
+      :bind
+      (:map org-mode-map
+         (("C-c n i" . org-roam-node-insert) ; 20210802 - update to v2
+          ("C-c n c" . org-roam-capture)
+          ("C-c n r" . orb-insert)
+          ("C-c n R" . helm-bibtex)
+          ("C-c n l" . org-roam-buffer-toggle)
+          ("C-c n f" . org-roam-node-find)
+          ("C-c n t" . org-roam-tag-add)
+          ("C-c n n" . my/goto-today)
+          ("C-c n g" . org-roam-graph)
+	  ;; bindings created in org-journal
+          ;; ("C-c n d" . my/link-date-id)
+          )))
 
 (use-package deft :ensure t
   :bind
@@ -93,8 +117,11 @@
  (org-journal-dir my/jrnldir)
  (add-to-list 'org-agenda-files (expand-file-name org-journal-dir))
  (org-journal-file-format "%G-%W.org")
- (global-set-key (kbd "C-c n d") #'my/link-date)
- (global-set-key (kbd "C-c n n") #'my/goto-today))
+ :bind
+ (;; ("C-c n d" . #'my/link-date) ; roam v1
+  ("C-c n d" . #'my/link-date-id)
+  ("C-c n n" . #'my/goto-today)
+  ("C-c n j" . #'org-journal-new-entry)))
 
 (use-package org-roam-bibtex :ensure t :defer t
  :after org-roam
@@ -107,7 +134,7 @@
   (setq orb-templates
         '(("r" "ref" plain (function org-roam-capture--get-point)
            ""
-	   :unnarrowed t
+          :unnarrowed t
            :file-name "lit/${=key=}"
            :head
 "#+TITLE: ${=key=}: ${title}

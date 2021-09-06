@@ -34,9 +34,28 @@
   (call-interactively (my/org-show-just-me)))
 
 (use-package org :defer t
+  :bind
+    ("C-c a" . #'org-agenda)
+    ("C-c l" . #'link-hint-open-link)
   :config
   ;;; spelling. finally added 20210209
   (add-hook 'org-mode-hook 'flyspell-mode)
+  ;; 20210417 - wrap lines
+  (add-hook 'org-mode-hook 'visual-line-mode)
+  ;; 20210428 - auto save to this file
+  ;; also see var auto-save-visited-file-name
+  ;; but this runs saving hooks
+  (add-hook 'org-mode-hook #'auto-save-visited-mode)
+  ;20210504 pretty source block
+  ; https://www.reddit.com/r/emacs/comments/brt0sk/prettifysymbolsmode_is_so_cool/
+  ; https://stackoverflow.com/questions/24356401/how-to-append-multiple-elements-to-a-list-in-emacs-lisp
+  ;; (add-hook 'org-mode-hook (lambda () (
+  ;;   (setf prettify-symbols-alist
+  ;; 	  (cl-list* 
+  ;; 	   '("#+BEGIN_SRC"     . "λ")
+  ;; 	   '("#+END_SRC"       . "λ")
+  ;; 	   prettify-symbols-alist)))))
+
   
   (setq org-use-speed-commands t)
   (add-to-list 'org-speed-commands-user
@@ -69,9 +88,12 @@
 	(shell . t) ; req newer org mode
 	(J . t)
         (jupyter . t)
+        (plantuml . t)
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
         ))
+  ;; 20210408 - after installing with pacman
+  (setq org-plantuml-jar-path  "/usr/share/java/plantuml/plantuml.jar")
 
   ;; must be afer org load-language -- function doesn't exist?
   ;(org-babel-jupyter-override-src-block "python")
@@ -104,3 +126,10 @@
    '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
    '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
    '(org-level-5 ((t (:inherit outline-5 :height 1.0))))))
+
+;; 20210421
+(use-package org-attach-screenshot :ensure t
+:config
+; copy to clipboard (C-c), output also saved to file
+(setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
+

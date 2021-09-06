@@ -1,4 +1,4 @@
-;;;; base emacs config. assume my.el already laoded
+;;;; base emacs config. assume my.el already loaded
 
 ;; path locations
 ;; ~/notes/org-files tracked in syncthing
@@ -14,6 +14,11 @@
 (defvar my/jrnldir
   (concat my/notesdir "weekly/")
   "location of journal org files (org-journal)")
+
+;; (setq org-agenda-files nil)
+(if (boundp 'org-agenda-files)
+    (add-to-list 'org-agenda-files my/notesdir)
+    (setq org-agenda-files (list my/notesdir)))
 
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
@@ -71,9 +76,36 @@
 (global-set-key "\M-\\" 'comint-dynamic-complete-filename)
 (global-set-key "\M- " 'hippie-expand) ; overwrites 'just-one-space'
 
+
+; 20210504 - intially for R, but also lisps
+(global-prettify-symbols-mode +1)
+
+
 ; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
 (use-package cliphist :ensure t
   :bind
   ("C-c p" . cliphist-paste-item)
   :config
   (setq cliphist-linux-clipboard-managers '("greenclip" "clipit" "parcellite")))
+
+;; 20210508 default to turning key helping on
+(use-package which-key :ensure t :config (which-key-mode 1))
+
+; 20210331 recompile elc if newer code
+(setq load-prefer-newer t) 
+(use-package auto-compile :ensure t
+ :config
+    (auto-compile-on-load-mode)
+    (auto-compile-on-save-mode))
+
+;(use-package mood-line :ensure t :config (mood-line-mode))
+;(use-package smart-mode-line :ensure t :config (sml/setup))
+
+;; 20210428 tramp passwords stored
+;; (impl. for ginger where .ssh perms prevent key exchange)
+;; https://stackoverflow.com/questions/840279/passwords-in-emacs-tramp-mode-editing
+;; wont work for proxyjump (ssh:reese|ssh:ginger:/file): doesn't store ginger
+;; defaults to ~/.authinfo (not encrypted)
+(use-package password-cache :ensure t
+  :config
+  (setq password-cache-expiry nil))

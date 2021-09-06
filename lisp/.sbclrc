@@ -1,3 +1,36 @@
-;;; 20200521
+;; -*-mode: lisp -*-
+
+;; 20200521
 #-quicklisp
 (load "/usr/lib/quicklisp/setup")
+
+
+; local quicklisp - customize as desird
+(defvar *my-quicklisp-dir* (merge-pathnames #P"src/quicklisp/" (user-homedir-pathname))
+       "local lisp libaries root directory")
+(pushnew  *my-quicklisp-dir* ql:*local-project-directories*)
+
+; get code not in quicklisp/ultralisp. run by hand -- not run on startup
+#|
+(progn
+  (setq saveto (namestring (merge-pathnames *my-quicklisp-dir* #p"cmd")))
+  (uiop:run-program (list "git" "clone" "https://github.com/ruricolist/cmd" (saveto)))
+  (ql:quickload :cmd)
+  (cmd:cmd "git clone https://github.com/WillForan/cl-dollar" :in *my-quicklisp-dir*))
+|#
+
+; only run when exists
+#+null
+(if (probe-file (merge-pathnames "cl-dollar/" *my-quicklisp-dir*))
+    (sb-ext:without-package-locks (ql:quickload "cl-dollar"))) ; (use-package :$)
+;; (sb-ext:without-package-locks (ql:quickload :cl-dollar)) ;shlex has locking issue?
+
+; (ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)
+
+;; 20210515 - maybe need to be defmacro
+;; (defun emacs-slynk ()
+;;   "start service for sly/emacs to connect"
+;;   (progn (ql:quickload :slynk) (slynk:create-server)))
+;; (defun emacs-swank ()
+;;   "start service for slime/emacs to connect"
+;;   (progn (ql:quickload :swank) (swank:create-server)))

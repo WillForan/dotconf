@@ -19,6 +19,7 @@ CFGDIR=$(pwd)
 #
 # 20190822WF - init
 # 20210123   - add dryrun
+# 20210625   - use upbin, add autokey-gtk to syspkg
 #
 
 [ -n "${DRYRUN:-}" ] && DRYRUN=echo || DRYRUN=
@@ -33,14 +34,16 @@ for gitpkg in wf-utils fuzzy_arg plum; do
 done
 
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
-  curl -L https://github.com/Jguer/yay/releases/download/v9.4.2/yay_9.4.2_x86_64.tar.gz > yay.tar.gz
+  yay_ver=10.2.3 # 20210614
+  curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
   rm -r yay*/ yay.tar.gz
 fi
 
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole stow sshpass syncthing)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk)
+# pip install keepmenu
 # also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
 command -v xinput && xinput list | grep -qi touchpad && SYSPKG+=("libinput-gestures")
 for syspkg in ${SYSPKGS}; do
@@ -49,22 +52,8 @@ for syspkg in ${SYSPKGS}; do
    exit 1
 done
 
-# TODO: run upbin $PKG for each package
-
-# just want bashrc, not the other source files
-[ ! -h ~/.bashrc ] && ln -s $CFGDIR/bash/.bashrc ~/.bashrc
-
-# for all packages (not */ because bash, maybe others soon)
-for pkg in vim xbindkeys x11 R i3 easystroke mail; do
-   $DRYRUN stow $pkg -t ~ -d ~/config/
+# run upbin $PKG for each package
+for d in $CFGDIR/*/; do
+   pkg=$(basename $d)
+   $DRYRUN $CFGDIR/bin/upbin $pkg
 done
-
-$DRYRUN stow emacs -t ~/.emacs.d/
-$DRYRUN stow bin -t ~/bin/
-$DRYRUN stow libinput-gestures/ -t ~/.config
-$DRYRUN stow greenclip/ -t ~/.config
-
-# system config. need sudo/root
-$DRYRUN sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
-
-

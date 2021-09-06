@@ -5,6 +5,20 @@ samsung_tv(){
    xrandr --output HDMI1 --mode 1280x720 --transform 1.04,0,-27,0,1.05,-14,0,0,1 --panning 1280x720 --pos 0x0 $@
 }
 
+## keyboard settings
+# right click keyboard "menu" is hyper (for emacs keybindings)
+xmodmap -e "keysym Menu = Hyper_L"
+# apl chars using right alt + key
+setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
+#setxkbmap -layout us -option ctrl:nocaps
+# capslock is control
+setxkbmap -layout us -option "caps:ctrl_modifier"
+# cap released with no other key is escape
+commmand -v xcape >/dev/null && xcape -e '#66=Escape'
+# see also: space2ctrl (s2cctl start)
+
+test -r ~/.Xdefaults && xrdb -merge $_
+
 case $HOSTNAME in
    kt)
       # 20200815 - moved upstairs
@@ -42,23 +56,19 @@ case $HOSTNAME in
       ;;
 
 esac
-# make sure xbindkeys can find everything in the path
-source $HOME/.bashrc
 
 # no bell
 xset b off
-# setxkbmap -layout us,apl -variant ,dyalog -option grp:switch # hold right alt + key for apl
-#setxkbmap -layout us -option ctrl:nocaps
-# capslock is control
-setxkbmap -layout us -option "caps:ctrl_modifier"
-
-test -r ~/.Xdefaults && xrdb -merge $_
 
 # clipboard manager: greenclip
 #  systemctl --user start greenclip.service
+# NB. consumes cpu/power (constant polling to not break X11 clipboard ownership)
 
-# TODO: use lighter sxhc?
+# make sure xbindkeys can find everything in the path
+source $HOME/.bashrc
 xbindkeys
+# TODO: use lighter sxhc?
+
 # 20210108 - add facny notification deamon
 command -v deadd-notification-center && $_ &
 

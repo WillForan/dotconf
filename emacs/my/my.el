@@ -59,8 +59,9 @@
      (interactive)
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
-     '(base frame-settings backup primary-clip
- 	package quelpa
+     '(package
+        base backup primary-clip
+ 	quelpa
  	evil rainbow
  	xterm-color
  	git
@@ -71,4 +72,6 @@
 	swiper helm-swoop
  	R
 	lisp
-	org theme)))
+	org
+        roam 
+	theme frame-settings)))

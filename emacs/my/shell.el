@@ -21,7 +21,7 @@
 ;; Key bindings
 ; also see helm.el for C-l history and prompt jump
 ; replaces binding for backward-sentence, see helm.el for other comint settings
-(define-key comint-mode-map (kbd "M-a") 'my/comint-args)
+(define-key comint-mode-map (kbd "C-c M-a") 'my/comint-args)
 ; ^find^replace[space] replaces -- tab does this already?
 ; (define-key shell-mode-map (kbd "SPC") 'comint-magic-space)
 
@@ -33,6 +33,9 @@
 ; (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
 ; (set-face-attribute 'comint-highlight-prompt nil :inherit nil)
 ; (use-package ansi-color   :config  (ansi-color-for-comint-mode-on))
+; 20210401 - reboot and works with color?! using doom-solarazied-dark theme
+; this file wasn't sourced before hand.
+; still need export TERM=eterm-color for ls colors
 
 ; get tab complete on some functions. TODO: add fish
 (use-package bash-completion :ensure t

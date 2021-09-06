@@ -27,9 +27,10 @@ test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
 
 # if emacs, set term. but dont set bindings
 if [ -n "$INSIDE_EMACS" ]; then
-    #TERM=xterm
-    #TERM=eterm-color
-    :
+    export TERM=eterm-color \
+           EDITOR='emacsclient -n'
+
+    alias pass='EDITOR=emacsclient pass'
 else
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
@@ -81,6 +82,8 @@ if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
 then
    . $HOME/.afni/help/all_progs.COMP.bash
 fi
+export AFNI_FONTSIZE=MINUS
+
 export XDG_RUNTIME_DIR='/run/user/1000'
 
 # curl -L https://install.perlbrew.pl | bash

@@ -16,6 +16,7 @@ test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
 command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
    export PATH="$PYENV_ROOT/bin:$PATH"
+   eval "$(pyenv init --path)"
    eval "$(pyenv init -)"
 }
 
