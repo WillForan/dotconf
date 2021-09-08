@@ -34,7 +34,11 @@ case $HOSTNAME in
       ;;
   s2)
      # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
-     greenclip daemon &
+     # 20210707  - greenclip eats cpu. probably dont need it here
+     # greenclip daemon &
+
+     # book server. needs gui first. http by plugin
+     pgrep -f calibre || $_ &
      # hdmi only if we have it
      xrandr | grep -q HDMI1\ connected &&
          samsung_tv --output LVDS1 --off ||
