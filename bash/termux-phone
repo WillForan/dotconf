@@ -1,0 +1,14 @@
+alias v=vim
+alias g=grep
+alias l="ls --color"
+alias s=ssh
+alias e="emacs -a'' -n"
+alias t='tmux -2'
+alias wh='which'
+n() { ls $@ -tcl|sed 10q; }
+alias m=mosh
+alias s=ssh
+export PATH="$PATH:$HOME/.termux/tasker"
+alias i="pkg install"
+
+export PATH="$PATH:$HOME/bin"

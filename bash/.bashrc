@@ -18,7 +18,8 @@ test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
 
 
 # If not running interactively, be done -- only handle paths
-[[ $- != *i* ]] && return
+# need that to source additional settings
+[[ $- != *i* ]] && export PS1="$ " && return
 
 
 # kitty terminal
@@ -31,7 +32,10 @@ if [ -n "$INSIDE_EMACS" ]; then
            EDITOR='emacsclient -n'
 
     alias pass='EDITOR=emacsclient pass'
+elif [ "$TERM" == "dumb" ]; then
+    export PS1="$ "
 else
+    . $_BASHCFGDIR/PS1.bash
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
@@ -59,9 +63,9 @@ fi
 # N.B. 's' alias overwritten to 'ssh' later
 eval "$(fasd --init auto)"
 
-# need that to source additional settings
-. $_BASHCFGDIR/PS1.bash
+# get aliases after fasd (rewrite s to ssh insead of fasd)
 . $_BASHCFGDIR/aliases.bash
+
 # . $_BASHCFGDIR/xsh
 
 
