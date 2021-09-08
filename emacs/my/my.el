@@ -73,4 +73,5 @@
  	R
 	lisp
 	org
+        roam 
 	theme frame-settings)))

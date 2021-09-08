@@ -1,0 +1,11 @@
+#!/bin/env bash
+
+err(){ termux-toast "$*"; echo "$@" >&2; exit 1; }
+[ $# -ne 1 ] && err $0 expects exactly one argument: a url
+
+url="$*"
+case "$url" in
+  magnet:?xt*) bash $HOME/bin/mag2h "$url";;
+    *) err "no handle in $0 for $@";;
+esac
+

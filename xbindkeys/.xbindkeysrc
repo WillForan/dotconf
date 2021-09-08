@@ -51,7 +51,7 @@
 "/home/foranw/src/utils/wf-utils/zim/convo_jump.bash"
   Mod4 + Mod1 + c
 
-"keepmenu"
+"python3.9 keepmenu"
   Mod4 + p
 
 # "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"

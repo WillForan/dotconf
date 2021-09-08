@@ -11,6 +11,7 @@ e(){
     local args="-t"
     [[ -n "$DISPLAY" && ! "$@" =~ ^-t ]] && args="-c -n" 
     set -x
+    #TERM=xterm-24bit
     emacsclient -a '' $args "$@"
 }
 [[ $(basename "$0") == "e" ]] && e "$@"

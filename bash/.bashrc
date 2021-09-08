@@ -86,6 +86,8 @@ if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
 then
    . $HOME/.afni/help/all_progs.COMP.bash
 fi
+export AFNI_FONTSIZE=MINUS
+
 export XDG_RUNTIME_DIR='/run/user/1000'
 
 # curl -L https://install.perlbrew.pl | bash

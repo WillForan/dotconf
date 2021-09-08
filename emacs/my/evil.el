@@ -37,6 +37,7 @@
     (dolist (mode (list
 		  'synosaurus-list-mode 'wordnut-mode
 		  'haskell-error-mode
+		  'special-mode
 		  'spray 'help-mode 'elfeed-search-mode 'elfeed-show-mode
 		  'Magit-mode 'magit-mode 
 		  'notmuch-hello-mode 'notmuch-tree-mode
