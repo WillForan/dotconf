@@ -23,7 +23,11 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
    xclip -o|sed 's/\\cite{\\|\\}$//g'|sed 1q|xargs -I{} echo  emacsclient -n -e '(my/journal-cite \"{}\")'
 "
   (call-interactively 'org-journal-new-entry)
-  (orb-insert-edit-notes (list citekey)))
+  (orb-insert-edit-note citekey))
+
+(defun wf/bibtex-url (key)
+  "get url from KEY, extracted from bibtex-completion.el"
+  (bibtex-completion-get-value "url" (bibtex-completion-get-entry key)))
 
 
 (use-package org-noter :ensure t :defer t 
