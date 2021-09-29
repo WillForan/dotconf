@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# 20210920WF - show slack giphy images extracted from weechat
+# use like:  s s2 tmux capture-pane -p -S -  | slack-browse-imgs
+[ ! -v BROWSER ] && BROWSER=firefox
+cmd() {
+   if [ "$1" == "s2tmux" ]; then
+      ssh s2 tmux capture-pane -t chat -p -S -
+   else
+      echo "# $0: no input args given, looking at clipboard" >&2
+      tty >/dev/null  && xclip -o || cat
+   fi
+}
+out(){
+ if [ -v DEBUG ]; then
+    cat 
+ else
+    cat > /tmp/slack_img.html
+    $BROWSER /tmp/slack_img.html
+ fi
+}
+cmd "$@" | perl -lne '
+ sub html{
+    my ($name,$time,$img) = @_;
+    print "<div style=\"position: relative;display:inline-block\">
+           <span style=\"position: absolute; bottom: 0px; background: white;\">
+           $name $time</span>
+           <img src=\"$img\" style=\"max-width: 200px\"></div>";
+ };
+
+ print STDERR "debug: line=$_" if $ENV{DEBUG};
+ s/^(\d+:\d+) //; # remove timestamp
+ $time = $1;
+ s/^[^\s]+.\#[^\s]+ //; # remove channel name in chanmon (e.g slack.lncd#random)
+
+ # chanmon name is in <>. but not in other buffers
+ # empty if same person
+ # $name = $1 and next if s/^<([^>]+)> //;
+ $name = $1 if s/^<([^>]+)> //;
+ s/^<> //g; 
+
+ print STDERR " debug: name=$name; time=$time;remain: $_" if $ENV{DEBUG};
+ # have a link! its probably an image
+ if(m/^(\w+) (http[^\s]+(gif|png|jpe?g))/i and not $name) {
+    html($1,$time,$2);
+    $name="";
+ } elsif(m/^http[^\s]+(gif|png|jpe?g)/i and $name) {
+    html($name, $time, $&);
+    $name="";
+ } elsif (m/^\w+/){
+    $name=$&;
+    $name="" if @{[$name=~m/\d/g]}>4; # remove giphy icon
+ }
+ ' | out
