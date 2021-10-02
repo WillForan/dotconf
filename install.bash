@@ -39,6 +39,7 @@ if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
   rm -r yay*/ yay.tar.gz
+  export PATH="$HOME/bin:$PATH"
 fi
 
 # check for needed system packages
@@ -46,9 +47,10 @@ SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpa
 # pip install keepmenu
 # also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
 command -v xinput && xinput list | grep -qi touchpad && SYSPKG+=("libinput-gestures")
-for syspkg in ${SYSPKGS}; do
+for syspkg in ${SYSPKGS[@]}; do
    command -v $syspkg >/dev/null && continue
-   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)" 
+   [ -r /etc/arch-release ] && ~/bin/yay -S $syspkg --noconfirm && continue
+   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
    exit 1
 done
 

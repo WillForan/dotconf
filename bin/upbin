@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 # 20191229 - update home's bin directory
 #          - if given argument, update that packages symlinks
-configdir=$(dirname $(readlink -f $0))/..
+# 20211002 - CFGDIR should be configdir
+set -euo pipefail
+trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
+cd $(dirname $0)
+configdir="$(readlink -f ..)"
+[ -z "$configdir" ] && echo "error cannto find $(pwd)/.. !?" && exit 1
 [ $# -eq 0 ] && pkg=bin || pkg="$1"
 [ ! -d $configdir ] &&
     echo "no stow package $pkg in $configdir! $(find $configdir -maxdepth 1 -type f)" &&
@@ -18,16 +23,19 @@ cd $configdir
 
 case $pkg in
   # in there own place
-  bash) [ ! -h ~/.bashrc ] && ln -s $CFGDIR/bash/.bashrc ~/.bashrc;;
+  bash) test ! -h ~/.bashrc && ln -s $configdir/bash/.bashrc ~/.bashrc || echo "# have $_";;
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
-  # inside ~
-  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail) stowto ~;;
+  # in own folder but not in config
+  weechat) stowto ~/.$pkg;;
+  # all files (likely just one) inside ~  (e.g. .xinitrc, .tmux.conf)
+  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux) stowto ~;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey) stowto ~/.config/$pkg;;
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status) stowto ~/.config/$pkg;;
   # greenclip.toml lives inside .config instead of it's own directory
   greenclip) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
-  dynamic-colors) stowto /usr/share/dynamic-colors;;
+  dynamic-colors) test -w  /usr/share/dynamic-colors && stowto $_ || echo "WARNING: cannot write to '$_'; chmod and rerun 'upbin $pkg'";;
+  barriers|firefox) echo "$pkg will live in config. not installing";;
   *) echo "$pkg not defined in $0"; exit 1;;
 esac
