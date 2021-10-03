@@ -4,8 +4,8 @@
 # 20211002 - CFGDIR should be configdir
 set -euo pipefail
 trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
-cd $(dirname $0)
-configdir="$(readlink -f ..)"
+cd $(dirname $(readlink -f "$0")) # $HOME/config/bin
+configdir="$(cd ..; pwd)"
 [ -z "$configdir" ] && echo "error cannto find $(pwd)/.. !?" && exit 1
 [ $# -eq 0 ] && pkg=bin || pkg="$1"
 [ ! -d $configdir ] &&
