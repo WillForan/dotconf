@@ -3,7 +3,8 @@
 
 ####pretty prompt
 # transform hostname into a "unique" color
-colnum=$(echo $(whoami)$(hostname) | ruby -ne 'puts $_.split("").map {|x| x.ord}.reduce(:+) % 256')
+#colnum=$(echo $(whoami)$(hostname) | ruby -ne 'puts $_.split("").map {|x| x.ord}.reduce(:+) % 256')
+colnum=$(perl -se '$x+=$_ for map {ord} split //, $X; END{print $x%256;}' -- -X="$USER$(hostname)")
 # info on one line
   blue="\[[38;5;27m\]"
   pink="\[[38;5;197m\]"
