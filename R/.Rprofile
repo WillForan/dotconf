@@ -2,6 +2,7 @@
 #options(repos="https://mirrors.nics.utk.edu/cran") # tn
 options(repos = c(CRAN = "http://cran.rstudio.com"))
 options(unzip="internal") # for devtools github install
+options(max.print=999) # mostly so emacs doesn't panic
 
 showdf <- function(...) print.data.frame(row.names=F, ...)
 
