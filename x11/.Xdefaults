@@ -9,7 +9,7 @@
 *VT100.veryBoldColors: 6
 
  
-! 20210216 - dont use :pixelsize=21 so xterm's Ctrl+right VT Font menu will still work
+! 20210216 - dont use :pixelsize=21 so xterms Ctrl+right VT Font menu will still work
 *faceName: Iosevka,xft:Symbola
 xterm*faceSize: 16
 
@@ -42,9 +42,12 @@ UXTerm*numColorRegisters: 256
 ! but disabling also breaks title setting
 ! *allowTitleOps: True
 
+! 20211004 added vt font. not sure if C-{+,-} overrides anything
 *XTerm*Translations: #override \n\
      Shift<Key>Tab:dabbrev-expand() \n\
      Alt<Key>Tab: set-altscreen(toggle) \n\
+     Ctrl <Key> minus: smaller-vt-font() \n\
+     Ctrl <Key> plus: larger-vt-font()
 
 URxvt*background:    	#222222
 URxvt*foreground:    	peachpuff
