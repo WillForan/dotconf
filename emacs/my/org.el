@@ -128,8 +128,8 @@
    '(org-level-5 ((t (:inherit outline-5 :height 1.0))))))
 
 ;; 20210421
-(use-package org-attach-screenshot :ensure t
-:config
-; copy to clipboard (C-c), output also saved to file
-(setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
+(use-package org-attach-screenshot :ensure t :defer t
+  :config
+  ;; copy to clipboard (C-c), output also saved to file
+  (setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
 

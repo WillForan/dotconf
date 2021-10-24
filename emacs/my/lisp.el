@@ -42,7 +42,7 @@
 (use-package sly-quicklisp :ensure t :after sly)
 (use-package sly-asdf :ensure t :after sly)
 (use-package sly-macrostep :ensure t :after sly)
-(use-package sly :ensure t
+(use-package sly :ensure t :defer t
   :config
   (rainbow-delimiters-mode 1)
   (setq inferior-lisp-program "/usr/bin/sbcl")

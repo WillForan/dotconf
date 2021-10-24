@@ -30,14 +30,14 @@
 
 ;; jump to buffer (info and shell)
 ; NB. M-RET is mapped to reset cwd?
-(use-package helm-selector :ensure t ;:after 'helm
+(use-package helm-selector :ensure t :defer t ;:after 'helm
   :bind
   ("C-h i" . 'helm-selector-info)
   ("C-<return>" . 'helm-selector-shell) ; also lispy enter
   ("C-c C-<return>" . 'helm-selector-shell)
   ("C-M-<return>" . 'helm-selector-shell-other-window))
 
-(use-package helm-ls-git :ensure t :after 'helm)
+(use-package helm-ls-git :ensure t :defer t :after 'helm)
 
 ; 20210403 - undo helm for base packages. use  counsel (ivy)
 ; NB. helm config still has shift varients for original emacs utilities
