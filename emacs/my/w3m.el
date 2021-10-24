@@ -1,14 +1,22 @@
 (use-package w3m
+  :custom
+  (w3m-search-default-engine "duckduckgo")
+  (w3m-quick-start nil)
+  (w3m-display-mode 'plain)
+  (w3m-use-title-buffer-name t)
+  (w3m-confirm-leaving-secure-page nil)
+  ;; 20210218 - dont need numbers in links w/emacs, but enabled for cli
+  (w3m-command-arguments
+   (nconc w3m-command-arguments
+	  '("-o" "display_link_number=0")))
+  :bind
+  (:map w3m-mode-map
+	("<mouse-8>" . w3m-view-previous-page)
+	("<mouse-9>" . w3m-view-next-page)
+	("R" . tsa/w3m-toggle-readability)
+	("M-o" . ace-link-w3m))
+
   :config
-    (setq w3m-confirm-leaving-secure-page nil)
-    ; 20210218 - doesn't work. toggle in config
-    (setq w3m-command-arguments
-           (nconc w3m-command-arguments
-                  '("-o" "display_link_number=0")))
- :bind
-   (:map w3m-mode-map
-	 (("<mouse-8>" . w3m-view-previous-page))
-	 (("<mouse-9>" . w3m-view-next-page))))
   ;; from https://tech.toryanderson.com/2021/06/09/how-to-get-readable-mode-in-emacs-w3m/
   (defun tsa/readability (url)
     "Get the Readable.JS version of URL"
