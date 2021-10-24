@@ -26,11 +26,9 @@
     ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
     (setq-default evil-symbol-word-search t) 
     
-    ;;20201120 update requires explicit undo model
-    (global-undo-tree-mode 1)
     (evil-set-undo-system 'undo-tree)
 
-    ;; search history (up/down) -- 20200404
+    ;; 20200404 search history (up/down)
     (evil-select-search-module 'evil-search-module 'evil-search)
 
     ;; default to emacs for these
@@ -71,6 +69,7 @@
     (evil-leader/set-key "a" #'avy-goto-char-in-line)
     (evil-leader/set-key "l" #'avy-goto-line)
     (evil-leader/set-key "s" #'projectile-ag)
+    (evil-leader/set-key "S" #'w3m-search)
     (evil-leader/set-key "p" #'helm-projectile)
     (evil-leader/set-key "G" #'helm-projectile-find-file-in-known-projects)
     (evil-leader/set-key "n" #'neotree-find)
@@ -135,3 +134,10 @@
   (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
   
+
+
+;; 20201120 update requires explicit undo model
+;; 20211003 get w/use-package
+;; 20211024 move to out side of evil use-package
+(use-package undo-tree :ensure t :config :after evil
+  (global-undo-tree-mode 1))
