@@ -25,6 +25,7 @@
 (use-package evil-cleverparens :ensure t
  :config
  (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
+ (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
  (add-hook 'elisp-mode-hook #'evil-cleverparens-mode))
 
 ;;; 20210502 - a bit broken? need rust backend?
