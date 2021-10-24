@@ -40,31 +40,32 @@
 		  'Magit-mode 'magit-mode 
 		  'notmuch-hello-mode 'notmuch-tree-mode
 		  'sly-popup-buffer-mode 'sly-db-mode 'sly-inspector-mode
-                  'deft-mode 'special))
+                  'deft-mode 'special 'dired-mode))
        (evil-set-initial-state mode 'emacs))
     
-    ;; evil addons
-    (use-package evil-escape :ensure t
-      :config
-	(setq-default evil-escape-key-sequence "kj")
-	;; kj kills visual mode :( maybe switch to jk
-	(setq-default evil-escape-delay 0.2)
-	(evil-escape-mode 1))
-    ;; surround word commands- 20180629 - ysiw' -> surround word with quotes
-    ;; use S in visual mode
-    (use-package evil-surround :ensure t
-      :config
-      (global-evil-surround-mode 1))
-    ;; load evil leader
-    (use-package evil-leader :ensure t
-      :config
-       (global-evil-leader-mode)
-       (evil-leader/set-leader "<SPC>"))
     
     ;; does the opposite of J -- merge line up instead of down
     ;; use after e.g. r!xclip -o
-    (define-key evil-normal-state-map (kbd "M-j") #'join-line)
+    (define-key evil-normal-state-map (kbd "M-j") #'join-line))
 
+;; evil addons
+(use-package evil-escape :ensure t
+  :config
+  (setq-default evil-escape-key-sequence "kj")
+  ;; kj kills visual mode :( maybe switch to jk
+  (setq-default evil-escape-delay 0.2)
+  (evil-escape-mode 1))
+;; surround word commands- 20180629 - ysiw' -> surround word with quotes
+;; use S in visual mode
+(use-package evil-surround :ensure t :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+;; load evil leader
+(use-package evil-leader :ensure t :after evil
+  :config
+    (evil-leader/set-leader "<SPC>")
+    (global-evil-leader-mode)
     ;; leader keybindings -- consider hydra instead?
     (evil-leader/set-key "a" #'avy-goto-char-in-line)
     (evil-leader/set-key "l" #'avy-goto-line)
@@ -102,7 +103,9 @@
     (evil-leader/set-key "h" #'backward-sexp)
     (evil-leader/set-key "j" #'down-list)
     (evil-leader/set-key "k" #'up-list)
-    (evil-leader/set-key "l" #'forward-sexp))
+    (evil-leader/set-key "l" #'forward-sexp)
+
+  )
 
 ;; 20200607 - add jj for evil escape
 (use-package key-chord :ensure t

@@ -1,6 +1,6 @@
 ;; get packages not in MELPA
 ;; NB. run with :upgrade t or e.g. C-u M-x quelpa screensend RET
-(use-package quelpa :ensure t 
+(use-package quelpa :ensure t :defer t
   :init
     (setq quelpa-update-melpa-p nil)
   :config

@@ -111,7 +111,7 @@
   (deft-default-extension "org")
   (deft-directory my/notesdir))
 
-(use-package org-journal :ensure t
+(use-package org-journal :ensure t :defer t
  :custom
  (org-journal-file-type 'weekly)
  (org-journal-dir my/jrnldir)
@@ -147,7 +147,7 @@
 
 ;;(setq org-protocol-default-template-key nil)
 
-(use-package org-drill :ensure t
+(use-package org-drill :ensure t :defer t
   :config
   (setq org-drill-scope 'directory)
   ; 20210124 - hints in the heading

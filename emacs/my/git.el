@@ -4,6 +4,5 @@
 ;;    (global-git-gutter-mode t))
 (use-package diff-hl :ensure t
   :config (global-diff-hl-mode))
-
-(use-package magit :ensure t)
+(use-package magit :ensure t :defer t)
 (use-package forge :ensure t :defer t :after magit)

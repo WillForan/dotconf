@@ -78,23 +78,23 @@
 	  (set-window-margins win margin margin)))
 
 (defun my/loadinit ()
-  "load default set of 'layers'"
-  (interactive)
-  ;; use-package defintions for packages (a la spacemace layers?)
-  (mapcar #'my/use
-	  '(package
-            base backup primary-clip
- 	    quelpa
- 	    evil rainbow
- 	    xterm-color
- 	    git
- 	    tramp
- 	    ace switch-window
- 	    yas company helm
- 	    zim-wiki-mode screensend
-	    swiper helm-swoop
- 	    R
-	    lisp
-	    org
-            roam annote
-	    theme frame-settings)))
+     "load default set of 'layers'"
+     (interactive)
+     ;; use-package defintions for packages (a la spacemace layers?)
+     (mapcar #'my/use
+     '(package
+        base backup primary-clip
+ 	quelpa
+ 	evil rainbow
+ 	xterm-color
+ 	git
+ 	tramp
+ 	ace switch-window
+ 	yas company helm
+ 	zim-wiki-mode screensend
+	swiper helm-swoop
+ 	R
+	lisp
+	org
+        roam annote
+	theme frame-settings)))
