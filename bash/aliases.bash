@@ -1,6 +1,7 @@
 # generic 
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
+alias m=mosh
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias G='git'
@@ -43,7 +44,7 @@ alias zzz='sudo systemctl suspend'
 headphones(){ 
    local hmac="FC:58:FA:27:45:0A"
    local a=$1;
-   case $a in c*) a=connect;; d*) a=disconnect;; *) a=connect;; esac;
+   case $a in d*) a=disconnect;; c*|*) a=connect; bluetoothctl power on;; esac;
    bluetoothctl $a $hmac;
 }
 
