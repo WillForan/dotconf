@@ -1,3 +1,9 @@
+;; 20201120 update requires explicit undo model
+;; 20211003 get w/use-package
+;; 20211024 move to out side of evil use-package
+(use-package undo-tree :ensure t
+  :config (global-undo-tree-mode 1))
+
 ;; modal editor
 (defun my/eval-region-and-kbquit ()
   "eval selection and clear selection"
@@ -137,10 +143,3 @@
   (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
   
-
-
-;; 20201120 update requires explicit undo model
-;; 20211003 get w/use-package
-;; 20211024 move to out side of evil use-package
-(use-package undo-tree :ensure t :config :after evil
-  (global-undo-tree-mode 1))
