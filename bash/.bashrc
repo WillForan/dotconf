@@ -8,6 +8,7 @@
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
+test -r /etc/bashrc && . $_
 
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
@@ -40,7 +41,7 @@ else
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
-    . /usr/share/fzf/key-bindings.bash
+    test -r /usr/share/fzf/key-bindings.bash && source $_
 
     # history expand with space. !![space] ^tyop^typo[space]
     bind Space:magic-space
