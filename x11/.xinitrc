@@ -12,7 +12,11 @@ xmodmap -e "keysym Menu = Hyper_L"
 # capslock is control
 setxkbmap -layout us -option "caps:ctrl_modifier"
 # cap released with no other key is escape
-commmand -v xcape >/dev/null && xcape -e '#66=Escape'
+# [20211026]
+# left shift -> (  -- ideally lispy mode picks up the other side
+# right shift -> {
+# set time out to be quicker than .5s default. less accidental presses
+commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=Shift_R|braceleft' -t 150
 # see also: space2ctrl (s2cctl start)
 
 # 20211022 - order seems to matter. apl keyboard last

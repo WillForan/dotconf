@@ -51,7 +51,7 @@
 "/home/foranw/src/utils/wf-utils/zim/convo_jump.bash"
   Mod4 + Mod1 + c
 
-"python3.9 keepmenu"
+"keepmenu"
   Mod4 + p
 
 # "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"
@@ -98,7 +98,8 @@
 
 # 20210331 - new frame hook, dont need this
 # (setq frame-title-format "%b %f [emacs]")
-"emacsclient -c -n -e '(progn (switch-to-buffer nil))'"
+# "emacsclient -c -n -e '(progn (switch-to-buffer nil))'"
+"emacsclient -c -a ''"
  Mod4+ Shift +Return
 
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
