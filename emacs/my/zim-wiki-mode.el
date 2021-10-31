@@ -37,10 +37,12 @@
   :config
     (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
 
+<<<<<<< HEAD
 (use-package zim-wiki-mode  :defer f
-  :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa
-  :bind ("C-c C-n" . my/wiki-goto-now)
-  :after outline-magic
+  :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa, reversted 2021102x
+  :bind
+  ("C-c z" . my/wiki-goto-now) 		;; same as hydra command. but when not in zim, go there
+  ;; :after outline-magic
   :init
     (add-hook 'zim-wiki-mode-hook #'flyspell-mode)
     (add-hook 'zim-wiki-mode-hook #'(lambda () (git-gutter-mode 0)))

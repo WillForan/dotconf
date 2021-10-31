@@ -23,8 +23,13 @@
    (find-file-at-point "~/.emacs.d/my/evil.el") 
    (re-search-forward ";; default to emacs for these\$")))
 
+;; 20201120 update requires explicit undo model
+;; 20211003 get w/use-package
+;; 20211024 move to out side of evil use-package
+(use-package undo-tree :ensure t
+  :config (global-undo-tree-mode 1))
 
-(use-package evil :ensure t
+(use-package evil :ensure t :after undo-tree
   :init
   :config
     (evil-mode 1)
@@ -142,4 +147,3 @@
   (define-key evil-normal-state-map "v" 'evil-visual-char-or-expand-region)
   (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
   (define-key evil-visual-state-map [escape] 'evil-visual-char))
-  
