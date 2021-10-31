@@ -37,8 +37,8 @@
   :config
     (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
 
-(use-package zim-wiki-mode :defer f
-  ; :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa
+(use-package zim-wiki-mode  :defer f
+  :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa
   :bind ("C-c C-n" . my/wiki-goto-now)
   :after outline-magic
   :init
@@ -49,4 +49,4 @@
     ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
     (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
     ;(my/home-wiki)
-)
+    )
