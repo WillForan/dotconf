@@ -12,6 +12,7 @@
 ! 20210216 - dont use :pixelsize=21 so xterms Ctrl+right VT Font menu will still work
 *faceName: Iosevka,xft:Symbola
 xterm*faceSize: 16
+XTerm*termName: xterm-256color
 
 URxvt.font: xft:Iosevka:pixelsize=21,xft:Symbola
 !*faceName:      	Hack
