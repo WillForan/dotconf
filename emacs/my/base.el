@@ -95,10 +95,12 @@
 
 ; 20210331 recompile elc if newer code
 (setq load-prefer-newer t) 
-(use-package auto-compile :ensure t
- :config
-    (auto-compile-on-load-mode)
-    (auto-compile-on-save-mode))
+
+;; 20211024 - disable. can be very annoying
+;; (use-package auto-compile :ensure t
+;;  :config
+;;     (auto-compile-on-load-mode)
+;;     (auto-compile-on-save-mode))
 
 ;(use-package mood-line :ensure t :config (mood-line-mode))
 ;(use-package smart-mode-line :ensure t :config (sml/setup))

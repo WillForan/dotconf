@@ -42,6 +42,10 @@ export PATH
 
 # 20200408
 # only needs to happen once. slow to run. grep first to check
-grep prefix= ~/.npmrc  -q 2>/dev/null || npm config set prefix ~/.local
+! grep prefix= ~/.npmrc  -q 2>/dev/null && command -v npm && npm config set prefix ~/.local
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
 export PATH=$PATH:/opt/afni/
+
+# 20211002 - want auto updates from zotero and firefox
+test -r $HOME/bin/firefox && export PATH="$_:$PATH"
+test -r $HOME/bin/zotero && export PATH="$_:$PATH"

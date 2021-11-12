@@ -40,6 +40,22 @@
   (interactive)
   (kill-new (buffer-file-name)))
 
+(defun last-message (&optional num)
+  "from https://unix.stackexchange.com/questions/154098/copy-the-last-emacs-message-into-the-current-buffer#answer-154154"
+  (or num (setq num 1))
+  (save-excursion
+    (set-buffer "*Messages*")
+    (save-excursion
+      (forward-line (- 1 num))
+      (backward-char)
+      (let ((end (point)))
+	(forward-line 0)
+	(buffer-substring-no-properties (point) end)))))
+(defun my/clip-mesg ()
+  "buffer filename to clipboard"
+  (interactive)
+  (kill-new (last-message)))
+
 (defun my/other-window-kill ()
   "A window just opened w/o focus. buffer name has a *. kill it"
   (interactive)
@@ -53,6 +69,13 @@
 (defun my/frame-settings (_)
   "load settings specific to frame display"
   (my/use 'frame-settings))
+
+(defun my/center-text ()
+  "add margins to current window to center at 80 characters"
+    (interactive)
+    (let* ((win (get-buffer-window))
+	  (margin (max 0 (/ (- (window-width win) 80) 2))))
+	  (set-window-margins win margin margin)))
 
 (defun my/loadinit ()
      "load default set of 'layers'"
@@ -73,5 +96,5 @@
  	R
 	lisp
 	org
-        roam 
+        roam annote
 	theme frame-settings)))

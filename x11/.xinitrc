@@ -8,14 +8,20 @@ samsung_tv(){
 ## keyboard settings
 # right click keyboard "menu" is hyper (for emacs keybindings)
 xmodmap -e "keysym Menu = Hyper_L"
-# apl chars using right alt + key
-setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
 #setxkbmap -layout us -option ctrl:nocaps
 # capslock is control
 setxkbmap -layout us -option "caps:ctrl_modifier"
 # cap released with no other key is escape
-commmand -v xcape >/dev/null && xcape -e '#66=Escape'
+# [20211026]
+# left shift -> (  -- ideally lispy mode picks up the other side
+# right shift -> {
+# set time out to be quicker than .5s default. less accidental presses
+commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=Shift_R|braceleft' -t 150
 # see also: space2ctrl (s2cctl start)
+
+# 20211022 - order seems to matter. apl keyboard last
+# apl chars using right alt + key
+setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
 
 test -r ~/.Xdefaults && xrdb -merge $_
 
@@ -32,8 +38,11 @@ case $HOSTNAME in
       #   --panning 1920x1080 \
       #   --pos 0x0 \
       #   --left-of DVI-D-1;;
-      (cd $HOME/Photos/wallpaper/ &&
-       feh --bg-scale shozo_shimamoto.jpeg  JeanGiraud_Moebius_canyon.png)
+      $HOME/.fehbg &
+      #(cd $HOME/Photos/wallpaper/ &&
+      # feh --bg-scale shozo_shimamoto.jpeg  JeanGiraud_Moebius_canyon.png)
+      # joystick to keys. also see morse.bash in .xbinkkeysrc
+      antimicrox --tray  &
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
@@ -45,20 +54,20 @@ case $HOSTNAME in
       xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
       (sudo ifconfig wlp0s26u1u4i2 up;
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
+      #cbatticon &
       ;;
   s2)
-     # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
-     # 20210707  - greenclip eats cpu. probably dont need it here
-     # greenclip daemon &
+      # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
+      # 20210707  - greenclip eats cpu. probably dont need it here
+      # greenclip daemon &
 
-     # book server. needs gui first. http by plugin
-     pgrep -f calibre || $_ &
-     # hdmi only if we have it
-     xrandr | grep -q HDMI1\ connected &&
-         samsung_tv --output LVDS1 --off ||
-         xrandr --output LVDS1 --mode 1366x768
-      ;;
-
+      # book server. needs gui first. http by plugin
+      pgrep -f calibre || $_ &
+      # hdmi only if we have it
+      xrandr | grep -q HDMI1\ connected &&
+          samsung_tv --output LVDS1 --off ||
+          xrandr --output LVDS1 --mode 1366x768
+     ;;
 esac
 
 # no bell

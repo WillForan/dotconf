@@ -60,7 +60,7 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 ;; 20201114S 
 ;; https://github.com/tmalsburg/helm-bibtex
-(use-package helm-bibtex :ensure t
+(use-package helm-bibtex :ensure t :defer t
   :custom
   (bibtex-completion-bibliography my/zotbib)
   (bibtex-completion-pdf-field "file")
@@ -97,7 +97,7 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 ; https://emacs.stackexchange.com/questions/42281/org-mode-is-it-possible-to-display-online-images
 (require 'quelpa-use-package)
-(use-package org-yt :ensure t
+(use-package org-yt :ensure t :defer t
  :quelpa (org-yt :fetcher github :repo  "TobiasZawada/org-yt")
  :after org
  :config

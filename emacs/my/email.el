@@ -1,3 +1,23 @@
+(defun no-auto-fill () (auto-fill-mode -1))
+
+;; 20211026
+;; https://emacs.stackexchange.com/questions/52657/attaching-files-in-mu4e-from-the-clipboard
+;; original uses default-directory but don't want to pollute home folder (default w/draft buffer)
+;; TODO: inspect filetype on clipboard. panic if not image
+(defun my/clip-to-PNG ()
+  (interactive)
+  (let
+      ((image-file (concat "/tmp/" (format-time-string "tmp_%Y%m%d_%H%M%S.png"))))
+    (shell-command-to-string (concat "xclip -o -selection clipboard -t image/png > " image-file))
+    image-file))
+(defun my/mu4e-attach-image-from-clipboard ()
+  (interactive)
+  (let ((image-file (my/clip-to-PNG)) ;; paste clipboard to temp file
+    (pos (point-marker)))
+    (goto-char (point-max))
+    (mail-add-attachment image-file)
+    (goto-char pos)))
+
 (use-package "mu4e"
  :load-path "/usr/share/emacs/site-lisp/mu4e"
  :config
@@ -18,8 +38,12 @@
  (define-key mu4e-headers-mode-map (kbd "G") 'mu4e-headers-mark-for-tag)
  ; g is default refresh
  ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
+
+ ;; 20211026 - disable auto-newline at longer lines
+ (add-hook 'mu4e-compose-mode-hook #'no-auto-fill)
 )
 (use-package "org-mu4e"
  :load-path "/usr/share/emacs/site-lisp/mu4e"
 )
 (use-package "mu4e-conversation" :ensure t)
+
