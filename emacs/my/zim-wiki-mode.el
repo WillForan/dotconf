@@ -37,7 +37,6 @@
   :config
     (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
 
-<<<<<<< HEAD
 (use-package zim-wiki-mode  :defer f
   :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa, reversted 2021102x
   :bind
