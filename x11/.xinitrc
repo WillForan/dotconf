@@ -14,9 +14,10 @@ setxkbmap -layout us -option "caps:ctrl_modifier"
 # cap released with no other key is escape
 # [20211026]
 # left shift -> (  -- ideally lispy mode picks up the other side
-# right shift -> {
+# right shift -> -  [20211026] { (Shift_R|braceleft)
+# use editor/bash bindings to match pair
 # set time out to be quicker than .5s default. less accidental presses
-commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=Shift_R|braceleft' -t 150
+commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus' -t 150
 # see also: space2ctrl (s2cctl start)
 
 # 20211022 - order seems to matter. apl keyboard last
