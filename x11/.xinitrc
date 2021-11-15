@@ -56,6 +56,7 @@ case $HOSTNAME in
       (sudo ifconfig wlp0s26u1u4i2 up;
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
       #cbatticon &
+      nitrogen --restore &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
