@@ -6,11 +6,6 @@ samsung_tv(){
 }
 
 ## keyboard settings
-# right click keyboard "menu" is hyper (for emacs keybindings)
-xmodmap -e "keysym Menu = Hyper_L"
-#setxkbmap -layout us -option ctrl:nocaps
-# capslock is control
-setxkbmap -layout us -option "caps:ctrl_modifier"
 # cap released with no other key is escape
 # [20211026]
 # left shift -> (  -- ideally lispy mode picks up the other side
@@ -22,7 +17,12 @@ commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=m
 
 # 20211022 - order seems to matter. apl keyboard last
 # apl chars using right alt + key
-setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
+# capslock is control (combined with apl 20211028)
+setxkbmap -layout us,apl -variant ,dyalog -option grp:switch -option "caps:ctrl_modifier"
+
+# right click keyboard "menu" is hyper (for emacs keybindings)
+xmodmap -e "keysym Menu = Hyper_L"
+#setxkbmap -layout us -option ctrl:nocaps
 
 test -r ~/.Xdefaults && xrdb -merge $_
 
