@@ -44,6 +44,10 @@ case $HOSTNAME in
       # joystick to keys. also see morse.bash in .xbinkkeysrc
       antimicrox --tray  &
       nohup sbcl --eval '(load "~/bin/fpedal.lisp")' --non-interactive --quit &
+
+      # 20211113 - cheap track ball mouse for left hand. swap left and right push
+      # xinput set-prop "$mouse" 292 1 # 'Middle Emulation Enabled' (from reese, also see  xinput list-props $mouse)
+      test -n $(xinput --list|grep A4Tech|grep -Po '(?<=id=)\d+') && xinput --set-button-map $_ 3 2 1
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
