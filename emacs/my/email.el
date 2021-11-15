@@ -1,5 +1,18 @@
 (defun no-auto-fill () (auto-fill-mode -1))
 
+;; 20211110 - work uses notmuch on remote computer. personal uses mu
+(use-package "notmuch" :ensure t
+ :config
+ (setq notmuch-command (expand-file-name "~/bin/notmuch-remote")))
+(use-package org-msg :ensure t
+  :config
+  ;; (setq mail-user-agent 'message-user-agent) ; default
+  ;; (setq mail-user-agent 'notmuch-user-agent) ; doesn't work. sends =-=-= blank message
+  ;; ; (org-msg-mode-notmuch) adds advice to notmuch-mua-{reply,mail}
+  ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
+  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
+  (setq org-msg-convert-citation t))
+
 ;; 20211026
 ;; https://emacs.stackexchange.com/questions/52657/attaching-files-in-mu4e-from-the-clipboard
 ;; original uses default-directory but don't want to pollute home folder (default w/draft buffer)
