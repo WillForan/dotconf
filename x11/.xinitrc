@@ -43,6 +43,7 @@ case $HOSTNAME in
       # feh --bg-scale shozo_shimamoto.jpeg  JeanGiraud_Moebius_canyon.png)
       # joystick to keys. also see morse.bash in .xbinkkeysrc
       antimicrox --tray  &
+      nohup sbcl --eval '(load "~/bin/fpedal.lisp")' --non-interactive --quit &
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
