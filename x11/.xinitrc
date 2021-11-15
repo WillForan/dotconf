@@ -9,8 +9,6 @@ samsung_tv(){
 # right click keyboard "menu" is hyper (for emacs keybindings)
 xmodmap -e "keysym Menu = Hyper_L"
 #setxkbmap -layout us -option ctrl:nocaps
-# capslock is control
-setxkbmap -layout us -option "caps:ctrl_modifier"
 # cap released with no other key is escape
 # [20211026]
 # left shift -> (  -- ideally lispy mode picks up the other side
@@ -18,6 +16,8 @@ setxkbmap -layout us -option "caps:ctrl_modifier"
 # set time out to be quicker than .5s default. less accidental presses
 commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=Shift_R|braceleft' -t 150
 # see also: space2ctrl (s2cctl start)
+# capslock is control
+setxkbmap -layout us -option "caps:ctrl_modifier"
 
 # 20211022 - order seems to matter. apl keyboard last
 # apl chars using right alt + key
@@ -48,6 +48,10 @@ case $HOSTNAME in
       # 20211113 - cheap track ball mouse for left hand. swap left and right push
       # xinput set-prop "$mouse" 292 1 # 'Middle Emulation Enabled' (from reese, also see  xinput list-props $mouse)
       test -n $(xinput --list|grep A4Tech|grep -Po '(?<=id=)\d+') && xinput --set-button-map $_ 3 2 1
+
+      # 20211111 - no display manager so systemctl fails. run manually
+      # 20211114 - now using nodm. leaving here for refrence (systemctl --user start greenclip)
+      # pgrep greenclip || greenclip daemon &
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
@@ -97,5 +101,5 @@ command -v deadd-notification-center && $_ &
 command -v picom && picom -bi 1 # -b =daemon, -i1 = inactive opacity disabled 
 # window management only if needed 
 # could call .xinitrc from i3/config
-(sleep 5; autokey-gtk) &
+(sleep 5; pgrep autokey-gtk || autokey-gtk) &
 pgrep i3 || i3
