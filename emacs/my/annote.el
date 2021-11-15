@@ -19,11 +19,17 @@
 
 (defun my/journal-cite (citekey)
   "add new link for citkey as journal entry
+   depends on org-journal and org-roam-bibtex
 useful with betterbibtex as the copy export for zotero ctrl+shift+c
    xclip -o|sed 's/\\cite{\\|\\}$//g'|sed 1q|xargs -I{} echo  emacsclient -n -e '(my/journal-cite \"{}\")'
 "
   (call-interactively 'org-journal-new-entry)
   (orb-insert-edit-note citekey))
+(defun my/journal-cite-from-clip ()
+  (interactive)
+  (let ((clip (car kill-ring))
+        (citekey (replace-regexp-in-string ".*cite{\\|}.*" "" clip)))
+    (my/journal-cite citekey)))
 
 (defun wf/bibtex-url (key)
   "get url from KEY, extracted from bibtex-completion.el"
