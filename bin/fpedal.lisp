@@ -1,4 +1,6 @@
 ;; what keys to push when pedals are used
+;; run: sbcl --load ~/bin/fpedal.lisp --non-interactive --quit
+;;      sly-connect localhost 4008 (in-package :fpedal)
 ; (use-pacakge 'alexandria)
 (in-package :cl-user)
 (ql:quickload '("cl-interpol" "cmd" "alexandria" "slynk"))
@@ -92,9 +94,15 @@
   (uiop:process-info-output (uiop:launch-program cmd :output :stream)))
 (defun watch-pedal ()
   ;; run with file. NB. don't save string. have no way to (close)?
+  ;; errors about "descriptor 6" when evtest DNE
   (with-open-stream (s (cmd-stream (c "sudo evtest " *ev-input*)))
     (loop for line = (read-line s) while line do (read-event-line line))))
 
-(setq *fpeadl-thread* (bt:make-thread  #'watch-pedal))
-;; see (bt:all-threads)
-;; 
+(defun run-as-thread ()
+  "useful for running on repl"
+  (defvar *fpedal-thread*)
+  (setq *fpedal-thread* (bt:make-thread  #'watch-pedal))
+  ;; see (bt:all-threads)
+  ;; e.g. (bt:destroy-thread (nth 3 #v5))
+)
+(watch-pedal)

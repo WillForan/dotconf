@@ -42,7 +42,7 @@ export PATH
 
 # 20200408
 # only needs to happen once. slow to run. grep first to check
-! grep prefix= ~/.npmrc  -q 2>/dev/null && command -v npm && npm config set prefix ~/.local
+! grep prefix= ~/.npmrc  -q 2>/dev/null && command -v npm >/dev/null && npm config set prefix ~/.local
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
 export PATH=$PATH:/opt/afni/
 
