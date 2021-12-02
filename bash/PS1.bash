@@ -28,14 +28,20 @@ fi
 _hostname=$(hostname|cut -d. -f1 )
 case $TERM in
   *xterm*)
-     _x11title="\[\033]0;\u@$_hostname:\w\007\]"
      _hostinfo="$(whoami)@$_hostname"
+     _x11title="\[\033]0;$_hostinfo:\w\007\]"
      # 20211201 - add the running program to the title
-     # useful for long running, but also e.g. 'mpv'
-     # NB. $PWD is not the same as \w: /home/... vs ~
      # https://stackoverflow.com/questions/5076127/bash-update-terminal-title-by-running-a-second-command/7110386#7110386
-     # at some ponit debug is evalutated!? get error message on startup
-     trap 'echo -ne "\033]2;$_hostinfo:$PWD $(history 1 | sed "s/^ *[0-9]* *//g")\007"' DEBUG;;
+     # useful to id long running verbose output, but also finding eg. 'mpv'
+     # NB. $PWD is not the same as \w: /home/... vs ~
+     # NB. trap also executed in capture subshells! $_ is modified
+     #  echo $(echo hi) && echo $_ # hi\n     \003.... hi
+     #  similiar w/ xdotool set_window --name "test" $WINDOWID;
+     #  instead use noop ':' with previous $_ to reinstantiate. 
+     trap '__prevarg="$_";
+           echo -ne "\033]2;$_hostinfo:$PWD $(history 1 | sed "s/^ *[0-9]* *//g")\007";
+           : "$__prevarg"' DEBUG
+     ;;
   *) _x11title="";;
 esac
 #PS1="$yellow$(jobs|wc -l|sed -e '/^0$/d;s/$/ /')$pink$(date +%H:%M) $green\h$nocol:\[\e[3m\]$blue\w$nocol\n$purple»$nocol "
