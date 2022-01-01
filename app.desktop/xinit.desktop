@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=xinitrc
+Comment=Executes the .xinitrc script in your home directory
+Exec=bash $HOME/.xinitrc
+TryExec=bash $HOME/.xinitrc
+Type=Application
