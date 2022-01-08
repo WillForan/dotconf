@@ -13,8 +13,10 @@ samsung_tv(){
 # right shift -> -  [20211026] { (Shift_R|braceleft)
 # use editor/bash bindings to match pair
 # set time out to be quicker than .5s default. less accidental presses
-commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus' -t 150
-# see also: space2ctrl (s2cctl start)
+# 20211219 rigth alt (mode_switch) is delete. b/c kinesis del remapped to super
+# 20220108 left alt backspace for non-kenisis keyboards
+command -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace' -t 150
+# see also: space2ctrl (s2cctl start), and for wayland evscript
 
 ## CAPSLOCK and APL
 # 20211022 - xcape/setxkbmap order seems to matter. setxkbmap last
@@ -31,8 +33,9 @@ test -r ~/.Xdefaults && xrdb -merge $_
 
 case $HOSTNAME in
    kt)
+      xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
       # 20200815 - moved upstairs
-      xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
+      #xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
       # 20200526 - new curbed samsung w/ HDMI-DV1
       # xrandr --output HDMI-1 --mode 1920x1080;;
       # # old TV with overscan issue VGA setting
