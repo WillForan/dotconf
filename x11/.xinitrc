@@ -66,6 +66,7 @@ case $HOSTNAME in
       xrandr --output LVDS1 --mode 1600x900
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768
+      xinput --map-to-output 'ELAN Touchscreen' LVDS1
       libinput-gestures-setup restart
       #synid=$(xinput list|perl -lne 'print $1 and exit if /Synaptics.*id=(\d+)/i')
       #xinput set-prop $synid 303 1 # enable tap
