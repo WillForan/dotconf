@@ -59,6 +59,8 @@ case $HOSTNAME in
       # 20211111 - no display manager so systemctl fails. run manually
       # 20211114 - now using nodm. leaving here for refrence (systemctl --user start greenclip)
       # pgrep greenclip || greenclip daemon &
+      # 20220111 - kinesis keyboard want alt back. remove apl layout
+      setxkbmap -layout us -option "caps:ctrl_modifier"
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
