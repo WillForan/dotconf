@@ -28,7 +28,7 @@ fi
 _hostname=$(hostname|cut -d. -f1 )
 case $TERM in
   *xterm*)
-     _hostinfo="$(whoami)@$_hostname"
+     _hostinfo="$USER@$_hostname"
      _x11title="\[\033]0;$_hostinfo:\w\007\]"
      # 20211201 - add the running program to the title
      # https://stackoverflow.com/questions/5076127/bash-update-terminal-title-by-running-a-second-command/7110386#7110386

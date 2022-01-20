@@ -37,7 +37,6 @@ if [ -n "$INSIDE_EMACS" ]; then
 elif [ "$TERM" == "dumb" ]; then
     export PS1="$ "
 else
-    . $_BASHCFGDIR/PS1.bash
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
@@ -61,6 +60,9 @@ else
     bind -x '"\eG":"gitmoji_bash"'
 
     [ -n "$DISPLAY" ] && xset b off # no system bell if running X
+
+    # last to avoid DEBUG TRAP issues with fzf or fasd??
+    . $_BASHCFGDIR/PS1.bash
 fi
 
 # autojump aliases: z a sd sf d f
