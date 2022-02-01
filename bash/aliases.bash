@@ -33,8 +33,8 @@ alias sbcl="rlwrap sbcl"
 alias i='yay --noconfirm -S'
 alias pq='yay --color auto -Ss'
 
-# git - status short with no untracked
-alias gs='git status -s -uno'
+# git - status short with no untracked. gs is ghostscript
+alias gsuno='git status -s -uno'
 
 # calendar
 alias cala='gcalcli  --calendar "Meetings" --calendar "Will Foran" --calendar "LNCD Journal Club" --calendar "fun! run! climb!" agenda'
@@ -54,6 +54,10 @@ n() { ls -tlc $@|head;}
 sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 # which directory - 20200919
 wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
+
+# git vcs/scm
+gcm() { [ $# -eq 0 ] && return 1; g=$(gitmoji-select); [ -z "$g" ] && return 1; git commit -m "$g $*"; }
+
 
 # 20210421 - cd to a file.
 # doesnt work on symlinks (no easy way to tell if its a file or dir
