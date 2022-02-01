@@ -63,6 +63,9 @@ else
 
     # last to avoid DEBUG TRAP issues with fzf or fasd??
     . $_BASHCFGDIR/PS1.bash
+   
+    export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
+    test -r $HOME/src/utils/bash-autopairs/autopairs.sh && source $_
 fi
 
 # autojump aliases: z a sd sf d f
