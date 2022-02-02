@@ -28,6 +28,9 @@
 ;; store recent files
 (recentf-mode 1)
 
+;; learning new keyboard. find pairs helpful
+(electric-pair-mode 1)
+
 ;; Termux has hunspell
 (when (equal nil (executable-find "ispell"))
   (setq ispell-program-name (executable-find "hunspell")))
