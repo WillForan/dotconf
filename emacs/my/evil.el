@@ -107,6 +107,7 @@
     (evil-leader/set-key ";" #'my/eval-region-and-kbquit)
     (evil-leader/set-key "o" #'org-open-at-point)
     (evil-leader/set-key "f" #'helm-find-files)
+    (evil-leader/set-key "F" #'helm-recentf)
 
     ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "b" #'switch-to-buffer)
