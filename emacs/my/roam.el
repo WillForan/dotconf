@@ -123,7 +123,7 @@
   ("C-c n n" . #'my/goto-today)
   ("C-c n j" . #'org-journal-new-entry)))
 
-(use-package org-roam-bibtex :ensure t :defer t
+(use-package org-roam-bibtex :ensure t
  :after org-roam
  :hook (org-roam-mode . org-roam-bibtex-mode)
  :custom
