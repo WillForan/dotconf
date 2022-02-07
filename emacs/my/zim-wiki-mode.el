@@ -2,6 +2,7 @@
 (defun my/wiki-goto-now ()
    "now page for locally set notebook"
    (interactive)
+   (require 'zim-wiki-mode)
    (zim-wiki-goto-now (expand-file-name zim-wiki-my-root)))
 (defun my/work-wiki ()
   "switch to work wiki settings"
