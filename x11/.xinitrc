@@ -60,6 +60,7 @@ case $HOSTNAME in
       # 20211114 - now using nodm. leaving here for refrence (systemctl --user start greenclip)
       # pgrep greenclip || greenclip daemon &
       # 20220111 - kinesis keyboard want alt back. remove apl layout
+      setxkbmap -layout us -option # reset
       setxkbmap -layout us -option "caps:ctrl_modifier"
       ;;
    yogert)
@@ -112,5 +113,5 @@ command -v deadd-notification-center && $_ &
 command -v picom && picom -bi 1 # -b =daemon, -i1 = inactive opacity disabled 
 # window management only if needed 
 # could call .xinitrc from i3/config
-(sleep 5; pgrep autokey-gtk || autokey-gtk) &
+(sleep 5; pgrep -af autokey.gtkui || /usr/bin/python -m autokey.gtkui) &
 pgrep i3 || i3
