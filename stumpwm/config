@@ -3,18 +3,30 @@
 (in-package :stumpwm-user)
 
 ;; setup - not using .xinitrc but xinit $(which stumpwm) -- :1
+(run-shell-command "xrandr --output HDMI-0 --rotate right --left-of DVI-D-0")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 (run-shell-command "setxkbmap -layout us -option 'caps:ctrl_modifier'")
-(run-shell-command "xrandr --output HDMI-0 --rotate right --left-of DVI-D-0")
-(run-shell-command "picom -bi1")
+(run-shell-command "left-track-mouse")
+;(run-shell-command "picom -bi1")
 (run-shell-command "feh --no-fehbg --bg-scale /mnt/storage/dl/wallpapers/shozo_shimamoto.jpeg /mnt/storage/dl/wallpapers/PawelCzerwinski.jpeg")
+;; clipboard managment only if not running on this display
+(run-shell-command "pgrep greenclip|sed 's:^:/proc/:;s:$:/environ:'|xargs grep -qz DISPLAY=$DISPLAY || greenclip daemon")
+;; so we have something to start with
+(run-shell-command "xterm")
 
 ;; use footpedal as prefix
 ;; if this fails, will need to switch to console
-(run-shell-command "pgrep -af footpedal || sudo ~/src/play/dwellkey_modmap/footpedal /dev/input/by-id/usb-VEC_VEC_USB_Footpedal-event-if00")
+(run-shell-command "sudo ~/src/play/dwellkey_modmap/footpedal /dev/input/by-id/usb-VEC_VEC_USB_Footpedal-event-if00")
 (set-prefix-key (kbd "XF86KbdBrightnessDown"))
 ;; original:
 ;; (set-prefix-key (kbd "C-t"))
+
+;; should use sxkb or xbindkeys
+;; undo like
+;; (undefine-key *root-map* (kbd "s-g"))
+(define-key *root-map* (kbd "s-g") "run-shell-command plumb")
+;(define-key *root-map* (kbd "s-e") "run-shell-command $HOME/.emacs_anywhere/bin/run")
+(define-key *root-map* (kbd "s-e") "run-shell-command emacsclient --eval '(emacs-everywhere)'")
 
 
 ;; focus follows mouse. scroll wheel fix
@@ -28,8 +40,9 @@
 ;; git source in ~/src/utils/stumpwm
 
 ;; select any window
+;; also see globalwindows contrib module
 (defcommand all-window-select () ()
- (stumpwm::focus-all (stumpwm::select-window-from-menu (stumpwm::all-windows) "%m%n%s%50t")))
+ (stumpwm::focus-all (stumpwm::select-window-from-menu (stumpwm::all-windows) "%m%n%s%50t [%c]")))
 ;; replaces pull-hidden-next
 (define-key stumpwm:*root-map* (stumpwm:kbd "space") "all-window-select")
 (define-key stumpwm:*root-map* (stumpwm:kbd "SunPageDown") "pull-hidden-previous") 
@@ -43,7 +56,7 @@
 also see stumpwm:gother"
   (let ((prev-win (nth 1 (remove-if #'not (mapcar (lambda (g) (first (group-windows g))) (screen-groups (current-screen)))))))
     (move-window-to-group prev-win (current-group))))
-(stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "b") "prev-win-to-group")
+(stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "b") "prev-win-to-group") ;; binds over banish
 
 ;; mode line -- used primary for tray (in contrib)
 ;; lots of space at the end so tray doesn't eat time text
@@ -74,6 +87,7 @@ also see stumpwm:gother"
 (load-module "stumptray")
 (stumpwm:run-commands "stumptray")
 
+; expose with gaps causes crash?
 (load-module "swm-gaps")
 (setf swm-gaps:*inner-gaps-size* 10 
       swm-gaps:*outer-gaps-size* 20)
@@ -107,3 +121,6 @@ also see stumpwm:gother"
 
 
 
+; doesn't always get this right without hand holding
+; and cannot call to close to xrandr b/c heads might still report old values
+(refresh-heads)
