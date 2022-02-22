@@ -32,8 +32,8 @@ case $pkg in
   stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux) stowto ~;;
   # inside ~/.config
   kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status) stowto ~/.config/$pkg;;
-  # greenclip.toml lives inside .config instead of it's own directory
-  greenclip) stowto ~/.config/;;
+  # picom.config and greenclip.toml lives inside .config instead of it's own directory
+  greenclip|picom) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) test -w  /usr/share/dynamic-colors && stowto $_ || echo "WARNING: cannot write to '$_'; chmod and rerun 'upbin $pkg'";;
   barriers|firefox) echo "$pkg will live in config. not installing";;
