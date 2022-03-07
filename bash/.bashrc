@@ -10,6 +10,7 @@ export LANG="en_US.UTF-8"
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
+test -r /etc/bashrc && . $_
 
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
@@ -34,14 +35,14 @@ if [ -n "$INSIDE_EMACS" ]; then
            EDITOR='emacsclient -n'
 
     alias pass='EDITOR=emacsclient pass'
+    PS1="\t \w\n\$ "
 elif [ "$TERM" == "dumb" ]; then
     export PS1="$ "
 else
-    . $_BASHCFGDIR/PS1.bash
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
-    . /usr/share/fzf/key-bindings.bash
+    test -r /usr/share/fzf/key-bindings.bash && source $_
 
     # history expand with space. !![space] ^tyop^typo[space]
     bind Space:magic-space
@@ -59,6 +60,14 @@ else
     _bash_insert() { perl -le 'ioctl(STDIN,0x5412,$_) for split "", join " ", @ARGV' -- "$@";}
     gitmoji_bash() { _bash_insert $(gitmoji-select echo); }
     bind -x '"\eG":"gitmoji_bash"'
+
+    [ -n "$DISPLAY" ] && xset b off # no system bell if running X
+
+    # last to avoid DEBUG TRAP issues with fzf or fasd??
+    . $_BASHCFGDIR/PS1.bash
+   
+    export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
+    test -r $HOME/src/utils/bash-autopairs/autopairs.sh && source $_
 fi
 
 # autojump aliases: z a sd sf d f
@@ -72,7 +81,6 @@ eval "$(fasd --init auto)"
 
 
 ## bash settings
-[ -n "$DISPLAY" ] && xset b off # no system bell if running X
 HISTSIZE=10000
 shopt -s histappend
 shopt -s cmdhist    # multi-line command written as one line in history file
@@ -82,6 +90,7 @@ command -v env_parallel >/dev/null && source $(which env_parallel.bash)
 
 # auto-inserted by @update.afni.binaries :
 export PATH=$PATH:/opt/ni_tools/afni
+test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
 
 # set up tab completion for AFNI programs
 if [ -f $HOME/.afni/help/all_progs.COMP.bash ]

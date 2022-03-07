@@ -1,6 +1,7 @@
 # generic 
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
+alias m=mosh
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias G='git'
@@ -12,6 +13,7 @@ alias bn=basename
 alias dn=dirname
 alias x='xargs -r'
 alias px='env_parallel -X -r'
+alias feh='feh --keep-zoom-vp -. -Z --zoom full'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
@@ -31,8 +33,8 @@ alias sbcl="rlwrap sbcl"
 alias i='yay --noconfirm -S'
 alias pq='yay --color auto -Ss'
 
-# git - status short with no untracked
-alias gs='git status -s -uno'
+# git - status short with no untracked. gs is ghostscript
+alias gsuno='git status -s -uno'
 
 # calendar
 alias cala='gcalcli  --calendar "Meetings" --calendar "Will Foran" --calendar "LNCD Journal Club" --calendar "fun! run! climb!" agenda'
@@ -43,7 +45,7 @@ alias zzz='sudo systemctl suspend'
 headphones(){ 
    local hmac="FC:58:FA:27:45:0A"
    local a=$1;
-   case $a in c*) a=connect;; d*) a=disconnect;; *) a=connect;; esac;
+   case $a in d*) a=disconnect;; c*|*) a=connect; bluetoothctl power on;; esac;
    bluetoothctl $a $hmac;
 }
 
@@ -52,6 +54,10 @@ n() { ls -tlc $@|head;}
 sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 # which directory - 20200919
 wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
+
+# git vcs/scm
+gcm() { [ $# -eq 0 ] && return 1; g=$(gitmoji-select); [ -z "$g" ] && return 1; git commit -m "$g $*"; }
+
 
 # 20210421 - cd to a file.
 # doesnt work on symlinks (no easy way to tell if its a file or dir

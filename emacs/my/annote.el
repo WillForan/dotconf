@@ -19,11 +19,20 @@
 
 (defun my/journal-cite (citekey)
   "add new link for citkey as journal entry
+   depends on org-journal and org-roam-bibtex
 useful with betterbibtex as the copy export for zotero ctrl+shift+c
    xclip -o|sed 's/\\cite{\\|\\}$//g'|sed 1q|xargs -I{} echo  emacsclient -n -e '(my/journal-cite \"{}\")'
 "
   (call-interactively 'org-journal-new-entry)
   (orb-insert-edit-note citekey))
+(defun my/cite-key-from-clip ()
+  (replace-regexp-in-string ".*cite{\\|}.*" "" (car kill-ring)))
+
+(defun my/journal-cite-from-clip ()
+  (interactive)
+  (let* ((clip (car kill-ring))
+        (citekey (replace-regexp-in-string ".*cite{\\|}.*" "" clip)))
+    (my/journal-cite citekey)))
 
 (defun wf/bibtex-url (key)
   "get url from KEY, extracted from bibtex-completion.el"
@@ -60,7 +69,7 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 ;; 20201114S 
 ;; https://github.com/tmalsburg/helm-bibtex
-(use-package helm-bibtex :ensure t
+(use-package helm-bibtex :ensure t :defer t
   :custom
   (bibtex-completion-bibliography my/zotbib)
   (bibtex-completion-pdf-field "file")
@@ -97,7 +106,7 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 ; https://emacs.stackexchange.com/questions/42281/org-mode-is-it-possible-to-display-online-images
 (require 'quelpa-use-package)
-(use-package org-yt :ensure t
+(use-package org-yt :ensure t :defer t
  :quelpa (org-yt :fetcher github :repo  "TobiasZawada/org-yt")
  :after org
  :config

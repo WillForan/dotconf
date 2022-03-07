@@ -111,7 +111,7 @@
   (deft-default-extension "org")
   (deft-directory my/notesdir))
 
-(use-package org-journal :ensure t
+(use-package org-journal :ensure t :defer t
  :custom
  (org-journal-file-type 'weekly)
  (org-journal-dir my/jrnldir)
@@ -123,7 +123,7 @@
   ("C-c n n" . #'my/goto-today)
   ("C-c n j" . #'org-journal-new-entry)))
 
-(use-package org-roam-bibtex :ensure t :defer t
+(use-package org-roam-bibtex :ensure t
  :after org-roam
  :hook (org-roam-mode . org-roam-bibtex-mode)
  :custom
@@ -147,7 +147,7 @@
 
 ;;(setq org-protocol-default-template-key nil)
 
-(use-package org-drill :ensure t
+(use-package org-drill :ensure t :defer t
   :config
   (setq org-drill-scope 'directory)
   ; 20210124 - hints in the heading

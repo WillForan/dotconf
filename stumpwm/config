@@ -1,0 +1,126 @@
+;; -*- mode: common-lisp; -*-
+;; 
+(in-package :stumpwm-user)
+
+;; setup - not using .xinitrc but xinit $(which stumpwm) -- :1
+(run-shell-command "xrandr --output HDMI-0 --rotate right --left-of DVI-D-0")
+(run-shell-command "xsetroot -cursor_name left_ptr")
+(run-shell-command "setxkbmap -layout us -option 'caps:ctrl_modifier'")
+(run-shell-command "left-track-mouse")
+;(run-shell-command "picom -bi1")
+(run-shell-command "feh --no-fehbg --bg-scale /mnt/storage/dl/wallpapers/shozo_shimamoto.jpeg /mnt/storage/dl/wallpapers/PawelCzerwinski.jpeg")
+;; clipboard managment only if not running on this display
+(run-shell-command "pgrep greenclip|sed 's:^:/proc/:;s:$:/environ:'|xargs grep -qz DISPLAY=$DISPLAY || greenclip daemon")
+;; so we have something to start with
+(run-shell-command "xterm")
+
+;; use footpedal as prefix
+;; if this fails, will need to switch to console
+(run-shell-command "sudo ~/src/play/dwellkey_modmap/footpedal /dev/input/by-id/usb-VEC_VEC_USB_Footpedal-event-if00")
+(set-prefix-key (kbd "XF86KbdBrightnessDown"))
+;; original:
+;; (set-prefix-key (kbd "C-t"))
+
+;; should use sxkb or xbindkeys
+;; undo like
+;; (undefine-key *root-map* (kbd "s-g"))
+(define-key *root-map* (kbd "s-g") "run-shell-command plumb")
+;(define-key *root-map* (kbd "s-e") "run-shell-command $HOME/.emacs_anywhere/bin/run")
+(define-key *root-map* (kbd "s-e") "run-shell-command emacsclient --eval '(emacs-everywhere)'")
+
+
+;; focus follows mouse. scroll wheel fix
+(setf *mouse-focus-policy* :sloppy) ; or :click or :ignore
+(setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
+
+;; connect to running!
+(ql:quickload :slynk)
+(slynk:create-server :dont-close t) ; :4005
+; (in-package :stumpwm-user)
+;; git source in ~/src/utils/stumpwm
+
+;; select any window
+;; also see globalwindows contrib module
+(defcommand all-window-select () ()
+ (stumpwm::focus-all (stumpwm::select-window-from-menu (stumpwm::all-windows) "%m%n%s%50t [%c]")))
+;; replaces pull-hidden-next
+(define-key stumpwm:*root-map* (stumpwm:kbd "space") "all-window-select")
+(define-key stumpwm:*root-map* (stumpwm:kbd "SunPageDown") "pull-hidden-previous") 
+(define-key stumpwm:*root-map* (stumpwm:kbd "SunPageUp") "pull-hidden-next")
+
+
+;; group
+(defcommand prev-win-to-group () () 
+  "Focus window in previously focused group. Different from gprev: not next number but in time.
+   conveniently (screen-groups) returns list ordered by time.
+also see stumpwm:gother"
+  (let ((prev-win (nth 1 (remove-if #'not (mapcar (lambda (g) (first (group-windows g))) (screen-groups (current-screen)))))))
+    (move-window-to-group prev-win (current-group))))
+(stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "b") "prev-win-to-group") ;; binds over banish
+
+;; mode line -- used primary for tray (in contrib)
+;; lots of space at the end so tray doesn't eat time text
+(setf
+ stumpwm:*window-format* "%m%n%s%10t"     ;default %m%n%s%50t"
+ stumpwm:*screen-mode-line-format*
+      (list
+       "^[^2*%n^]"                      ; group name with 2nd color
+       "%w"                             ; list of windows. %v has colors but only for screen.
+       "^>" '(:eval (stumpwm:run-shell-command
+                     "date +%a' '%F' '%H:%M'          '" t))))
+;; (stumpwm:update)
+
+
+(enable-mode-line (current-screen) (current-head) t)
+(let ((head2 (nth 1 (screen-heads (current-screen)))))
+  (when head2
+    (enable-mode-line (current-screen) head2 "%v")))
+
+;; contrib
+;;  - system tray with stumptray
+;;  - window organization with windowtags
+(add-to-load-path "/usr/share/stumpwm/contrib/")
+; (init-load-path *module-dir*)
+; (list-modules)
+
+(ql:quickload :xembed)
+(load-module "stumptray")
+(stumpwm:run-commands "stumptray")
+
+; expose with gaps causes crash?
+(load-module "swm-gaps")
+(setf swm-gaps:*inner-gaps-size* 10 
+      swm-gaps:*outer-gaps-size* 20)
+(swm-gaps:toggle-gaps)
+
+;; haven't found tags useful
+;; (load-module "windowtags")
+;; (defvar default-tags '("edit" "web" "com" "image") "tags always available")
+;; (defun select-it (things)
+;; ;;   (select-from-menu (current-screen) (remove-duplicates (alexandria:flatten things))))
+;; (defun list-all-tags ()
+;; ;;   (mapcar #'string-downcase
+;; ;;           (alexandria:flatten (mapcar (lambda (x) (windowtags::window-tags x))
+;; ;;                                       (screen-windows (current-screen))))))
+;; (defun select-tag
+;; ;;   (&rest more-tags)
+;; ;;   "use menu to set select a tag. optional more tags likey default-tags"
+;; ;;   (select-it (list more-tags (list-all-tags))))
+;; 
+;; (defcommand set-tag-menu () ()
+;; ;;   "Set window tag using menu"
+;; ;;   (windowtags:tag-window (car (select-tag default-tags))))
+;; 
+;; (defcommand focus-tag-menu () ()
+;; ;;   "Set window tag using menu"
+;; ;;   (windowtags:raise-tag (car (select-tag))))
+;; 
+;; (stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "T") "set-tag-menu")
+;; ;; (stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "t") "focus-tag-menu")
+;; (stumpwm:define-key stumpwm:*root-map* (stumpwm:kbd "t") 'stumpwm::*tile-group-root-map*)
+
+
+
+; doesn't always get this right without hand holding
+; and cannot call to close to xrandr b/c heads might still report old values
+(refresh-heads)

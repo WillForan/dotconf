@@ -25,6 +25,7 @@
 (use-package evil-cleverparens :ensure t
  :config
  (add-hook 'lisp-mode-hook #'evil-cleverparens-mode)
+ (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
  (add-hook 'elisp-mode-hook #'evil-cleverparens-mode))
 
 ;;; 20210502 - a bit broken? need rust backend?
@@ -42,7 +43,7 @@
 (use-package sly-quicklisp :ensure t :after sly)
 (use-package sly-asdf :ensure t :after sly)
 (use-package sly-macrostep :ensure t :after sly)
-(use-package sly :ensure t
+(use-package sly :ensure t :defer t
   :config
   (rainbow-delimiters-mode 1)
   (setq inferior-lisp-program "/usr/bin/sbcl")

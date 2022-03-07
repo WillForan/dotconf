@@ -4,8 +4,8 @@
 # 20211002 - CFGDIR should be configdir
 set -euo pipefail
 trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
-cd $(dirname $(readlink -f "$0"))
-configdir="$(readlink -f ..)"
+cd $(dirname $(readlink -f "$0")) # $HOME/config/bin
+configdir="$(cd ..; pwd)"
 #echo "# confdir: $configdir ($PWD/..)"
 [ -z "$configdir" ] && echo "error cannto find $(pwd)/.. !?" && exit 1
 [ $# -eq 0 ] && pkg=bin || pkg="$1"
@@ -33,8 +33,8 @@ case $pkg in
   stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux) stowto ~;;
   # inside ~/.config
   kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status) stowto ~/.config/$pkg;;
-  # greenclip.toml lives inside .config instead of it's own directory
-  greenclip) stowto ~/.config/;;
+  # picom.config and greenclip.toml lives inside .config instead of it's own directory
+  greenclip|picom) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) test -w  /usr/share/dynamic-colors && stowto $_ || echo "WARNING: cannot write to '$_'; chmod and rerun 'upbin $pkg'";;
   barriers|firefox) echo "$pkg will live in config. not installing";;

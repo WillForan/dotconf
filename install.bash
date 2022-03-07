@@ -29,9 +29,12 @@ CFGDIR=$(pwd)
 # plum used in xbindkeys
 UTILDIR=$HOME/src/utils
 [ ! -d $UTILDIR ] && mkdir -p $UTILDIR
-for gitpkg in wf-utils fuzzy_arg plum; do
+for gitpkg in wf-utils fuzzy_arg plum dynamic-colors; do
    [ ! -d "$UTILDIR/$gitpkg" ] && git clone https://github.com/WillForan/$gitpkg $UTILDIR/$gitpkg
 done
+
+# bash "plugin" to insert matching "')} sourced by bashrc
+test -d $UTILDIR/bash-autopairs || git clone https://github.com/nkakouros-original/bash-autopairs $_
 
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
   yay_ver=10.2.3 # 20210614
@@ -43,12 +46,16 @@ if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
 fi
 
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk silver-searcher-git inetutils)
 # pip install keepmenu
 # also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
+#      xinput wont run if no X11 instance
 command -v xinput && xinput list | grep -qi touchpad && SYSPKG+=("libinput-gestures")
 for syspkg in ${SYSPKGS[@]}; do
-   command -v $syspkg >/dev/null && continue
+   # 20211002 inetutils for hostname, silver-searcher-git for ag
+   case $syspkg in silver-searcher-git) testcmd=ag;; inetutils) testcmd=hostname;; *) testcmd=$syspkg;; esac
+
+   command -v $testcmd >/dev/null && continue
    [ -r /etc/arch-release ] && ~/bin/yay -S $syspkg --noconfirm && continue
    echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
    exit 1

@@ -6,7 +6,11 @@
 (add-to-list 'package-archives    '("gnu"   . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives    '("org"   . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives    '("elpy"  . "https://jorgenschaefer.github.io/packages/"))
+
+;; 20211024
+;; (setq package-quickstart t)
 (package-initialize)
+
 ;; make sure we have use-package
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
