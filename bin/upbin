@@ -4,8 +4,9 @@
 # 20211002 - CFGDIR should be configdir
 set -euo pipefail
 trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
-cd $(dirname $0)
+cd $(dirname $(readlink -f "$0"))
 configdir="$(readlink -f ..)"
+#echo "# confdir: $configdir ($PWD/..)"
 [ -z "$configdir" ] && echo "error cannto find $(pwd)/.. !?" && exit 1
 [ $# -eq 0 ] && pkg=bin || pkg="$1"
 [ ! -d $configdir ] &&
@@ -37,5 +38,5 @@ case $pkg in
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) test -w  /usr/share/dynamic-colors && stowto $_ || echo "WARNING: cannot write to '$_'; chmod and rerun 'upbin $pkg'";;
   barriers|firefox) echo "$pkg will live in config. not installing";;
-  *) echo "$pkg not defined in $0"; exit 1;;
+  *) echo -e "ERROR: '$pkg' not defined in $0. try\n $(ls -d *|sed 's/^/\t/g')"; exit 1;;
 esac
