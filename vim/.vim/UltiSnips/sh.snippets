@@ -1,13 +1,45 @@
 snippet #! "bash shebang" bA
 #!/usr/bin/env bash
-set -euo pipefail
-trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error"' EXIT
-
+#
+# ${1:[c-b/c-z jump]}
 #
 # `date +%Y%m%d`WF - init
-#    ${1:[c-b/c-z jump]}
 #
+[ -v DRYRUN ] && DRYRUN=echo || DRYRUN=
+warn(){ echo "$@" >&2; }
 
-${0}
+${2:_`!p snip.rv = snip.basename`}() {
+  $3
+  return 1
+}
+
+# if not sourced (testing), run as command
+if ! [[ "$(caller)" != "0 "* ]]; then
+  set -euo pipefail
+  trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error $e"' EXIT
+  $2 "$@"
+  exit $?
+fi
+
+####
+# testing with bats. use like
+#   bats ./`!p snip.rv = snip.fn` --verbose-run
+####
+if  [[ "$(caller)" =~ /bats.*/preprocessing.bash ]]; then
+@test "init" {
+	$2
+}
+fi
 endsnippet
 
+snippet [ "if and" b
+[ ${1} ] && ${2}
+endsnippet
+
+snippet [| "if or" b
+[ ${1} ] || ${2}
+endsnippet
+
+snippet [~ "bash regexp" b
+[[ $${1} =~ ${2} ]] || continue
+endsnippet
