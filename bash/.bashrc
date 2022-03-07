@@ -5,6 +5,8 @@
 #   # stow bash -t ~ -d ~/config/ # brings in too much. just want this file
 #   ln -s ~/config/.bashrc ~/
 
+export LANG="en_US.UTF-8"
+
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
