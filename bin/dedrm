@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+dedrm=$HOME/src/utils/DeDRM_tools/DeDRM_plugin
+digital_editions=$HOME/.wine/drive_c/Program\ Files\ \(x86\)/Adobe/Adobe\ Digital\ Editions\ 4.5/DigitalEditions.exe
+
+[ ! -d "$dedrm" ] && echo "ERROR: missing dedrm tools plugin. update script 'dedrm' in $0" && exit 1
+[ ! -r "$digital_editions" ] && echo "ERROR: missing adobe digital editions. update script 'digital_editions' in $0" && exit 1
+test ! -r $dedrm/adobekey_1.der && echo "ERROR: cannot find decoding file '$_'; make with python2 branch of DeDRM_plugin" && exit 1
+
+[ $# -eq 0 -o ! -r "$1" ] && echo "USAGE: $0 xxx.ascm" && exit 0
+
+acsm_file="$1"
+
+wine "$digital_editions"  "$acsm_file" &
+adobepid=$!
+
+zenity --info okay --text "did adobe finish reading new book? (should see progress bar)"
+kill $adobepid
+
+
+new_epub="$(ls -c ~/My\ Digital\ Editions/*.epub|sed 1q)"
+# no files?
+[ -z "$new_epub" -o ! -r "$new_epub" ] && echo "ERROR: cannot find '$new_epub'" && exit 1
+
+save_to="/mnt/storage/dl/books/$(basename "$new_epub" | sed 's/ /_/g')"
+[ -r "$save_to" ] && echo "aready have '$save_to'" && exit 1
+
+
+# adobekey_1.der created with python2 branch of DeDRM
+cd $dedrm
+python3 ineptepub.py ./adobekey_1.der "$new_epub" "$save_to"
+
+[ -r "$save_to" ] && rm "$new_epub"
+echo "# made $save_to"
+

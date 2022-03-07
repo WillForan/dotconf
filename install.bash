@@ -18,47 +18,51 @@ CFGDIR=$(pwd)
 
 #
 # 20190822WF - init
+# 20210123   - add dryrun
+# 20210625   - use upbin, add autokey-gtk to syspkg
 #
+
+[ -n "${DRYRUN:-}" ] && DRYRUN=echo || DRYRUN=
 
 # wf-utils used by i3 and xbindkeys
 # fuzzy_arg used by bashrc
 # plum used in xbindkeys
 UTILDIR=$HOME/src/utils
 [ ! -d $UTILDIR ] && mkdir -p $UTILDIR
-for gitpkg in wf-utils fuzzy_arg plum; do
+for gitpkg in wf-utils fuzzy_arg plum dynamic-colors; do
    [ ! -d "$UTILDIR/$gitpkg" ] && git clone https://github.com/WillForan/$gitpkg $UTILDIR/$gitpkg
 done
 
+# bash "plugin" to insert matching "')} sourced by bashrc
+test -d $UTILDIR/bash-autopairs || git clone https://github.com/nkakouros-original/bash-autopairs $_
+
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
-  curl -L https://github.com/Jguer/yay/releases/download/v9.4.2/yay_9.4.2_x86_64.tar.gz > yay.tar.gz
+  yay_ver=10.2.3 # 20210614
+  curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
   rm -r yay*/ yay.tar.gz
+  export PATH="$HOME/bin:$PATH"
 fi
 
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors passhole stow sshpass syncthing)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk silver-searcher-git inetutils)
+# pip install keepmenu
 # also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
+#      xinput wont run if no X11 instance
 command -v xinput && xinput list | grep -qi touchpad && SYSPKG+=("libinput-gestures")
-for syspkg in ${SYSPKGS}; do
-   command -v $syspkg >/dev/null && continue
-   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)" 
+for syspkg in ${SYSPKGS[@]}; do
+   # 20211002 inetutils for hostname, silver-searcher-git for ag
+   case $syspkg in silver-searcher-git) testcmd=ag;; inetutils) testcmd=hostname;; *) testcmd=$syspkg;; esac
+
+   command -v $testcmd >/dev/null && continue
+   [ -r /etc/arch-release ] && ~/bin/yay -S $syspkg --noconfirm && continue
+   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
    exit 1
 done
 
-# just want bashrc, not the other source files
-[ ! -h ~/.bashrc ] && ln -s $CFGDIR/bash/.bashrc ~/.bashrc
-
-# for all packages (not */ because bash, maybe others soon)
-for pkg in vim xbindkeys x11 R i3 easystroke; do
-   stow $pkg -t ~ -d ~/config/
+# run upbin $PKG for each package
+for d in $CFGDIR/*/; do
+   pkg=$(basename $d)
+   $DRYRUN $CFGDIR/bin/upbin $pkg
 done
-
-stow emacs -t ~/.emacs.d/
-stow bin -t ~/bin/
-stow libinput-gestures/ -t ~/.config
-
-# system config. need sudo/root
-sudo stow dynamic-colors -t /usr/share/dynamic-colors/ -d ~/config/
-
-

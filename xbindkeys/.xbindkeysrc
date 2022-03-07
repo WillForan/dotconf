@@ -12,8 +12,10 @@
 
 "rofi -show" 
   Mod4 + Tab
-"rofi -combi-modi run,window,ssh -show combi"
+"rofi -show combi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window'"
   Mod4+d
+" rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
+  Mod4+Shift+v
 "plyrctrl gui"
   Mod4+m
 
@@ -81,7 +83,8 @@
 # shift+insert is x11 primary
 # but not everywhere
 # Shift + Insert
-"xdotool click 2"
+#"xdotool click 2"
+"cua_paste_primary"
   Control+Shift + Insert
 
 "plum"
@@ -93,7 +96,10 @@
 "copyq toggle"
   Mod4 + q
 
-"emacsclient -c -n -e '(progn (switch-to-buffer nil) (setq frame-title-format "%b %f [emacs]"))'"
+# 20210331 - new frame hook, dont need this
+# (setq frame-title-format "%b %f [emacs]")
+# "emacsclient -c -n -e '(progn (switch-to-buffer nil))'"
+"emacsclient -c -a ''"
  Mod4+ Shift +Return
 
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
@@ -106,3 +112,32 @@
 
 "flameshot gui"
  Print
+
+# XF86Mail and XF86AudioMedia not present on actual keyboard
+# using antimicrox to send
+"~/src/play/morse.bash send 0"
+ XF86Mail
+
+"~/src/play/morse.bash send 1"
+ XF86AudioMedia
+
+# mpv.conf: input-ipc-server=/tmp/mpv-socket
+# xinit: setxkbmap -layout us,apl -variant ,dyalog -option grp:switch
+# ralt+[ = ←
+"echo playlist-prev |socat - /tmp/mpv-socket"
+ Mod4 + Mod1 + bracketleft
+
+"echo playlist-next |socat - /tmp/mpv-socket"
+ Mod4 + Mod1 + bracketright
+
+#    state 0x2040, keycode 34 (keysym 0x1002190, U2190), same_screen YES,
+#    XLookupString gives 3 bytes: (e2 86 90) "←"
+#    state 0x2040, keycode 35 (keysym 0x1002192, U2192), same_screen YES,
+#    XLookupString gives 3 bytes: (e2 86 92) "→"
+"echo playlist-prev |socat - /tmp/mpv-socket"
+  m:0x2040 + c:34 #c:0x1002190
+"echo playlist-next |socat - /tmp/mpv-socket"
+  m:0x2040 + c:35 #c:0x1002192
+
+
+

@@ -9,7 +9,11 @@
 *VT100.veryBoldColors: 6
 
  
-*faceName: Iosevka:pixelsize=21,xft:Symbola
+! 20210216 - dont use :pixelsize=21 so xterms Ctrl+right VT Font menu will still work
+*faceName: Iosevka,xft:Symbola
+xterm*faceSize: 16
+XTerm*termName: xterm-256color
+
 URxvt.font: xft:Iosevka:pixelsize=21,xft:Symbola
 !*faceName:      	Hack
 !*faceName:      	Hasklig
@@ -19,17 +23,32 @@ URxvt.font: xft:Iosevka:pixelsize=21,xft:Symbola
 !*faceName:      	Monaco
 !*faceName:      	EnvyCodeR
 *dynamicColors: 	true
+xterm*dynamicColors: true
+urxvt*dynamicColors: on
 
 XTerm*background:    	#222222
 XTerm*foreground:    	peachpuff
+XTerm*decGraphicsID:     vt240
 UXTerm*background:    	#222222
 UXTerm*foreground:    	peachpuff
 ! for sixel
-UXTerm*decTerminalID:     vt340
+UXTerm*decGraphicsID:    vt240
 UXTerm*termName:         xterm-256color
 UXTerm*numColorRegisters: 256
 ! for autokey abrevatiosn
-UXTerm*allowSendEvents: True
+! *allowTitleOps: True
+*.allowSendEvents: False
+!*.allowSendEvents: True
+! sendevents disables setting title!? titleOpts doesnt help
+! but disabling also breaks title setting
+! *allowTitleOps: True
+
+! 20211004 added vt font. not sure if C-{+,-} overrides anything
+*XTerm*Translations: #override \n\
+     Shift<Key>Tab:dabbrev-expand() \n\
+     Alt<Key>Tab: set-altscreen(toggle) \n\
+     Ctrl <Key> minus: smaller-vt-font() \n\
+     Ctrl <Key> plus: larger-vt-font()
 
 URxvt*background:    	#222222
 URxvt*foreground:    	peachpuff
@@ -54,6 +73,15 @@ URxvt.keysym.M-Up:         font-size:increase
 URxvt.matcher.button:   1
 ! osX does not have termcap info for rxvt
 URxvt*termName:         xterm-256color
+
+! 20210209 - lucid with emacs cannot get to work :(
+! from https://www.rpi.edu/dept/acm/packages/xemacs/20.4/common/lib/xemacs-20.4/etc/sample.Xdefaults
+! Emacs*ScrollBar.SliderStyle:    dimple
+! Emacs*ScrollBar.ArrowPosition:  opposite
+! Emacs*ScrollBar.Foreground:		Gray30
+! Emacs*ScrollBar.Background:		peachpuff
+
+
 
 ! Bells are urgent, for windows manager
 ! rxvt-unicode
@@ -96,7 +124,11 @@ URxvt*termName:         xterm-256color
 ! yeah console configure
 yeahconsole*consoleHeight: 10
 
-xterm*dynamicColors: true
-urxvt*dynamicColors: on
+! ROFI Color theme
+rofi.color-enabled: true
+rofi.color-window: #333333, #333333, #1e2529
+rofi.color-normal: #333333, #c1c1c1, #333333, #394249, #ffffff
+rofi.color-active: #333333, #80cbc4, #333333, #394249, #80cbc4
+rofi.color-urgent: #333333, #ff1844, #333333, #394249, #ff1844
 
 ! vim: et sw=2 syn=xdefaults

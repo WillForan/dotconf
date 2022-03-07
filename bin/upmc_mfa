@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+oathtool --totp --base32 - < $HOME/passwd/upmc_mfa

@@ -12,6 +12,7 @@ _e(){
     # if no display or we want terminal, don't use -c -n
     [[ -z "$DISPLAY" || "$*" =~ ^-t || "$*" =~ "-nw" ]] && args="-t"
     set -x
+    #TERM=xterm-24bit
     emacsclient -a '' $args "$@"
 }
 [[ $(basename "$0") == "e" ]] && _e "$@"

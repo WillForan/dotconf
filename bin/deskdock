@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+adb-unlock # another small local script
+
+echo "# $(date) launching deskdock on phone"
+adb shell monkey -p com.floriandraschbacher.deskdock.pro 1
+
+echo "# $(date) running barrier"
+pgrep barriers || #tmux -t barrier \
+ barriers -c $HOME/config/barriers/kt.sgc
+
+cd $(dirname $0)
+pgrep -f DeskDockServer_1.2.2.jar || #tmux -t barrier \
+ java -jar DeskDockServer_1.2.2.jar

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -xe
+
+cfg=/home/foranw/config/barriers/$(hostname).sgc
+[ ! -r $cfg ] && echo "missing $cfg!" && exit 1
+# /home/foranw/config/barriers/kt.sgc
+otherhost=$(egrep -o '(=?right = ).*' $cfg  |grep -v $(hostname))
+echo $outherhost

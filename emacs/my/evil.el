@@ -1,3 +1,9 @@
+;; 20201120 update requires explicit undo model
+;; 20211003 get w/use-package
+;; 20211024 move to out side of evil use-package
+(use-package undo-tree :ensure t
+  :config (global-undo-tree-mode 1))
+
 ;; modal editor
 (defun my/eval-region-and-kbquit ()
   "eval selection and clear selection"
@@ -8,44 +14,74 @@
       (progn (evil-visual-line) (my/eval-region-and-kbquit)))
   (keyboard-quit))
 
-(use-package evil :ensure t
+(defun my/evil-exclude-state ()
+ "get major mode of current buffer, add to kill ring, jump to this file
+  this would be better as a configure variable that can be edited and saved?"
+ (interactive)
+ (progn
+   (kill-new (concat "'" (symbol-name major-mode)))
+   (find-file-at-point "~/.emacs.d/my/evil.el") 
+   (re-search-forward ";; default to emacs for these\$")))
+
+;; 20201120 update requires explicit undo model
+;; 20211003 get w/use-package
+;; 20211024 move to out side of evil use-package
+(use-package undo-tree :ensure t
+  :config (global-undo-tree-mode 1))
+
+(use-package evil :ensure t :after undo-tree
   :init
   :config
     (evil-mode 1)
     ;; _ is part of a word
     ;; https://emacs.stackexchange.com/questions/9583/how-to-treat-underscore-as-part-of-the-word
     (setq-default evil-symbol-word-search t) 
-    ;; search history (up/down) -- 20200404
+    
+    (evil-set-undo-system 'undo-tree)
+
+    ;; 20200404 search history (up/down)
     (evil-select-search-module 'evil-search-module 'evil-search)
 
     ;; default to emacs for these
     (dolist (mode (list
-		  'help-mode 'elfeed-search-mode 'elfeed-show-mode
-		  'Magit-mode
-		  'notmuch-hello-mode 'notmuch-tree-mode))
+		  'synosaurus-list-mode 'wordnut-mode
+		  'haskell-error-mode
+		  'special-mode
+		  'spray 'help-mode 'elfeed-search-mode 'elfeed-show-mode
+		  'Magit-mode 'magit-mode 
+		  'notmuch-hello-mode 'notmuch-tree-mode
+		  'sly-popup-buffer-mode 'sly-db-mode 'sly-inspector-mode
+                  'deft-mode 'special 'dired-mode))
        (evil-set-initial-state mode 'emacs))
-    ;; evil addons
-    (use-package evil-escape :ensure t
-      :config
-	(setq-default evil-escape-key-sequence "kj")
-	;; kj kills visual mode :( maybe switch to jk
-	(setq-default evil-escape-delay 0.2)
-	(evil-escape-mode 1))
-    ;; surround word commands- 20180629 - ysiw' -> surround word with quotes
-    ;; use S in visual mode
-    (use-package evil-surround :ensure t
-      :config
-      (global-evil-surround-mode 1))
-    ;; load evil leader
-    (use-package evil-leader :ensure t
-      :config
-       (global-evil-leader-mode)
-       (evil-leader/set-leader "<SPC>"))
+    
+    
+    ;; does the opposite of J -- merge line up instead of down
+    ;; use after e.g. r!xclip -o
+    (define-key evil-normal-state-map (kbd "M-j") #'join-line))
 
+;; evil addons
+(use-package evil-escape :ensure t
+  :config
+  (setq-default evil-escape-key-sequence "kj")
+  ;; kj kills visual mode :( maybe switch to jk
+  (setq-default evil-escape-delay 0.2)
+  (evil-escape-mode 1))
+;; surround word commands- 20180629 - ysiw' -> surround word with quotes
+;; use S in visual mode
+(use-package evil-surround :ensure t :after evil
+  :config
+  (global-evil-surround-mode 1))
+
+;; load evil leader
+(use-package evil-leader :ensure t :after evil
+  :config
+    (evil-leader/set-leader "<SPC>")
+    (global-evil-leader-mode)
     ;; leader keybindings -- consider hydra instead?
     (evil-leader/set-key "a" #'avy-goto-char-in-line)
     (evil-leader/set-key "l" #'avy-goto-line)
     (evil-leader/set-key "s" #'projectile-ag)
+    (evil-leader/set-key "S" #'w3m-search)
     (evil-leader/set-key "p" #'helm-projectile)
     (evil-leader/set-key "G" #'helm-projectile-find-file-in-known-projects)
     (evil-leader/set-key "n" #'neotree-find)
@@ -58,6 +94,7 @@
     (evil-leader/set-key "w" #'save-buffer)
     (evil-leader/set-key "0" #'switch-window-then-delete)
     (evil-leader/set-key "1" #'switch-window-then-maximize)
+    (evil-leader/set-key "q" #'my/other-window-kill)
 
     (evil-leader/set-key "<SPC>" #'helm-M-x)
 
@@ -69,7 +106,8 @@
 
     (evil-leader/set-key ";" #'my/eval-region-and-kbquit)
     (evil-leader/set-key "o" #'org-open-at-point)
-    (evil-leader/set-key "f" #'company-files)
+    (evil-leader/set-key "f" #'helm-find-files)
+    (evil-leader/set-key "F" #'helm-recentf)
 
     ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "b" #'switch-to-buffer)
@@ -77,7 +115,9 @@
     (evil-leader/set-key "h" #'backward-sexp)
     (evil-leader/set-key "j" #'down-list)
     (evil-leader/set-key "k" #'up-list)
-    (evil-leader/set-key "l" #'forward-sexp))
+    (evil-leader/set-key "l" #'forward-sexp)
+
+  )
 
 ;; 20200607 - add jj for evil escape
 (use-package key-chord :ensure t
@@ -85,4 +125,26 @@
   :config
   (key-chord-mode 1)
   (key-chord-define evil-insert-state-map  "jj" 'evil-normal-state)
-  (key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
+  ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body) ;rm 20210328
+  )
+
+;; 20201121 
+;; crib from http://blog.binchen.org/posts/how-to-use-expand-region-efficiently.html
+;; cite:binHowUseExpandregion2013
+(use-package expand-region :ensure t :after evil
+ :config
+  (setq expand-region-contract-fast-key "z")
+  (evil-leader/set-key "xx" 'er/expand-region)
+
+  ;; 20210502
+  ;; https://wikemacs.org/wiki/Lisp_editing
+  ;; https://emacs.stackexchange.com/questions/16614/make-evil-mode-more-lisp-friendly
+  (defun evil-visual-char-or-expand-region ()
+    (interactive)
+    (if (region-active-p)
+          (call-interactively 'er/expand-region)
+      (evil-visual-char)))
+  
+  (define-key evil-normal-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map "v" 'evil-visual-char-or-expand-region)
+  (define-key evil-visual-state-map [escape] 'evil-visual-char))

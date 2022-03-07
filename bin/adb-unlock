@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+echo "# $(date) waiting for device"
+adb wait-for-device
+echo "# $(date) found. unlocking"
+#adb shell input keyevent 26 # will lock if already unlocked
+adb shell input keyevent 82  # wake up if asleep 
+adb shell input keyevent 82  # same effect as swipe up
+#NB. KEYCODE_MENU has no effect if already awake/unlocked (?)
+
+# keyevents
+#     66 KEYCODE_ENTER
+# 1 = 82 KEYCODE_MENU
+#     26 KEYCODE_POWER
+# actually swipe up:
+#  adb shell input touchscreen swipe 930 880 930 380

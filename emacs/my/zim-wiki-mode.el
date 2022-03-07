@@ -1,7 +1,9 @@
 ;; local journaling wiki
 (defun my/wiki-goto-now ()
-   (zim-wiki-goto-now (expand-file-name zim-wiki-my-root))
-)
+   "now page for locally set notebook"
+   (interactive)
+   (require 'zim-wiki-mode)
+   (zim-wiki-goto-now (expand-file-name zim-wiki-my-root)))
 (defun my/work-wiki ()
   "switch to work wiki settings"
   (interactive)
@@ -27,14 +29,29 @@
    (insert (string-join (list header-level date header-level) " "))))
 
 
-(use-package zim-wiki-mode :defer t
-  ; :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa
-  :bind ("C-c C-n" . my/wiki-goto-now)
+
+; 20200625 - broke?!
+;(use-package outline-mode :ensure t)
+
+(use-package outline-magic :ensure t
+  :after outline-mode
+  :config
+    (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
+
+(use-package zim-wiki-mode  :defer f
+  :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa, reversted 2021102x
+  :bind
+  ("C-c z" . my/wiki-goto-now) 		;; same as hydra command. but when not in zim, go there
+  ;; c-c c-n used for org-roam/journal too. so dont overwrite by defult
+  ; :bind ("C-c C-n" . my/wiki-goto-now)
+  ;; maybe useful to have
+  ; :after outline-magic
   :init
     (add-hook 'zim-wiki-mode-hook #'flyspell-mode)
     (add-hook 'zim-wiki-mode-hook #'(lambda () (git-gutter-mode 0)))
     (add-hook 'zim-wiki-mode-hook #'auto-save-visited-mode)
   :config
+    ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
     (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
     ;(my/home-wiki)
-)
+    )

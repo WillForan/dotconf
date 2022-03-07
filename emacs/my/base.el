@@ -1,9 +1,24 @@
-;; base emacs config. assume my.el already laoded
-(setq inhibit-startup-screen t)
-;; no display, toolbar already off (dne)
-(when (display-graphic-p) (tool-bar-mode 0))
-(menu-bar-mode 0)
-(setq inhibit-startup-screen t)
+;;;; base emacs config. assume my.el already loaded
+
+;; path locations
+;; ~/notes/org-files tracked in syncthing
+(defvar my/zotbib
+  '("~/notes/org-files/ZoteroLibrary.bib" "~/notes/org-files/year_of_space_20-21.bib")
+  "zotero bibtex output file, set in zotero preferences")
+(defvar my/notesdir
+  "~/notes/org-files/"
+  "where org-roam org files are")
+(defvar my/litdir
+  (concat my/notesdir "lit/")
+  "location of org-noter org files")
+(defvar my/jrnldir
+  (concat my/notesdir "weekly/")
+  "location of journal org files (org-journal)")
+
+;; (setq org-agenda-files nil)
+(if (boundp 'org-agenda-files)
+    (add-to-list 'org-agenda-files my/notesdir)
+    (setq org-agenda-files (list my/notesdir)))
 
 ;; shift-insert like terminal: x11 primary clipboard
 (global-set-key (kbd "S-<Insert>") 'my/get-primary)
@@ -13,6 +28,9 @@
 ;; store recent files
 (recentf-mode 1)
 
+;; learning new keyboard. find pairs helpful
+(electric-pair-mode 1)
+
 ;; Termux has hunspell
 (when (equal nil (executable-find "ispell"))
   (setq ispell-program-name (executable-find "hunspell")))
@@ -21,6 +39,9 @@
 ;; https://www.emacswiki.org/emacs/FlySpell
 (setq flyspell-issue-message-flag nil)
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
+; see C-;
+(add-hook #'mu4e-compose-mode-hook #'flyspell-mode)
+(add-hook #'git-commit-setup-hook #'git-commit-turn-on-flyspell)
 
 ; (global-linum-mode 1)
 
@@ -30,18 +51,10 @@
 ;; write over highlighted selection (20171107)
 (delete-selection-mode 1)
 
-;; dont ask about symlinks in vcs
+;; dont ask about symlinks in version control (git)
 (setq vc-follow-symlinks nil)
 
-;; title has filename in it
-(setq-default frame-title-format '("%f [emacs %m]"))
-(setq-default icon-title-format frame-title-format)
 
-;; Font
-;(set-default-font "Source Code Pro 14") ;; 20191022
-;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
-; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-(set-frame-font "DejaVu Sans Mono-14" nil t); 20180810; 20191116 fix
 
 ;; persistant history (20171107)
 (savehist-mode 1)
@@ -59,9 +72,47 @@
 ;; use python3 in python-mode 20200225
 (setq python-shell-interpreter "python3")
 
-;; org babel -- see org.el (?)
-;(org-babel-do-load-languages
-; 'org-babel-load-languages
-; '((python . t)
-;   (R . t)
-;   (shell .t)))
+(setq inhibit-startup-screen t)
+
+;; use comint file completion to approximate vim's C-x C-f
+;; TODO: why does comany-files need a leading path (e.g. ./)
+; M-\    gives a minibuffer list 
+; M-SPC completes and cycles through
+(global-set-key "\M-\\" 'comint-dynamic-complete-filename)
+(global-set-key "\M- " 'hippie-expand) ; overwrites 'just-one-space'
+
+
+; 20210504 - intially for R, but also lisps
+(global-prettify-symbols-mode +1)
+
+
+; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
+(use-package cliphist :ensure t
+  :bind
+  ("C-c p" . cliphist-paste-item)
+  :config
+  (setq cliphist-linux-clipboard-managers '("greenclip" "clipit" "parcellite")))
+
+;; 20210508 default to turning key helping on
+(use-package which-key :ensure t :config (which-key-mode 1))
+
+; 20210331 recompile elc if newer code
+(setq load-prefer-newer t) 
+
+;; 20211024 - disable. can be very annoying
+;; (use-package auto-compile :ensure t
+;;  :config
+;;     (auto-compile-on-load-mode)
+;;     (auto-compile-on-save-mode))
+
+;(use-package mood-line :ensure t :config (mood-line-mode))
+;(use-package smart-mode-line :ensure t :config (sml/setup))
+
+;; 20210428 tramp passwords stored
+;; (impl. for ginger where .ssh perms prevent key exchange)
+;; https://stackoverflow.com/questions/840279/passwords-in-emacs-tramp-mode-editing
+;; wont work for proxyjump (ssh:reese|ssh:ginger:/file): doesn't store ginger
+;; defaults to ~/.authinfo (not encrypted)
+(use-package password-cache :ensure t
+  :config
+  (setq password-cache-expiry nil))

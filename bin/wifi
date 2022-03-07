@@ -1,20 +1,92 @@
 #!/usr/bin/env bash
+set -x
 #
 # connect to wifi using creds stored in syncthing
-#
+
+# find interface
+IF=""
+set_IF() {
+   cnt=0
+   while [ $cnt -lt 4 ]; do
+      #IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
+      IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
+      [ -n "$IF" ] && break
+      echo "no interface. waiting"
+      sleep 1;
+   done
+   [ -z "$IF" ] && echo 'no interface found' && exit 1
+}
+
+# find current/prev essid (useful for resume from supsend)
+essid() { iwconfig 2>/dev/null|grep -Po '(?<=ESSID:).*"'|sed 's/"//g'; } 
+prev_essid(){ 
+   local prev_wifi
+   cnt=0
+   while [ $cnt -lt 4 ]; do
+     prev_wifi="$(essid)"
+     #[ -z "$prev_wifi" ] && break
+     echo "$cnt: prev wifi seen as '$prev_wifi'" >&2
+     [[ -z "$prev_wifi" || "$prev_wifi" =~ ^off/any$ ]] &&
+        sleep 2 ||
+        break
+     prev_wifi=""
+     let ++cnt
+   done
+   echo $prev_wifi
+}
+
+# get interface or exit
+set_IF
+
+# DOESNT WORK
+# if sym link/run from /lib/systemd/system-sleep/ to run after resume from sleep
+# https://unix.stackexchange.com/questions/124212/writing-a-systemd-service-to-be-executed-at-resume
+if [[ $0 =~ system-sleep ]]; then
+   # systemctl symlink run on suspend and resume
+   # closed: $0=/usr/lib/systemd/system-sleep/wifi pre suspend
+   # open:   $0=/usr/lib/systemd/system-sleep/wifi post suspend
+   [ $1 != "post" ] && exit 0
+   # this works, but is then undone!? maybe wait for whatever this is to finish
+   # ... dhcpcd[3047818]: wlp0s26u1u4i2: removing interface
+   # ... kernel: wlp0s26u1u4i2: deauthenticating from xxxxx by local choice (Reason: 3=DEAUTH_LEAVING)
+   # ... dhcpcd[3047818]: dhcpcd exited
+   # ... systemd[1]: systemd-suspend.service: Succeeded
+   # so fork w/sleep. still doesn't work 
+
+   # try to pickup old essid
+   # useful for resumeing from suspend
+   # inteface might be off. so wait a bit if empty
+
+   test -n "$(prev_essid)" && $(readlink -f $0) "$_"
+   exit 0
+fi
+
+# used by /etc/systemd/system/restart_wifi.service
+if [ $# -gt 0 -a "$1" = "resume" ]; then
+   test -n "$(prev_essid)" &&
+      $0 "$_" ||
+      echo "ERROR: no essid to resume"
+   exit
+
+# ... systemd[1]: systemd-rfkill.service: Deactivated successfully.
+# ... audit[1]: SERVICE_STOP pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-rfkill comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+# ... kernel: audit: type=1131 audit(1620399961.302:8499): pid=1 uid=0 auid=4294967295 ses=4294967295 msg='unit=systemd-rfkill comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+#     ...
+# ... dhcpcd[3056448]: received SIGTERM, stopping
+# ... dhcpcd[3056448]: wlp0s26u1u4i2: removing interface
+# ... kernel: wlp0s26u1u4i2: deauthenticating from xxxx by local choice (Reason: 3=DEAUTH_LEAVING)
+# ... systemd[1]: restart_wifi.service: Deactivated successfully.
+fi
+
+
 # if connecting to open wifi network, use network name as first arg
 
 # needed because sudo will have wrong HOME
 # and wifi settings are in $HOME/passwd/wifi/$essid.wifi
-home=$(readlink -f $0|cut -f1-3 -d/)
 DEFAULT_WIFI=abraham_linksys #_5G
+home=$(readlink -f $0|cut -f1-3 -d/) # assume script is stored in home
 
-# find interface
-#IF=$(iwconfig 2>/dev/null|grep -om1 "^w[^ ]*")
-IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
-[ -z "$IF" ] && echo 'no interface' && exit 1
-
-# make sure we sudo
+# make sure we have permission
 [ $(id -u) -ne 0 ] && {
   sudo $0 "$@"
   exit
@@ -22,14 +94,18 @@ IF=$(ip addr|perl -lne 'print $1 if /^\d+: (w[^:]+)/'|sort)
 
 # shut down if already running
 killall wpa_supplicant
-dhcpcd -k
+dhcpcd -k $IF
 killall dhcpcd
 
 ## start up
-# default to home wifi if not args
+# use previous essid if it exists
+# otherwise use input arg
+# and if neither, use default home wifi
 # otherwise use input arg as essid to find wpasupplicant file
 # if no file, assume open wifi
-[ $# -eq 0 ] && essid="$DEFAULT_WIFI" || essid="$1"
+
+[ $# -gt 0 ] && essid="$1" || essid="$DEFAULT_WIFI"
+
 if test -r $home/passwd/wifi/${essid//[^A-Za-z0-9]/_}.wifi; then
    wpa_supplicant -c $_ -B -i $IF
 elif [ "$essid" == "select" ]; then

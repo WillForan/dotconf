@@ -4,11 +4,11 @@
 #  - language modules: python (pyenv), perl (cpanm), node (npm)
 #
 
-export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$PATH"
+export PATH="$HOME/bin:$HOME/.local/bin:$HOME/src/utils/plum:$HOME/src/utils/dynamic-colors/bin:$PATH"
 
 # ruby gems (for xiki -- but that was 2012 version!) 20200531
-command -v ruby >/dev/null &&
- PATH="$PATH:$(ls -d $HOME/.gem/ruby/*/bin|sed -n '$p')"
+test -d $HOME/.gem/ruby &&
+ PATH="$PATH:$(ls -d $_/*/bin|sed -n '$p')"
 # 20200531 xiki from git (no gem install)
 test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
 
@@ -16,6 +16,7 @@ test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
 command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
    export PATH="$PYENV_ROOT/bin:$PATH"
+   eval "$(pyenv init --path)"
    eval "$(pyenv init -)"
 }
 
@@ -31,6 +32,7 @@ for d in \
  /opt/ni_tools/fmri_processing_scripts  \
  /opt/ni_tools/c3d/bin \
  /opt/ANTs/bin\
+ /opt/ni_tools/mrpeek\
  $HOME/src/cIQ/bin            `# garmin connect IQ unzipped SDK` \
  /usr/share/perl6/vendor/bin/ `# raku/perl6 for zef`\
  ; do
@@ -40,6 +42,10 @@ export PATH
 
 # 20200408
 # only needs to happen once. slow to run. grep first to check
-grep prefix= ~/.npmrc  -q 2>/dev/null || npm config set prefix ~/.local
+! grep prefix= ~/.npmrc  -q 2>/dev/null && command -v npm >/dev/null && npm config set prefix ~/.local
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
 export PATH=$PATH:/opt/afni/
+
+# 20211002 - want auto updates from zotero and firefox
+test -r $HOME/bin/firefox && export PATH="$_:$PATH"
+test -r $HOME/bin/zotero && export PATH="$_:$PATH"
