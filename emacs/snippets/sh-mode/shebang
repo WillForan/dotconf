@@ -3,3 +3,33 @@
 # key: #!
 # --
 #!/usr/bin/env bash
+#
+# $1
+#
+# `(insert (format-time-string "%Y%m%d"))`WF - init
+#
+[ -v DRYRUN ] && DRYRUN=echo || DRYRUN=
+warn(){ echo "$@" >&2; }
+
+${2:_`(replace-regexp-in-string "[^A-Za-z0-9]+" "_" (file-name-sans-extension (buffer-name)))`}() {
+  $3
+  return 1
+}
+
+# if not sourced (testing), run as command
+if ! [[ "$(caller)" != "0 "* ]]; then
+  set -euo pipefail
+  trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error $e"' EXIT
+  $2 "$@"
+  exit $?
+fi
+
+####
+# testing with bats. use like
+#   bats ./`(buffer-name)` --verbose-run
+####
+if  [[ "$(caller)" =~ /bats.*/preprocessing.bash ]]; then
+@test "init" {
+	$2
+}
+fi

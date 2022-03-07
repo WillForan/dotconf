@@ -83,7 +83,7 @@
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
      '(package
-        base backup primary-clip
+        base backup primary-clip yas
  	quelpa
  	evil rainbow
  	xterm-color
