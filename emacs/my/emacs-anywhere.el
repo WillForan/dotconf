@@ -1,14 +1,20 @@
 
 ;; c-c c-c (exit and past) or c-c c-k (no paste)
 (use-package emacs-everywhere :ensure t
-  :init
+ :init
   (defun emacs-everywhere-pidgin-paste ()
     (when (string= (emacs-everywhere-app-class emacs-everywhere-current-app) "Pidgin")
       (set 'emacs-everywhere-paste-command
            '("xdotool" "key" "--clearmodifiers" "Control+V"))))
-    
-  :config
- (add-hook 'emacs-everywhere-init-hooks 'emacs-everywhere-pidgin-paste))
+ :custom
+  (emacs-everywhere--display-server 'x11 "force x11")
+ :config
+  (add-to-list 'emacs-everywhere-markdown-apps "Pidgin")
+  (add-hook 'emacs-everywhere-init-hooks #'emacs-everywhere-pidgin-paste)
+  (add-hook 'emacs-everywhere-init-hooks #'flyspell-mode-on)
+  ;; 20220314 pandoc check obscuring markdown-mode check?
+  (add-hook 'emacs-everywhere-init-hooks #'emacs-everywhere-major-mode-org-or-markdown))
+
 
 
 ;; ORIGINAL doesnt work on firefox developer edition (?!)
