@@ -4,7 +4,7 @@
   :init
   (defun emacs-everywhere-pidgin-paste ()
     (when (string= (emacs-everywhere-app-class emacs-everywhere-current-app) "Pidgin")
-      (set 'emacs-everywhere-paste-cmd
+      (set 'emacs-everywhere-paste-command
            '("xdotool" "key" "--clearmodifiers" "Control+V"))))
     
   :config
