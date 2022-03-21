@@ -1,4 +1,28 @@
 (defun no-auto-fill () (auto-fill-mode -1))
+;; META: if we want to refactor this to use let/variables for actual email and sendmail
+;; how could we use structural editing to do it quickly
+(defun my/quick-email ()
+  (interactive)
+  ;; change from is address is not set
+  (save-excursion (beginning-of-buffer)
+                  (if (re-search-forward "^From:.*tickle-me" nil t)
+                      (replace-match "From: will.foran+from.emacs@gmail.com")))
+  ;; start a the To: line
+  (beginning-of-buffer)
+  (if (re-search-forward "^To:" nil t)
+      (goto-char (match-end 0)))
+  (evil-insert-state)
+  ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
+  ;; (ie. where gmail is blocked)
+  (setq-local
+   message-send-mail-function 'message-send-mail-with-sendmail
+   sendmail-program (if (= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
+
+;; empty for some reason w/text-mode in message-mode dont even complete
+ (yas-define-snippets
+  'message-mode
+  (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
+        (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'"))))
 
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
 (use-package "notmuch" :ensure t
