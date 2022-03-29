@@ -42,6 +42,7 @@
   :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa, reversted 2021102x
   :bind
   ("C-c z" . my/wiki-goto-now) 		;; same as hydra command. but when not in zim, go there
+  ("C-c n w" . my/work-wiki)
   ;; c-c c-n used for org-roam/journal too. so dont overwrite by defult
   ; :bind ("C-c C-n" . my/wiki-goto-now)
   ;; maybe useful to have
