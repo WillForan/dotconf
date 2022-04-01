@@ -16,7 +16,7 @@
   ;; (ie. where gmail is blocked)
   (setq-local
    message-send-mail-function 'message-send-mail-with-sendmail
-   sendmail-program (if (= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
+   sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
  (yas-define-snippets
@@ -24,6 +24,19 @@
   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'"))))
 
+;; 20220328 - sendmail w/ notmuch (work email)
+;; https://notmuchmail.org/pipermail/notmuch/2019/028633.html
+(defun my/work-mail-setup ()
+  (interactive)
+  (setq-local sendmail-program (if (string= (system-name) "reese")
+                                   "/usr/bin/sendmail"
+                                 "~/bin/sendmail-remote")
+              mail-specify-envelope-from t
+              message-sendmail-envelope-from 'header
+              mail-envelope-from 'header
+              send-mail-function 'message-send-mail-with-sendmail)
+  (no-auto-fill)
+  (flyspell-mode-on))
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
 (use-package "notmuch" :ensure t
  :config
