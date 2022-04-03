@@ -98,3 +98,12 @@
 	org
         roam annote
 	theme frame-settings)))
+
+(defun my/note-now (&optional notes)
+  "use org journal with org roam settings to start a note
+timestamps w/current time (now) in a weekly folder. see my/roam.el
+if any NOTES will insert that"
+  (interactive)
+  (when (not (fboundp 'org-journal-new-entry)) (my/use 'roam))
+  (org-journal-new-entry nil)
+  (when notes (insert notes)))

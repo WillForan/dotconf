@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# see emacs/my.el for my/note-now
+emacsclient -cne "(my/note-now)" 
+
+# TODO: if xdotool winactive (wmctrl active name?) is firefox
+# look into firefox's TabFS for url. add clipboard
+# or
+# try to run zotero insert? and grab citation key?
+# write something to turn note page (with citation key) into email
+
+# TODO: maybe use for work too? my/work-wiki

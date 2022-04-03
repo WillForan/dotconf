@@ -108,6 +108,9 @@
 "~/.emacs_anywhere/bin/run"
  Control + Mod4 + e
 
+"mknote"
+ Control + Mod4 + j
+
 ####
 
 "flameshot gui"
