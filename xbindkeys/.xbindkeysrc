@@ -105,9 +105,10 @@
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
  Mod1 + Tab
 
-"~/.emacs_anywhere/bin/run"
+"emacsclient --eval '(emacs-everywhere)'"
  Control + Mod4 + e
 
+# "emacsclient -cne '(org-journal-new-entry nil)'" but with my/new-note
 "mknote"
  Control + Mod4 + j
 
