@@ -1,9 +1,12 @@
 ;; local journaling wiki
 (defun my/wiki-goto-now ()
-   "now page for locally set notebook"
-   (interactive)
-   (require 'zim-wiki-mode)
-   (zim-wiki-goto-now (expand-file-name zim-wiki-my-root)))
+  "now page for locally set notebook"
+  (interactive)
+  (require 'zim-wiki-mode)
+  (zim-wiki-goto-now (expand-file-name zim-wiki-my-root))
+  ;; 20200605 - in my/home-wiki
+  ;; 20220402 - moved here (wiki-goto-wiki)
+  (if (= (buffer-size) 0) (zim-wiki-insert-header)))
 (defun my/work-wiki ()
   "switch to work wiki settings"
   (interactive)
@@ -16,9 +19,7 @@
   (interactive)
   (setq zim-wiki-my-root "~/notes/PersonalWiki")
   (setq zim-wiki-journal-datestr "Calendar/%Y/%02m.txt")
-  (my/wiki-goto-now)
-  ;; 20200605
-  (if (= (buffer-size) 0) (zim-wiki-insert-header)))
+  (my/wiki-goto-now))
 
 
 (defun my/zim-day-header ()
