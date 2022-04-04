@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+tty >/dev/null  && echo "need to pipe to $0; cmd | $0" && exit 1
+
+
+opt=$(tac|
+   perl -lne 'print $& while m:(\S*[~/]\S+)|(^[0-9a-z]{7}\b):g' "$@" |
+   uniq | # want to keep order so not sorted .. non consecutive repeats remain
+   # when used, kb-custom-1 key sets exit code to 10
+   rofi -dmenu -kb-custom-1 Alt+Return)
+code=$?
+[ -z "$opt" ] && exit
+case $code in
+   10)
+      xdotool sleep .1 type  --clearmodifiers  "$opt";;
+   *)
+      echo -n "$opt" | xclip -i;;
+esac
+exit 0

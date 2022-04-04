@@ -48,7 +48,13 @@ UXTerm*numColorRegisters: 256
      Shift<Key>Tab:dabbrev-expand() \n\
      Alt<Key>Tab: set-altscreen(toggle) \n\
      Ctrl <Key> minus: smaller-vt-font() \n\
-     Ctrl <Key> plus: larger-vt-font()
+     Ctrl <Key> plus: larger-vt-font() \n\
+     Ctrl <Key> backslash: print-everything()
+! 20220325 - print to rofi for path on clipboard. no escape sequences
+!            see translation above
+XTerm*printAttributes: 0
+XTerm*printerCommand: term-extract-slugs
+! XTerm*printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 
 URxvt*background:    	#222222
 URxvt*foreground:    	peachpuff
