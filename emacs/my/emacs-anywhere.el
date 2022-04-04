@@ -1,14 +1,17 @@
 
 ;; c-c c-c (exit and past) or c-c c-k (no paste)
 (use-package emacs-everywhere :ensure t
- :init
+  :init
   (defun emacs-everywhere-pidgin-paste ()
-    (when (string= (emacs-everywhere-app-class emacs-everywhere-current-app) "Pidgin")
-      (set 'emacs-everywhere-paste-command
-           '("xdotool" "key" "--clearmodifiers" "Control+V"))))
- :custom
+    (let ((app (emacs-everywhere-app-class emacs-everywhere-current-app))))
+    (set 'emacs-everywhere-paste-command
+         (case
+             (string= app "Pidgin") '("xdotool" "key" "--clearmodifiers" "Control+V")
+             (string= app "Firefox") '("xdotool" "key" "--clearmodifiers" "Control+v")
+             t emacs-everywhere-paste-command)))
+  :custom
   (emacs-everywhere--display-server 'x11 "force x11")
- :config
+  :config
   (add-to-list 'emacs-everywhere-markdown-apps "Pidgin")
   (add-hook 'emacs-everywhere-init-hooks #'emacs-everywhere-pidgin-paste)
   (add-hook 'emacs-everywhere-init-hooks #'flyspell-mode-on)
