@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+# $Id$
+# elvis: marginalia		-- Search on  marginalia
+# version 0.1 
+
+. surfraw || exit 1
+
+w3_usage_hook () {
+    cat <<EOF
+Usage: $w3_argv0 [options] [search words]...
+Description:
+  Surfraw search on search.marginalia.nu
+EOF
+    w3_global_usage
+}
+
+w3_config
+w3_parse_args "$@"
+escaped_args=$(w3_url_of_arg $w3_args)
+w3_browse_url "https://search.marginalia.nu/search?query=${escaped_args}"

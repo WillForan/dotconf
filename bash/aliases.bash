@@ -21,7 +21,10 @@ alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 alias en="emacsclient -n"
 
 # browse with images
-alias w3m='w3m -sixel -o display_image=1'
+alias w3m='w3m -sixel -o display_image=1 -o display_link_number=1'
+alias w3g='surfraw google'
+# https://search.marginalia.nu/search?query=w3m
+alias w3sm='surfraw marginalia'
 
 # play music not cover art
 alias mpv="mpv --no-audio-display"
