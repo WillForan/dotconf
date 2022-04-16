@@ -51,7 +51,7 @@
 "/home/foranw/src/utils/wf-utils/zim/convo_jump.bash"
   Mod4 + Mod1 + c
 
-"keepmenu"
+"/home/foranw/.local/bin/keepmenu"
   Mod4 + p
 
 # "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"
@@ -143,5 +143,8 @@
 "echo playlist-next |socat - /tmp/mpv-socket"
   m:0x2040 + c:35 #c:0x1002192
 
+"/home/foranw/bin/quick-menu"
+  m:0x0 + c:8
+  #F21
 
 

@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# foot pedal or maybe xcape with mod key release
+# keyboard shortcuts already have program options so reuse those
+choice=$(cat  <<HEREDOC |
+primary X11 insert             | key:Shift+Insert
+r - resize                     | run:i3-msg mode resize
+d - dmenu-like launcher (rofi) | key:Super+d
+p - passwords                  | key:Super+p
+g - plumb                      | key:Super+g
+G - plumb menu                 | key:Super+G
+j - journal                    | run:mknote
+v - greenclip                  | key:Super+V
+e - emacs-everywhere           | key:Control+Super+e
+close                          | run:i3-msg kill
+#mark - mark i3 window          | run:i3-input -F 'mark %s' -l 1 -P 'Mark: '
+#markgo - go to mark            | run:i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
+HEREDOC
+
+sed '/^#/d' |rofi -dmenu)
+
+[ -z $choice ] && exit
+
+action=${choice//*| /}
+[ -z "$action" ] && exit 1
+
+case "$action" in
+    key:*) xdotool key ${action/key:/};;
+    run:*) eval "${action/run:/}";;
+    *) xmessage bad command $action;;
+esac
