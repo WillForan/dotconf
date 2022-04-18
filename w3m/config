@@ -1,0 +1,21 @@
+# Open page in the default browser or copy link
+# use M, 2M, 3M, ...
+extbrowser firefox %s
+extbrowser2 url=%s && printf %s "$url" | xclip -i &
+extbrowser3 emacsclient -nc --eval "(progn (require 'w3m) (w3m-browse-url \"%s\"))"
+extbrowser4 mpv %s &
+
+
+# edit with emacsclient
+editor e
+
+# run external viewers/commands in background
+bgextviewer 1
+
+# dark background. change links to green
+basic_color terminal
+anchor_color green
+image_color cyan
+form_color blue
+mark_color yellow
+bg_color terminal
