@@ -64,8 +64,17 @@
 	 '("M" . my/org-move-and-show-just-me))
 
 
-  ; don't ask about evaluting code: 2017-06-26
-  (setq org-confirm-babel-evaluate nil)
+  ;;20170626: don't ask about evaluting code: 
+  ;;20220404: src block indentation/ed/highlight
+  ;;          e.i. evil o/O doesn't keep indenting
+  ;;          https://github.com/syl20bnr/spacemacs/issues/13255
+  (setq
+      org-confirm-babel-evaluate nil
+      org-src-fontify-natively t
+      org-src-window-setup 'current-window ;; edit in current window
+      org-src-strip-leading-and-trailing-blank-lines t
+      org-src-preserve-indentation t ;; do not put two spaces on the left
+      org-src-tab-acts-natively t)
   ; loaded languages
   (use-package jupyter :ensure t
    :config (setenv "EDITOR" "emacsclient")
