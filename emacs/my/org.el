@@ -124,6 +124,11 @@
 (use-package org-bullets :ensure t :after org
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+(defun my/org-open-link-here ()
+  "open link in current frame"
+  (interactive)
+  (let ((org-link-frame-setup '((file . find-file))))
+    (org-open-at-point)))
 
 ;; 
 (defun my/org-header-sizes ()
