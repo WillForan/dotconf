@@ -26,6 +26,37 @@
   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'"))))
 
+
+
+;; https://jao.io/blog/2021-08-19-notmuch-threads-folding-in-emacs.html
+;; use outline mode for thread folding
+;; invisible "> " prefix on message lines that are the first in a thread (notmuch handily marks them with :first in the message metadata passed to notmuch-tree-insert-msg).
+;; tell outline mode to use a regular expression that recognises the marker above:
+(defun jao-notmuch-tree--msg-prefix (msg)
+  (insert (propertize (if (plist-get msg :first) "> " "  ") 'display "")))
+(defun jao-notmuch-tree--mode-setup ()
+  (setq-local outline-regexp "^> \\|^En")
+  (outline-minor-mode t))
+
+
+;; toggle a tag by keybinding
+;; modfied from hints on https://notmuchmail.org/emacstips
+(defun notmuch-toggle-tag (tag tag-func)
+  "toggle tag for message. tag-func like #'notmuch-show-tag"
+  (let ((add-or-rm (if (member tag (notmuch-show-get-tags))
+                       "-" "+")))
+      (funcall tag-func (list (concat add-or-rm tag)))))
+(defun notmuch-keybind-tag-everywhere (key tag)
+    (define-key notmuch-show-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-show-tag)))
+    (define-key notmuch-tree-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-tree-tag)))
+    (define-key notmuch-search-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-search-tag))))
+
+(setq my-notmuch-inbox-search "(date:1w.. -tag:delete) OR tag:todo")
+(defun my-notmuch-tree ()
+  (interactive)
+  (progn (notmuch-search my-notmuch-inbox-search)
+         (notmuch-tree-from-search-current-query)))
+
 ;; 20220328 - sendmail w/ notmuch (work email)
 ;; https://notmuchmail.org/pipermail/notmuch/2019/028633.html
 (defun my/work-mail-setup ()
@@ -39,10 +70,30 @@
               send-mail-function 'message-send-mail-with-sendmail)
   (no-auto-fill)
   (flyspell-mode-on))
+
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
 (use-package "notmuch" :ensure t
- :config
- (setq notmuch-command (expand-file-name "~/bin/notmuch-remote")))
+  :custom
+  ;; 20220107 - redefine jumps on 'j'
+  (notmuch-saved-searches '((:name "week" :query "(date:1w.. -tag:delete) OR tag:todo" :key "w")
+                (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
+  :config
+  ;; use remote server's database. todo: not if (system-name) is work?
+  (setq notmuch-command (expand-file-name "~/bin/notmuch-remote"))
+
+  ;; 20220328 - sendmail using remote if needed
+  (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
+
+  ;; 20211202 use jao's outline mode trick
+  (advice-add 'notmuch-tree-insert-msg :before #'jao-notmuch-tree--msg-prefix)
+  (add-hook 'notmuch-tree-mode-hook #'jao-notmuch-tree--mode-setup)
+  (define-key notmuch-tree-mode-map (kbd "TAB") #'outline-cycle)
+  (define-key notmuch-tree-mode-map (kbd "M-TAB") #'outline-cycle-buffer)
+
+  ;; quick tags defined for show, tree, and search modes
+  (notmuch-keybind-tag-everywhere "d"  "delete")
+  (notmuch-keybind-tag-everywhere "T"  "todo"))
+
 (use-package org-msg :ensure t
   :config
   ;; (setq mail-user-agent 'message-user-agent) ; default
