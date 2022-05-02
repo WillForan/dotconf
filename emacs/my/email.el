@@ -143,10 +143,16 @@
  ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
 
  ;; 20211026 - disable auto-newline at longer lines
- (add-hook 'mu4e-compose-mode-hook #'no-auto-fill)
-)
-(use-package "org-mu4e"
- :load-path "/usr/share/emacs/site-lisp/mu4e"
-)
+ (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
+
+;; mu4e org links functions.
+;; TODO: evil leader keys should probably go somewhere else (20220502)
+;;       likewise for get-mail-command
+(use-package "org-mu4e" :load-path "/usr/share/emacs/site-lisp/mu4e"
+  :config
+  (evil-leader/set-key "M" #'mu4e)
+  (evil-leader/set-key "M-M" #'notmuch)
+  :custom
+  (mu4e-get-mail-command "ssh s2 mbsync -a"))
 (use-package "mu4e-conversation" :ensure t)
 
