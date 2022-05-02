@@ -1,4 +1,20 @@
 (defun no-auto-fill () (auto-fill-mode -1))
+
+;; org-mime and org-msg have overlapping functionality?
+;; 20220502 - prefer org-msg (?why? -- spent more time with it first)
+;; (use-package org-mime :ensure t
+;;   :config
+;;   (setq org-mime-export-options '(:with-latex dvipng
+;;                                               :section-numbers nil
+;;                                               :with-author nil
+;;                                               :with-toc nil))
+;;   ;; if all emails are intended to be htmlized
+;;   ;; (add-hook 'message-send-hook 'org-mime-confirm-when-no-multipart)
+;;   (add-hook 'message-mode-hook
+;;             (lambda () (local-set-key (kbd "C-c M-o") 'org-mime-htmlize)))
+;;   (add-hook 'org-mode-hook
+;;             (lambda () (local-set-key (kbd "C-c M-o") 'org-mime-org-buffer-htmlize))))
+
 ;; META: if we want to refactor this to use let/variables for actual email and sendmail
 ;; how could we use structural editing to do it quickly
 (defun my/quick-email ()
