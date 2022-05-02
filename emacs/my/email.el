@@ -33,10 +33,13 @@
   ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
   ;; (ie. where gmail is blocked)
   (setq-local
-   message-send-mail-function 'message-send-mail-with-sendmail
+   ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
+   message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
+   send-mail-function 'sendmail-send-it
    sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
+ (require 'yas)
  (yas-define-snippets
   'message-mode
   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
@@ -110,10 +113,12 @@
   (notmuch-keybind-tag-everywhere "d"  "delete")
   (notmuch-keybind-tag-everywhere "T"  "todo"))
 
+(use-package org-download :ensure t)    ; 20220501 - org-download-paste for clipboard images
 (use-package org-msg :ensure t
   :config
   ;; (setq mail-user-agent 'message-user-agent) ; default
   ;; (setq mail-user-agent 'notmuch-user-agent) ; doesn't work. sends =-=-= blank message
+  ;; (setq mail-user-agent 'mu4e-user-agent) ; 20220501
   ;; ; (org-msg-mode-notmuch) adds advice to notmuch-mua-{reply,mail}
   ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
