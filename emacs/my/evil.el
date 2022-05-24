@@ -81,7 +81,8 @@
     (evil-leader/set-leader "<SPC>")
     (global-evil-leader-mode)
     ;; leader keybindings -- consider hydra instead?
-    (evil-leader/set-key "a" #'avy-goto-char-in-line)
+    (evil-leader/set-key "a" #'avy-goto-word-0)
+    (evil-leader/set-key "A" #'avy-goto-char-in-line)
     (evil-leader/set-key "l" #'avy-goto-line)
     (evil-leader/set-key "s" #'projectile-ag)
     (evil-leader/set-key "S" #'w3m-search)
@@ -108,12 +109,15 @@
     (evil-leader/set-key "m" #'helm-mark-ring)
 
     (evil-leader/set-key ";" #'my/eval-region-and-kbquit)
+    (evil-leader/set-key "e" #'eval-expression)
+
     (evil-leader/set-key "o" #'org-open-at-point)
     (evil-leader/set-key "f" #'helm-find-files)
     (evil-leader/set-key "F" #'helm-recentf)
 
     ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "b" #'switch-to-buffer)
+    (evil-leader/set-key "B" #'switch-window)
     (evil-leader/set-key "i" #'imenu)
     (evil-leader/set-key "h" #'backward-sexp)
     (evil-leader/set-key "j" #'down-list)
