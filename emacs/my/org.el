@@ -33,6 +33,12 @@
     (org-forward-heading-same-level 1))
   (call-interactively (my/org-show-just-me)))
 
+;; 20220510
+;; use src tmux to play. then change to shell when done
+(use-package ob-tmux :ensure t
+  :custom
+  (org-babel-tmux-terminal "xterm"))
+
 (use-package org :defer t
   :bind
     ("C-c a" . #'org-agenda)
@@ -56,7 +62,7 @@
   ;; 	   '("#+END_SRC"       . "λ")
   ;; 	   prettify-symbols-alist)))))
 
-  
+
   (setq org-use-speed-commands t)
   (add-to-list 'org-speed-commands-user
 	 '("m" . my/org-show-just-me))
@@ -81,7 +87,7 @@
     ;; shell:
     ;;   i jupyter perl-cpanplus-dist-arch perl-moose
     ;;   cpanp install Devel::IPerl
-   ) 
+   )
   (require 'org-tempo) ;; 20201014 removed from default settings. add back
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages 'org-babel-load-languages
@@ -95,9 +101,11 @@
 	(sql . t)
 	(sqlite . t)
 	(shell . t) ; req newer org mode
-	(J . t)
+	;; (J . t) ; will fail if not j-mode
         (jupyter . t)
         (plantuml . t)
+        ;; 20220510 - with ob-tmux
+        (tmux . t)
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
         ))
