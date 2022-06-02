@@ -155,3 +155,35 @@
   ;; copy to clipboard (C-c), output also saved to file
   (setq org-attach-screenshot-command-line "sh -c 'flameshot gui --raw > \"$1\"' -- '%f'"))
 
+
+;; 20220531 -- effort and clock hydra menu with zim outline mode settings
+(defun my/zim-set-header () (setq-local org-complex-heading-regexp "^\\(=+\\)"))
+(defun my/effort-clock-now ()
+  (interactive)
+  (my/zim-set-header)                   ;; Todo: only if zim wiki mode?
+  (org-set-effort)
+  (org-clock-in))
+
+(pretty-hydra-define org-clock-hydra
+  (:color blue :title "org-clock" :quit-key "q")
+  ("clock"
+   (("b" my/effort-clock-now "effort&in")
+    ("i" org-clock-in "clock in")
+    ("o" org-clock-out "clock out")
+    ("e" org-set-effort "effort"))
+   "misc"
+   (("z" my/zim-set-header "zim org header")
+    ("r" org-reveal "reveal")
+    ("u" org-clock-update-time-maybe "update")
+    ("t" org-time-stamp "timestamp"))
+   "link"
+   (("l" org-store-link "get link")
+    ("L" org-insert-link-global "insert link")
+    ("g" org-open-at-point "open"))
+   "outlinde"
+   (("h" outline-hide-entry "hide")
+    ("s" outline-show-entry "show"))))
+   
+(evil-leader/set-key "c" 'org-clock-hydra/body)
+
+
