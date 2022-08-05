@@ -84,9 +84,6 @@
 ;; dont do the crazy comment indent (20200224)
 (electric-indent-mode 0)
 
-;; use python3 in python-mode 20200225
-(setq python-shell-interpreter "python3")
-
 (setq inhibit-startup-screen t)
 
 ;; use comint file completion to approximate vim's C-x C-f
