@@ -4,5 +4,5 @@
 # --
 #!/usr/bin/env perl
 use strict;
-use warnings;
-use feature qw/say/;
+use warnings; no warnings 'experimental::signatures';
+use feature qw/say signatures/;
