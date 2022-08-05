@@ -8,13 +8,14 @@
 
 ;; 20220804
 (setq python-shell-interpreter-args "-m asyncio")
-(use-package company-lsp :ensure t)
 (use-package lsp-pyright :ensure t 
   :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp) (flycheck-mode)))
   :init (when (executable-find "python3")
           (setq lsp-pyright-python-executable-cmd "python3")))
 
 
+;; 20220805 - no longer in MELPA? latest release was 2019
+;; (use-package company-lsp :ensure t :config (push 'company-lsp company-backends))
 ;; 20220804
 ;; no ipython. pyright instead of lsp-mode directly
 ;; NB. elpy is no longer maintained 
