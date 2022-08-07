@@ -107,5 +107,9 @@ let R_assign = 3 " ' _ ' => -> (default is any '_' becomes '->' )
 "  " Either way, for R, need
 "  Plug 'gaalcaras/ncm-R'
 
+" added 20220807 (pkg last updated Apr 2020)
+Plug 'jakykong/vim-zim'
+let g:zim_notebooks_dir="$HOME/notes/WorkWiki"
+let g:zim_dev_keys=1
 
 call plug#end()
