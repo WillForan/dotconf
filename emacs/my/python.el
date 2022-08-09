@@ -18,7 +18,8 @@
 ;; (use-package company-lsp :ensure t :config (push 'company-lsp company-backends))
 ;; 20220804
 ;; no ipython. pyright instead of lsp-mode directly
-;; NB. elpy is no longer maintained 
+;; NB. elpy is still maintained (as of 20220805 last updated a month ago late jun)
+;;     BUT looking for a new maintainer
 
 ;; (setq python-shell-interpreter "ipython"
 ;;       python-shell-interpreter-args "--simple-prompt -i")
