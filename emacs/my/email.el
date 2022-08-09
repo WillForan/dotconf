@@ -1,3 +1,4 @@
+(setq  send-mail-function 'sendmail-send-it)
 (defun no-auto-fill () (auto-fill-mode -1))
 
 ;; org-mime and org-msg have overlapping functionality?
@@ -39,7 +40,7 @@
    sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
- (require 'yas)
+ (require 'yasnippet)
  (yas-define-snippets
   'message-mode
   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
@@ -67,7 +68,7 @@
       (funcall tag-func (list (concat add-or-rm tag)))))
 (defun notmuch-keybind-tag-everywhere (key tag)
     (define-key notmuch-show-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-show-tag)))
-    (define-key notmuch-tree-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-tree-tag)))
+    (define-key notmuch-tree-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-tree-tag) (notmuch-tree-next-message)))
     (define-key notmuch-search-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-search-tag))))
 
 (setq my-notmuch-inbox-search "(date:1w.. -tag:delete) OR tag:todo")
@@ -81,7 +82,7 @@
 (defun my/work-mail-setup ()
   (interactive)
   (setq-local sendmail-program (if (string= (system-name) "reese")
-                                   "/usr/bin/sendmail"
+                                   "/usr/sbin/sendmail"
                                  "~/bin/sendmail-remote")
               mail-specify-envelope-from t
               message-sendmail-envelope-from 'header
@@ -91,6 +92,10 @@
   (flyspell-mode-on))
 
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
+(defun my/notmuch ()
+  (interactive)
+  (notmuch-tree "date:1week.. -tag:delete"))
+
 (use-package "notmuch" :ensure t
   :custom
   ;; 20220107 - redefine jumps on 'j'
@@ -102,6 +107,9 @@
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
+
+  ;; 20220808 - x and a actions
+  (setq notmuch-archive-tags '("-inbox" "-new"))
 
   ;; 20211202 use jao's outline mode trick
   (advice-add 'notmuch-tree-insert-msg :before #'jao-notmuch-tree--msg-prefix)
