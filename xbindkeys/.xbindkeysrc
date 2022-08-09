@@ -14,7 +14,7 @@
   Mod4 + Tab
 "rofi -show combi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window'"
   Mod4+d
-" rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
+"rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
   Mod4+Shift+v
 "plyrctrl gui"
   Mod4+m
@@ -144,7 +144,7 @@
   m:0x2040 + c:35 #c:0x1002192
 
 "/home/foranw/bin/quick-menu"
-  m:0x0 + c:8
-  #F21
+  #m:0x0 + c:8
+  F21
 
 
