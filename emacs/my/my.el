@@ -109,3 +109,5 @@ if any NOTES will insert that"
   (when (not (fboundp 'org-journal-new-entry)) (my/use 'roam))
   (org-journal-new-entry nil)
   (when notes (insert notes)))
+
+(defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))
