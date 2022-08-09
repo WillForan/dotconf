@@ -83,21 +83,23 @@
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
      '(package
-        base backup primary-clip yas
- 	quelpa
- 	evil rainbow
- 	xterm-color
- 	git
- 	tramp
- 	ace switch-window
- 	yas company helm
- 	zim-wiki-mode screensend
-	swiper helm-swoop
- 	R
-	lisp
-	org
-        roam annote
-	theme frame-settings)))
+       base backup primary-clip helm
+       company yas
+       quelpa
+       evil rainbow
+       xterm-color
+       git
+       tramp
+       ace switch-window
+       zim-wiki-mode screensend
+       swiper helm-swoop
+       python R
+       lisp lint ;; these take a long time
+       org
+       roam annote
+       ;; last -- if not applied we know something went wrong
+       frame-settings theme
+       )))
 
 (defun my/note-now (&optional notes)
   "use org journal with org roam settings to start a note
@@ -107,3 +109,5 @@ if any NOTES will insert that"
   (when (not (fboundp 'org-journal-new-entry)) (my/use 'roam))
   (org-journal-new-entry nil)
   (when notes (insert notes)))
+
+(defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))

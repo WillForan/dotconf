@@ -1,6 +1,34 @@
-(setq python-shell-interpreter "ipython"
-      python-shell-interpreter-args "--simple-prompt -i")
+;; might want set a different path to python.
+;; in .dir-locals.el
+;; ((python-mode . ((python-pytest-executable . "pipenv run python -m pytest"))))
+(use-package python-pytest
+  :ensure t
+  :bind
+  ("C-c t" . python-pytest-file-dwim)
+  ("C-c T" . python-pytest-dispatch))
 
+(use-package python-black :ensure t
+  :demand t
+  :after python
+  ;; is [tool.black] in pyproject.toml
+  :hook (python-mode . python-black-on-save-mode-enable-dwim))
+
+(use-package lsp-ui :ensure t :commands lsp-ui-mode)
+
+;; 20220804
+(setq python-shell-interpreter-args "-m asyncio")
+(use-package lsp-pyright :ensure t 
+  :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp) (flycheck-mode)))
+  :init (when (executable-find "python3")
+          (setq lsp-pyright-python-executable-cmd "python3")))
+
+
+;; 20220805 - no longer in MELPA? latest release was 2019
+;; (use-package company-lsp :ensure t :config (push 'company-lsp company-backends))
+
+;; 20220804
+;; no ipython. pyright instead of lsp-mode directly
+;; NB. elpy is looking for a mainter
 (defun my/pysetup ()
   "Flycheck setup w/keybindings."
   (interactive)
@@ -11,15 +39,18 @@
 
 ;; prefer flycheck over older flymake
 ;; flycheck does useful things with py out of the box
-(add-hook 'python-mode-hook #'my/pysetup)
+;; (add-hook 'python-mode-hook #'my/pysetup)
 
-;; might want set a different path to python.
-;; in .dir-locals.el
-;; ((python-mode . ((python-pytest-executable . "pipenv run python -m pytest"))))
-(use-package python-pytest
-  :ensure t
-  :bind
-  ("C-c t" . python-pytest-file-dwim)
-  ("C-c T" . python-pytest-dispatch))
-
-;; end
+;; (setq python-shell-interpreter "ipython"
+;;       python-shell-interpreter-args "--simple-prompt -i")
+;; (use-package lsp-mode :ensure t
+;;   :config
+;;     (lsp-register-custom-settings
+;;    '(("pyls.plugins.pyls_mypy.enabled" t t)
+;;      ("pyls.plugins.pyls_mypy.live_mode" nil t)
+;;      ("pyls.plugins.pyls_black.enabled" t t)
+;;      ("pyls.plugins.pyls_isort.enabled" t t)
+;;      ("pyls.plugins.flake8.enabled" t t)))
+;;   :hook
+;;   ((python-mode . lsp)
+;;    (lsp-mode . lsp-enable-which-key-integration)))
