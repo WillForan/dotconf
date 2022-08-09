@@ -14,7 +14,7 @@
   Mod4 + Tab
 "rofi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window' -show combi "
   Mod4+d
-" rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
+"rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
   Mod4+Shift+v
 "plyrctrl gui"
   Mod4+m
@@ -160,6 +160,3 @@
 #   root 0x1e1, subw 0x0, time 445939994, (61,305), root:(512,1154),
 #   state 0x0, keycode 8 (keysym 0xffd2, F21), same_screen YES,
 #   XLookupString gives 0 bytes: 
-
-
-
