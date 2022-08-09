@@ -98,7 +98,10 @@
     (evil-leader/set-key "w" #'save-buffer)
     (evil-leader/set-key "0" #'switch-window-then-delete)
     (evil-leader/set-key "1" #'switch-window-then-maximize)
-    (evil-leader/set-key "q" #'my/other-window-kill)
+    ;; 20220809 change from other-window-kill to quit-other
+    ;;          quit-other leans on quit-window which restores previous win arrangement
+    ;; (evil-leader/set-key "q" #'my/other-window-kill)
+    (evil-leader/set-key "q" #'my/quit-other)
 
     (evil-leader/set-key "<SPC>" #'helm-M-x)
 

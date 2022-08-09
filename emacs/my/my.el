@@ -18,13 +18,27 @@
   )
 )
 
+(defun my/quit-other ()
+  "quit e.g. help buffer without switching to it.
+  with-selected+otherwindow from inspecting M-<next> (scroll-other-window)
+  cf. my/other-window-kill"
+  (interactive)
+  (with-selected-window (other-window-for-scrolling) (quit-window)))
+
+(defun my/quit-help ()
+  "quit all *Help* buffers. using dash"
+  (apply #'quit-restore-window
+   (-filter (lambda (w)
+      (-> w (window-buffer) (buffer-name) (equal "*Help*")))
+    (window-list))))
+
 (defun my/use-url (url)
   "Download and load url. right now just loads basename from pkgs directory"
   (let ((pkg-dir "~/.emacs.d/pkgs/"))
     ;; TODO: exists or download to pkg-dir
     (load-file (expand-file-name (concat pkg-dir (file-name-base url) ".el")))
+    )
   )
-)
 
 (defun my/dokuwiki ()
   "Connects to the dokuwiki."
