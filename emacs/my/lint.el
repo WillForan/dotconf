@@ -1,7 +1,10 @@
 
-
 ;; 20220403 - https://emacstil.com/til/2022/03/05/setting-up-vale-prose-linter-on-emacs/
+;; 20220811 - enable flycheck for all prog
+
 (use-package flycheck :ensure t
+  :init
+  (global-flycheck-mode)
   :config
   (flycheck-define-checker vale
                            "A checker for prose"
