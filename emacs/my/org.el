@@ -64,9 +64,9 @@
 
 
   (setq org-use-speed-commands t)
-  (add-to-list 'org-speed-commands-user
+  (add-to-list 'org-speed-commands
 	 '("m" . my/org-show-just-me))
-  (add-to-list 'org-speed-commands-user
+  (add-to-list 'org-speed-commands
 	 '("M" . my/org-move-and-show-just-me))
 
 
