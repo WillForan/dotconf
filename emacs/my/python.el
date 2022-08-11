@@ -41,7 +41,6 @@
 ;; prefer flycheck over older flymake
 ;; flycheck does useful things with py out of the box
 ;; (add-hook 'python-mode-hook #'my/pysetup)
->>>>>>> 3e744efe3e745a5ba7595e6ac1ebf69242522db1
 
 ;; (setq python-shell-interpreter "ipython"
 ;;       python-shell-interpreter-args "--simple-prompt -i")
