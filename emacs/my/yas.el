@@ -6,8 +6,14 @@
 
    ;; 20210209 - global so 'today' expands everywhere it can
    ;;            alt: (add-hook 'prog-mode-hook #'yas-minor-mode)
+
    ;; 20220805 - need '1' as only arg
-   (yas-global-mode 1)
+   ;; (yas-global-mode 1)
+
+   ;; 20220818 - magit and repl lost tab with gobal mode. 
+   ;;            reload and prog-mode only
+   (yas-reload-all)
+   (add-hook 'prog-mode-hook #'yas-minor-mode-on)
 
    ; 20200907 - add yas to copmany backands
    (append company-backends' (:with company-yasnippet))
