@@ -109,6 +109,20 @@
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
         ))
+
+      ;; 20220911 org-protocol bookmarklet and desktop files
+
+   (setq org-capture-templates (quote
+       (("w"
+         "www"
+         entry
+         (file+headline "~/notes/org-files/capture.org" "WWW Capture")
+         "** %:description\n\n  %u %:link\n %i"
+         :empty-lines 1)
+        ;; ... more templates here ...
+        )))
+
+
   ;; 20210408 - after installing with pacman
   (setq org-plantuml-jar-path  "/usr/share/java/plantuml/plantuml.jar")
 
@@ -185,5 +199,4 @@
     ("s" outline-show-entry "show"))))
    
 (evil-leader/set-key "c" 'org-clock-hydra/body)
-
 
