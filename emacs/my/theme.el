@@ -13,9 +13,9 @@
   (helm-themes--load-theme "moe-dark"))
 
 ;; 20220809 using base16-eva
+;;base16-eva, base16-gruvbox-dark-hard, base16-drakula
+;; (use-package base16-theme :ensure t :config (load-theme 'base16-eva t))
+;; (use-package  monokai-theme :ensure t :config (load-theme 'monokai t))
+;; doom themes  do not increase text size for org mode but are otherwise a nice collection
+;;   esp. doom-monokai-classic, doom-drakula
 
-;; (use-package moe-theme :ensure t :config (load-theme 'moe-dark t))
-; (use-package  monokai-theme :ensure t :config (load-theme 'monokai t))
-; also see 
-; doom-monokai-classic, doom-drakula, 
-; but doom themes do not increase text size for org mode
