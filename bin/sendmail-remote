@@ -1,0 +1,8 @@
+#!/bin/bash
+# mostly copy of notmuch-remote
+printf -v ARGS "%q " "$@"
+exec ssh reese msmtp ${ARGS}
+
+# in emacs (TODO: does this work with attachments?!)
+# (setq sendmail-program (expand-file "~/bin/sendmail-remote"))
+# alternative: ssh -L 1025:localhost:1025 reese
