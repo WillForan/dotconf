@@ -84,6 +84,7 @@
   (setq-local sendmail-program (if (string= (system-name) "reese")
                                    "/usr/sbin/sendmail"
                                  "~/bin/sendmail-remote")
+              user-mail-address "foranw@upmc.edu"
               mail-specify-envelope-from t
               message-sendmail-envelope-from 'header
               mail-envelope-from 'header
@@ -94,6 +95,7 @@
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
 (defun my/notmuch ()
   (interactive)
+  (setq user-mail-address "foranw@upmc.edu" user-full-name  "Will Foran")
   (notmuch-tree "date:1week.. -tag:delete"))
 
 (use-package "notmuch" :ensure t
