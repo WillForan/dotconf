@@ -3,6 +3,6 @@ nmhost=reese
 if [[ $(hostname) =~ $nmhost ]]; then
   emacsclient -t -e '(my/notmuch)'
 else
-  ssh $nmhost $0
+  ssh -t $nmhost $0
 fi
 
