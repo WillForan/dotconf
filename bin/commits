@@ -8,26 +8,32 @@
 #
 # FROMTIME - days from current seconds. floored to day
 #            default to 0 -- just whats happened today
-# USER     - github username
+# USERS     - github username like 'users/XXX' and/or 'orgs/YYYY'
 
 # defaults
 FROMTIME=0
-USER=WillForan
+USERS=(users/WillForan orgs/LabNeuroCogDevel)
+get_commits(){
+  curl -sL https://api.github.com/$1/events | 
+    jq -r '
+      .[]|
+      .created_at as $date|
+      .repo.name as $repo |
+      .payload.commits[0].message as $m |
+      select($m != null)|
+      select($date >= (now-'''$FROMTIME'''|strftime("%Y-%m-%d")))|
+      [$repo,$date,$m]|
+      @tsv'
+}
 
 # args
 [ $# -ge 1 ] && FROMTIME="$1"
-[ $# -ge 2 ] && USER="$2"
+[ $# -ge 2 ] && USERS=("$@")
 
 # convert to seconds
 let FROMTIME=$FROMTIME*60*60*24
+
 # get
-curl -sL https://api.github.com/users/$USER/events | 
-  jq -r '
-    .[]|
-    .created_at as $date|
-    .repo.name as $repo |
-    .payload.commits[0].message as $m |
-    select($m != null)|
-    select($date >= (now-'''$FROMTIME'''|strftime("%Y-%m-%d")))|
-    [$repo,$date,$m]|
-    @tsv'
+for u in "${USERS[@]}"; do
+   get_commits "$u"
+done | sort -k2r

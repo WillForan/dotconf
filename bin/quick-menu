@@ -3,7 +3,7 @@
 # foot pedal or maybe xcape with mod key release
 # keyboard shortcuts already have program options so reuse those
 choice=$(cat  <<HEREDOC |
-primary X11 insert             | key:Shift+Insert
+x - X11 insert (Primary)       | key:Shift+Insert
 r - resize                     | run:i3-msg mode resize
 d - dmenu-like launcher (rofi) | key:Super+d
 p - passwords                  | key:Super+p
@@ -12,12 +12,17 @@ G - plumb menu                 | key:Super+G
 j - journal                    | run:mknote
 v - greenclip                  | key:Super+V
 e - emacs-everywhere           | key:Control+Super+e
-close                          | run:i3-msg kill
+q - close window               | key:Super+Q
+f - float                      | key:Super+Shift+space
+t - dictation                  | run:/home/foranw/src/utils/nerd-dictation/nerd-dictation begin --continuous
+te - end dictation             | run:/home/foranw/src/utils/nerd-dictation/nerd-dictation end 
+cr - code-repos                | run:code-repos s
+#close                          | run:i3-msg kill
 #mark - mark i3 window          | run:i3-input -F 'mark %s' -l 1 -P 'Mark: '
 #markgo - go to mark            | run:i3-input -F '[con_mark="%s"] focus' -l 1 -P 'Goto: '
 HEREDOC
 
-sed '/^#/d' |rofi -dmenu)
+sed '/^#/d' |rofi -dmenu -matching prefix)
 
 [ -z $choice ] && exit
 
