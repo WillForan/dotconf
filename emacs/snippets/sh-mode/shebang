@@ -24,12 +24,9 @@ if ! [[ "$(caller)" != "0 "* ]]; then
   exit $?
 fi
 
-####
-# testing with bats. use like
-#   bats ./`(buffer-name)` --verbose-run
-####
-if  [[ "$(caller)" =~ /bats.*/preprocessing.bash ]]; then
-@test "init" {
-	$2
+#### testing ####
+# bats ./`(buffer-name)` --verbose-run
+#################
+function test_init { # @test
+    [ 1 -eq 0 ]
 }
-fi
