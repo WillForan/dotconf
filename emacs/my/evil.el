@@ -118,14 +118,17 @@
     (evil-leader/set-key "f" #'helm-find-files)
     (evil-leader/set-key "F" #'helm-recentf)
 
-    ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "b" #'switch-to-buffer)
     (evil-leader/set-key "B" #'switch-window)
     (evil-leader/set-key "i" #'imenu)
+    ;; testing -- not sure about these (sexp movements)
     (evil-leader/set-key "h" #'backward-sexp)
     (evil-leader/set-key "j" #'down-list)
     (evil-leader/set-key "k" #'up-list)
-    (evil-leader/set-key "l" #'forward-sexp)
+    ;; (evil-leader/set-key "l" #'forward-sexp) ;;avy goto line
+    ;; 20220910 - SPC x ....
+    (evil-leader/set-key "xd" 'dired)
+    (evil-leader/set-key "xc" 'my/clip-fname)
 
   )
 
