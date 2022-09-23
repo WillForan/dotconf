@@ -110,8 +110,9 @@
 	;(bash . t) ; doesn't exist
         ))
 
-      ;; 20220911 org-protocol bookmarklet and desktop files
-
+  ;; 20220911 org-protocol bookmarklet and desktop files
+  ;; 20220922 require so it's actually loaded
+   (require 'org-protocol)
    (setq org-capture-templates (quote
        (("w"
          "www"
@@ -119,6 +120,9 @@
          (file+headline "~/notes/org-files/capture.org" "WWW Capture")
          "** %:description\n\n  %u %:link\n %i"
          :empty-lines 1)
+        ("n" "note file"
+         entry (file+headline "~/notes/org-files/capture.org" "Files")
+         "* %?\n  %i\n  %a")
         ;; ... more templates here ...
         )))
 
@@ -190,6 +194,7 @@
     ("r" org-reveal "reveal")
     ("u" org-clock-update-time-maybe "update")
     ("t" org-time-stamp "timestamp"))
+    ("c" org-capture "capture"))
    "link"
    (("l" org-store-link "get link")
     ("L" org-insert-link-global "insert link")
