@@ -120,9 +120,12 @@
          (file+headline "~/notes/org-files/capture.org" "WWW Capture")
          "** %:description\n\n  %u %:link\n %i"
          :empty-lines 1)
-        ("n" "note file"
+        ("f" "file note"
          entry (file+headline "~/notes/org-files/capture.org" "Files")
          "* %?\n  %i\n  %a")
+        ("n" "general note"
+         entry (file+headline "~/notes/org-files/capture.org" "Notes")
+         "* %?\n  %u\n")
         ;; ... more templates here ...
         )))
 
