@@ -1,0 +1,2 @@
+sshpass -f ~/passwd/ssh/p ssh p -t ssh crc -t ssh home -NMfR 2000:localhost:22
+ssh -J s2 foran@localhost -p 2000 -D 12345
