@@ -13,7 +13,7 @@ repo_update_cache(){
 
 repo_select(){
  sel="$(cat $REPO_CACHE | rofi -dmenu -i | cut -f1)"
- [ -z "$sel" ] && continue
+ [ -z "$sel" ] && return 1
 
  # add to clipboard and paste
  # type is slower but maybe more likely to work in gtk apps?
@@ -22,9 +22,11 @@ repo_select(){
 
 }
 
-[ $# -eq 0 ] && echo "USAGE: $0 [update,select,commits]" && exit 1
-case $1 in
+[ $# -eq 0 ] && echo "USAGE: $0 [update,list,commits]" && exit 1
+
+case "$1" in
   u*) repo_update_cache;;
-  l*) repo_select;;
+  s*|l*) repo_select;;
   c*) shift; commits "$@";; # off load onto commits script
+  *) echo "$1 unknown command" >&2; exit 1;;
 esac
