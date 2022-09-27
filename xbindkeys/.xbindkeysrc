@@ -10,11 +10,11 @@
 #   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
 #
 
-"rofi -show" 
+"rofi rofi -combi-modi window,run,ssh -show combi"
   Mod4 + Tab
-"rofi -show combi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window'"
+"rofi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window' -show combi "
   Mod4+d
-" rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
+"rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
   Mod4+Shift+v
 "plyrctrl gui"
   Mod4+m
@@ -51,7 +51,7 @@
 "/home/foranw/src/utils/wf-utils/zim/convo_jump.bash"
   Mod4 + Mod1 + c
 
-"keepmenu"
+"/home/foranw/.local/bin/keepmenu"
   Mod4 + p
 
 # "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i'"
@@ -99,14 +99,18 @@
 # 20210331 - new frame hook, dont need this
 # (setq frame-title-format "%b %f [emacs]")
 # "emacsclient -c -n -e '(progn (switch-to-buffer nil))'"
-"emacsclient -c -a ''"
+"emacsclient -c -a '' -e '(switch-to-buffer nil)'"
  Mod4+ Shift +Return
 
 "~/src/utils/skippy-xd/skippy-xd --config ~/src/utils/skippy-xd/skippy-xd.rc"
  Mod1 + Tab
 
-"~/.emacs_anywhere/bin/run"
+"emacsclient --eval '(emacs-everywhere)'"
  Control + Mod4 + e
+
+# "emacsclient -cne '(org-journal-new-entry nil)'" but with my/new-note
+"mknote"
+ Control + Mod4 + j
 
 ####
 
@@ -139,5 +143,20 @@
 "echo playlist-next |socat - /tmp/mpv-socket"
   m:0x2040 + c:35 #c:0x1002192
 
-
-
+"/home/foranw/bin/quick-menu"
+  F12
+  #R1 + release
+  #m:0x0 + c:0xffd2
+  #F21
+  #m:0x0 + c:8
+#https://wiki.archlinux.org/title/wacom_tablet#Mapping_pad_buttons_to_function_keys
+# mentions higher function keys, but not how to intercept them
+#
+# xkeybind -k
+#   m:0x0 + c:8
+#   F21
+#   # but c:8 launches on emoji xdo type too
+# xev
+#   root 0x1e1, subw 0x0, time 445939994, (61,305), root:(512,1154),
+#   state 0x0, keycode 8 (keysym 0xffd2, F21), same_screen YES,
+#   XLookupString gives 0 bytes: 

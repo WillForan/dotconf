@@ -5,12 +5,13 @@
 # 20200129 - init
 # 20210219 - args: 'xdo' for rofi and autotype; 'autokey' for rofi but still return key
 #  depends: jq, dc, xargs, xdotool (optionally type)
-
+# 20220329 - add and then disable an insert delay
+sleep="sleep 1"; sleep=""
 cmd=echo
 select="fzf"
 while [ $# -gt 0 ]; do
    case "$1" in
-          xdo*) cmd="xdotool type"; select="rofi -dmenu -i";;
+          xdo*) cmd="xdotool $sleep type"; select="rofi -dmenu -i";;
       autokey*)                     select="rofi -dmenu -i";;
             *) echo "unkown option $1"; exit ;;
   esac

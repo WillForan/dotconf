@@ -28,11 +28,11 @@ case $pkg in
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   # in own folder but not in config
-  weechat) stowto ~/.$pkg;;
+  weechat|w3m) stowto ~/.$pkg;;
   # all files (likely just one) inside ~  (e.g. .xinitrc, .tmux.conf)
-  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux) stowto ~;;
+  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux|vale) stowto ~;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status) stowto ~/.config/$pkg;;
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw) stowto ~/.config/$pkg;;
   # picom.config and greenclip.toml lives inside .config instead of it's own directory
   greenclip|picom) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look

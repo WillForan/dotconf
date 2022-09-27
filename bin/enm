@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+nmhost=reese
+if [[ $(hostname) =~ $nmhost ]]; then
+  emacsclient -t -e '(my/notmuch)'
+else
+  ssh -t $nmhost $0
+fi
+

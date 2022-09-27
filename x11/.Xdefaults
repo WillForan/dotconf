@@ -5,6 +5,13 @@
 *eightBitInput: 	false
 *metaSendsEscape:	true
 
+! 20220809 - BS sends ^H instead of ^?
+! (this is a recent issue. what caused this?)
+! see also: stty erase ^?  (tset -e ^?; stty -a)
+! http://www.hypexr.org/linux_ruboff.php
+xterm.*backarrowKey: false
+*ttyModes:         erase ^?
+
 ! bold/underline at the same time 
 *VT100.veryBoldColors: 6
 
@@ -36,19 +43,25 @@ UXTerm*decGraphicsID:    vt240
 UXTerm*termName:         xterm-256color
 UXTerm*numColorRegisters: 256
 ! for autokey abrevatiosn
-! *allowTitleOps: True
-*.allowSendEvents: False
-!*.allowSendEvents: True
+*XTerm*allowTitleOps: True
+*XTerm*allowSendEvents: True
 ! sendevents disables setting title!? titleOpts doesnt help
 ! but disabling also breaks title setting
 ! *allowTitleOps: True
+!*.allowSendEvents: False
 
 ! 20211004 added vt font. not sure if C-{+,-} overrides anything
 *XTerm*Translations: #override \n\
      Shift<Key>Tab:dabbrev-expand() \n\
      Alt<Key>Tab: set-altscreen(toggle) \n\
      Ctrl <Key> minus: smaller-vt-font() \n\
-     Ctrl <Key> plus: larger-vt-font()
+     Ctrl <Key> plus: larger-vt-font() \n\
+     Ctrl <Key> backslash: print-everything()
+! 20220325 - print to rofi for path on clipboard. no escape sequences
+!            see translation above
+XTerm*printAttributes: 0
+XTerm*printerCommand: term-extract-slugs
+! XTerm*printerCommand: xterm -T History -e sh -c 'less -r <&3' 3<&0
 
 URxvt*background:    	#222222
 URxvt*foreground:    	peachpuff

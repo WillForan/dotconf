@@ -29,7 +29,22 @@
 (recentf-mode 1)
 
 ;; learning new keyboard. find pairs helpful
-(electric-pair-mode 1)
+;; (electric-pair-mode 0)
+;; 20220329 - smartparens has better handing of pair ends
+;;   prefix command with 'o' in visual mode to ignore parens "escape hatch"
+;;   use eg S( to surround seleciton with parens -- evil-surround
+;; with lispy-mode use ] (sp-forward-sexp) to go to end and ]d for beginning
+;; https://ebzzry.com/en/emacs-pairs/
+;;   also see M-S-up/down
+(use-package evil-smartparens :ensure t
+  :config
+  (smartparens-global-mode 1)
+  (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+  :bind
+  ("C-M-t" . sp-transpose-sexp)         ; overwrite transpose words
+  ("C-{"   . sp-forward-slurp-sexp)
+  ("C-}"   . sp-forward-barf-sexp))
+
 
 ;; Termux has hunspell
 (when (equal nil (executable-find "ispell"))
@@ -69,9 +84,6 @@
 ;; dont do the crazy comment indent (20200224)
 (electric-indent-mode 0)
 
-;; use python3 in python-mode 20200225
-(setq python-shell-interpreter "python3")
-
 (setq inhibit-startup-screen t)
 
 ;; use comint file completion to approximate vim's C-x C-f
@@ -83,7 +95,8 @@
 
 
 ; 20210504 - intially for R, but also lisps
-(global-prettify-symbols-mode +1)
+; 20220403 - turn off. causes rendering issues in term over ssh?
+; (global-prettify-symbols-mode +1)
 
 
 ; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
