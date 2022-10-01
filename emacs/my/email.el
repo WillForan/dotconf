@@ -187,3 +187,11 @@
   (mu4e-get-mail-command "ssh s2 mbsync -a"))
 (use-package "mu4e-conversation" :ensure t)
 
+
+(defun my/mail-org-header ()
+  (interactive)
+  (let ((this-head (org-get-heading))
+        (content (progn  (org-mark-subtree) (buffer-substring (point) (mark)))))
+    (compose-mail "emily.mente@gmail.com" this-head)
+    (insert content)))
+
