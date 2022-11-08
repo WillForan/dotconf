@@ -5,41 +5,34 @@ snippet #! "bash shebang" bA
 #
 # `date +%Y%m%d`WF - init
 #
-[ -v DRYRUN ] && DRYRUN=echo || DRYRUN=
-warn(){ echo "$@" >&2; }
 
-${2:_`!p snip.rv = snip.basename`}() {
+${2:`!p snip.rv = snip.basename`_main}() {
   $3
   return 1
 }
 
 # if not sourced (testing), run as command
-if ! [[ "$(caller)" != "0 "* ]]; then
-  set -euo pipefail
-  trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error $e"' EXIT
-  $2 "$@"
-  exit $?
-fi
+eval "$(iffmain "$2")"
 
 ####
 # testing with bats. use like
 #   bats ./`!p snip.rv = snip.fn` --verbose-run
 ####
-if  [[ "$(caller)" =~ /bats.*/preprocessing.bash ]]; then
-@test "init" {
-	$2
+$2_test() { #@test
+	run $2
+	[[ $output =~ ".*" ]]
 }
-fi
 endsnippet
 
-snippet [ "if and" b
-[ ${1} ] && ${2}
+snippet iff "if and" b
+[ ${1:! -r} ] && ${2:continue}
 endsnippet
 
-snippet [| "if or" b
-[ ${1} ] || ${2}
+snippet orr "if or" b
+[ ${1} ] || ${2:continue}
 endsnippet
 
-snippet [~ "bash regexp" b
-[[ $${1} =~ ${2} ]] || continue
+snippet regex "bash regexp" b
+[[ "$${1}" =~ ${2} ]] || continue
+${3} = "${BASH_REMATCH[0]}"
 endsnippet
