@@ -15,8 +15,9 @@ samsung_tv(){
 # set time out to be quicker than .5s default. less accidental presses
 # 20211219 rigth alt (mode_switch) is delete. b/c kinesis del remapped to super
 # 20220108 left alt backspace for non-kenisis keyboards
+# 20221015 get curly { with left control (was on shift 20211026?)
 command -v xcape >/dev/null && ! pgrep xcape &&
- xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace' -t 150
+ xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace;Control_L=Shift_L|bracketleft' -t 150
 # see also: space2ctrl (s2cctl start), and for wayland evscript
 
 ## CAPSLOCK and APL
