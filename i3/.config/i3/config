@@ -237,6 +237,7 @@ for_window [class="Tilda"]  floating enable
 # xmessage used by plum notify
 for_window [title="xmessage"]  floating enable; focus; move absolute position center
 
+for_window [title="sxiv"]  floating enable
 
 
 ## extra stuff
