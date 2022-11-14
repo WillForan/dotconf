@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# show n number of images from slack autodownload by weechat
+# /set plugins.var.python.slack.files_download_location  "/mnt/storage/dl/slack/"
+#  if n > 1, show as thumbnail. otherwise show just the image
+#  sxiv displays animaged gifs!
+# 20221108 - init
+
 imgdir=/mnt/storage/dl/slack
 [ ! -d $imgdir ] && mount /mnt/storage
+
 prog=feh
 command -v sxiv >/dev/null && prog="sxiv -a"
 

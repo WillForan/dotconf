@@ -3,17 +3,20 @@
 #
 # use mount location and use single "paste.png" to store the most recent image
 # easy to have a single upload command
-#   /key bind alt-v /insert /slack upload /mnt/storage/dl/slack/upload/upload.png
+#   /key bind meta-v /input insert /slack upload /mnt/storage/dl/slack/upload/upload.png
 #
 # but previous iteration tried to echo save name so it could be pasted
 # also could use ssh without mount
 #  xclip -selection clipboard -t image/png -o | ssh s2 "mkdir -p /tmp/imgs; cat > $saveas"
+#
+# 20221113 - init
 
 set -euo pipefail
 test ! -d /mnt/storage/ && mount $_
 
 saveas=/mnt/storage/dl/slack/upload/upload.png
 
+# testing takes a long time. maybe trust we're uploading the right thing?
 ! xclip -o -target TARGETS -se c |grep -m1 -q image && exit 1
 xclip -o -se c -t image/png > $saveas
 
