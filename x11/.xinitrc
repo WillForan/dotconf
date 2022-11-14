@@ -32,6 +32,13 @@ xmodmap -e "keysym Menu = Hyper_L"
 test -r ~/.Xdefaults && xrdb -merge $_
 
 case $HOSTNAME in
+   reese)
+      # 20221031 - reese on main config file after SSD upgrade
+      test -n $(xinput --list|grep A4Tech|grep -Po '(?<=id=)\d+') &&
+         xinput --set-button-map $_ 3 2 1
+      xrandr --output DVI-0 --rotate left  --right-of VGA-0
+      nitrogen --restore &
+      ;;
    kt)
       xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
       # 20200815 - moved upstairs
@@ -60,8 +67,10 @@ case $HOSTNAME in
       # 20211114 - now using nodm. leaving here for refrence (systemctl --user start greenclip)
       # pgrep greenclip || greenclip daemon &
       # 20220111 - kinesis keyboard want alt back. remove apl layout
-      setxkbmap -layout us -option # reset
-      setxkbmap -layout us -option "caps:ctrl_modifier"
+      
+      # done for all (removed 20221031)
+      # setxkbmap -layout us -option # reset
+      # setxkbmap -layout us -option "caps:ctrl_modifier"
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
