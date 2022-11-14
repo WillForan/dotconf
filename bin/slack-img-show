@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+imgdir=/mnt/storage/dl/slack
+[ ! -d $imgdir ] && mount /mnt/storage
+prog=feh
+command -v sxiv >/dev/null && prog="sxiv -a"
+
+n=$(echo -e "1\n5\n"| rofi -dmenu)
+[ -z "$n" ] && exit
+
+[[ $n != 1 ]] && thumb_opt="-t" || thumb_opt=""
+
+find "$imgdir" -maxdepth 1 -type f -exec stat -c %Z$'\t'%n {} \+ |
+   sort -nr |
+   perl -l0 -nsaF'\t' -e 'exit if $i>=$n; print "@F[1..$#F]" and ++$i if m/png|jpg|jpeg|gif/i' -- -n="$n"  |
+   xargs -r0 $prog $thumb_opt
