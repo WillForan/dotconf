@@ -112,4 +112,18 @@ Plug 'jakykong/vim-zim'
 let g:zim_notebooks_dir="$HOME/notes/WorkWiki"
 let g:zim_dev_keys=1
 
+" 20221107 - testing (initially for bats)
+Plug 'vim-test/vim-test'
+let g:test#shell#bats#file_pattern = '\v\.(bats|bash|sh)'
+let g:test#shell#bats#patterns = {
+        \ 'test': [
+        \ '\v^\s*\@test %("|'')(.*)%("|'')',
+        \ '\v^(\w+)\W*#\@test'
+        \ ],
+        \ 'namespace': []
+        \ }
+
+" 20221107 - quick view on registars: normal ^R, insert quote @
+Plug 'junegunn/vim-peekaboo'
+
 call plug#end()

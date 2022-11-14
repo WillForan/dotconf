@@ -15,7 +15,9 @@ samsung_tv(){
 # set time out to be quicker than .5s default. less accidental presses
 # 20211219 rigth alt (mode_switch) is delete. b/c kinesis del remapped to super
 # 20220108 left alt backspace for non-kenisis keyboards
-command -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace' -t 150
+# 20221015 get curly { with left control (was on shift 20211026?)
+command -v xcape >/dev/null && ! pgrep xcape &&
+ xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace;Control_L=Shift_L|bracketleft' -t 150
 # see also: space2ctrl (s2cctl start), and for wayland evscript
 
 ## CAPSLOCK and APL
@@ -119,7 +121,7 @@ command -v deadd-notification-center && $_ &
 #easystroke & # commented out (20200515)
 # composite manager if needed (20200515)
 # enabled again (20210111)  need for DeskDockServer (and maybe citrix?)
-command -v picom && picom -bi 1 # -b =daemon, -i1 = inactive opacity disabled 
+command -v picom && picom -bi .95 # -b =daemon, -i1 = inactive opacity disabled
 # window management only if needed 
 # could call .xinitrc from i3/config
 (sleep 5; pgrep -af autokey.gtkui || /usr/bin/python -m autokey.gtkui) &

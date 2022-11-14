@@ -120,9 +120,12 @@
          (file+headline "~/notes/org-files/capture.org" "WWW Capture")
          "** %:description\n\n  %u %:link\n %i"
          :empty-lines 1)
-        ("n" "note file"
+        ("f" "file note"
          entry (file+headline "~/notes/org-files/capture.org" "Files")
          "* %?\n  %i\n  %a")
+        ("n" "general note"
+         entry (file+headline "~/notes/org-files/capture.org" "Notes")
+         "* %?\n  %u\n")
         ;; ... more templates here ...
         )))
 
@@ -196,12 +199,12 @@
     ("t" org-time-stamp "timestamp") 
     ("c" org-capture "capture"))
    "link"
-   (("l" org-store-link "get link")
-    ("L" org-insert-link-global "insert link")
-    ("g" org-open-at-point "open"))
-   "outlinde"
-   (("h" outline-hide-entry "hide")
-    ("s" outline-show-entry "show"))))
+    (("l" org-store-link "get link")
+     ("L" org-insert-link-global "insert link")
+     ("g" org-open-at-point "open")) 
+   "outline"
+    (("h" outline-hide-entry "hide")
+     ("s" outline-show-entry "show"))))
    
 (evil-leader/set-key "c" 'org-clock-hydra/body)
 
