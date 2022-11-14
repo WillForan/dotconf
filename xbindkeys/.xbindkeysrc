@@ -143,6 +143,9 @@
 "echo playlist-next |socat - /tmp/mpv-socket"
   m:0x2040 + c:35 #c:0x1002192
 
+"rofi -modi emoji -show emoji -emoji-format '{emoji}:{name}/{keywords}'"
+ Mod4 + i
+
 "/home/foranw/bin/quick-menu"
   F12
   #R1 + release
