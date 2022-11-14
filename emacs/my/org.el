@@ -102,7 +102,7 @@
 	(sqlite . t)
 	(shell . t) ; req newer org mode
 	;; (J . t) ; will fail if not j-mode
-        (jupyter . t)
+        ;; (jupyter . t)
         (plantuml . t)
         ;; 20220510 - with ob-tmux
         (tmux . t)
@@ -193,7 +193,7 @@
    (("z" my/zim-set-header "zim org header")
     ("r" org-reveal "reveal")
     ("u" org-clock-update-time-maybe "update")
-    ("t" org-time-stamp "timestamp"))
+    ("t" org-time-stamp "timestamp") 
     ("c" org-capture "capture"))
    "link"
    (("l" org-store-link "get link")
