@@ -24,7 +24,7 @@ font pango:monospace 8
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, its unicode glyph coverage is limited, the old
 # X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
+# font, it doesn't scale on retina/hidpi displays.
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -35,6 +35,7 @@ floating_modifier $mod
 #bindsym $mod+Return exec kitty # 20190822
 #bindsym $mod+Return exec uxterm # 20201019
 #bindsym $mod+Return exec xterm # 20201227
+#bindsym $mod+Return exec  /mnt/hdd/home/foranw/src/pkgs/xterm/src/xterm-363/xterm -xrm "*allowSendEvents: True" -xrm "*allowTitleOps: True" # 20210216
 bindsym $mod+Return exec ~/bin/xterm -xrm "*allowSendEvents: True" -xrm "*allowTitleOps: True" # 20210216
 
 # kill focused window
@@ -218,6 +219,7 @@ for_window [title="afni_picker"]  floating enable
 for_window [title="xzoom.*"]  floating enable
 for_window [title="xmag"]  floating enable
 for_window [title="Magnifying Glass"]  floating enable
+for_window [title="OpenGL Test App"]  floating enable
 
 # R figure
 for_window [class="r_x11"]  floating enable
@@ -237,6 +239,12 @@ for_window [class="Tilda"]  floating enable
 # xmessage used by plum notify
 for_window [title="xmessage"]  floating enable; focus; move absolute position center
 
+# video conference
+for_window [class="^zoom$"]  move container to workspace 2:vid; focus;
+# video chat windows
+for_window [class="^zoom$" title="Meeting"]  focus; floating enable;
+for_window [class="^zoom$" title="^Zoom$"]  focus; floating enable;
+for_window [class="^zoom$" title="^zoom$"]  focus; floating enable;
 
 
 ## extra stuff
@@ -245,6 +253,9 @@ bindsym $mod+x [urgent=latest] focus
 bindsym $mod+Shift+b  workspace back_and_forth
 bindsym $mod+b        nop back_within_output
 exec --no-startup-id  /home/foranw/src/utils/wf-utils/i3/i3-back_within_output
+
+# systemctl daemon fails
+exec --no-startup-id greenclip daemon>/dev/null
 
 # swap workspaces on monitors
 bindsym $mod+Shift+S exec /home/foranw/src/utils/wf-utils/i3/swapscreens.py
