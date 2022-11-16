@@ -12,6 +12,7 @@ G - plumb menu                 | key:Super+G
 j - journal                    | run:mknote
 v - greenclip                  | key:Super+V
 e - emacs-everywhere           | key:Control+Super+e
+w - warpd                      | run:warpd -f --hint2
 q - close window               | key:Super+Q
 f - float                      | key:Super+Shift+space
 t - dictation                  | run:/home/foranw/src/utils/nerd-dictation/nerd-dictation begin --continuous

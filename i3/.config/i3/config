@@ -245,6 +245,7 @@ for_window [class="^zoom$"]  move container to workspace 2:vid; focus;
 for_window [class="^zoom$" title="Meeting"]  focus; floating enable;
 for_window [class="^zoom$" title="^Zoom$"]  focus; floating enable;
 for_window [class="^zoom$" title="^zoom$"]  focus; floating enable;
+for_window [title="sxiv"]  floating enable
 
 
 ## extra stuff
@@ -272,5 +273,20 @@ bindsym $mod+grave [title="emacs.*wiki"] scratchpad show
 # 20201019 
 bindsym $mod+u border toggle
 
+## GAPS
+# Smart Gaps -- no gaps if only one window
+#smart_gaps on
+
+# Smart Borders
+smart_borders on
+
+# Set inner/outer gaps
+gaps inner 10
+gaps outer 5
+
+
 # start xinitrc b/c lightdm xsession-xinit doesnt work?
-exec  --no-startup-id /home/foranw/.xinitrc
+# xbindkeys used everywhere. if not running need to xinit
+# xinit wont run i3 if it is running
+exec --no-startup-id pgrep xbindkeys || /home/foranw/.xinitrc
+
