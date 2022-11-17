@@ -152,6 +152,7 @@
 "echo  slack-img-show'\n'slack-img-clipsave|rofi -dmenu|parallel -r exec"
  Mod4 + Control + i
 
+# for fpedal
 "/home/foranw/bin/quick-menu"
   F12
   #R1 + release
