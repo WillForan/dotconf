@@ -149,7 +149,7 @@
 "rofi -dmenu </mnt/storage/dl/slack/emoji.txt | sed 's/^\|$/:/g' | xargs -r xdotool sleep .1 type"
  Mod4 + Shift + i
 
-"rofi -dmenu <<< slack-img-show$'\n'slack-img-clipsave|parallel -r exec"
+"echo  slack-img-show'\n'slack-img-clipsave|rofi -dmenu|parallel -r exec"
  Mod4 + Control + i
 
 "/home/foranw/bin/quick-menu"
