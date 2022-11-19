@@ -18,13 +18,27 @@
   )
 )
 
+(defun my/quit-other ()
+  "quit e.g. help buffer without switching to it.
+  with-selected+otherwindow from inspecting M-<next> (scroll-other-window)
+  cf. my/other-window-kill"
+  (interactive)
+  (with-selected-window (other-window-for-scrolling) (quit-window)))
+
+(defun my/quit-help ()
+  "quit all *Help* buffers. using dash"
+  (apply #'quit-restore-window
+   (-filter (lambda (w)
+      (-> w (window-buffer) (buffer-name) (equal "*Help*")))
+    (window-list))))
+
 (defun my/use-url (url)
   "Download and load url. right now just loads basename from pkgs directory"
   (let ((pkg-dir "~/.emacs.d/pkgs/"))
     ;; TODO: exists or download to pkg-dir
     (load-file (expand-file-name (concat pkg-dir (file-name-base url) ".el")))
+    )
   )
-)
 
 (defun my/dokuwiki ()
   "Connects to the dokuwiki."
@@ -83,18 +97,31 @@
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
      '(package
-        base backup primary-clip
- 	quelpa
- 	evil rainbow
- 	xterm-color
- 	git
- 	tramp
- 	ace switch-window
- 	yas company helm
- 	zim-wiki-mode screensend
-	swiper helm-swoop
- 	R
-	lisp
-	org
-        roam annote
-	theme frame-settings)))
+       base backup primary-clip helm
+       company yas
+       quelpa
+       evil rainbow
+       xterm-color
+       git
+       tramp
+       ace switch-window
+       zim-wiki-mode screensend
+       swiper helm-swoop
+       python R
+       lisp lint ;; these take a long time
+       org
+       roam annote
+       ;; last -- if not applied we know something went wrong
+       frame-settings theme
+       )))
+
+(defun my/note-now (&optional notes)
+  "use org journal with org roam settings to start a note
+timestamps w/current time (now) in a weekly folder. see my/roam.el
+if any NOTES will insert that"
+  (interactive)
+  (when (not (fboundp 'org-journal-new-entry)) (my/use 'roam))
+  (org-journal-new-entry nil)
+  (when notes (insert notes)))
+
+(defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))

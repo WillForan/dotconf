@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+DEFAULT_SIZE=16
+set_font(){
+  [ $# -eq 0 ] && return
+  font="$*"
+  [[ "$*" =~ :pixelsize ]] || font="$font:pixelsize=$DEFAULT_SIZE"
+  # eg set_font DejaVu Sans Mono:pixelsize=14
+  set -x
+  echo -e "\033[?35h\033]50;$font\a\033"
+  set +x
+}
+list_fonts(){
+  fc-list|grep -iP 'mono|hack|iosevka'  |cut -f2 -d:|sort -u
+}
+reset_font(){
+ echo -e "\033[?35h\033]50;DejaVu Sans Mono:pixelsize=14\a\033"
+}
+
+set_font $(list_fonts | fzf )

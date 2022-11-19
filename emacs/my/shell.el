@@ -42,6 +42,26 @@
   :config
   (bash-completion-setup))
 
+(use-package shx :ensure t
+  :init
+  (setq
+   ;; resync the shell's default-directory with Emacs on "z" commands:
+   shx-directory-tracker-regexp "^z "
+   ;; vastly improve display performance by breaking up long output lines
+   shx-max-output 1024
+   ;; prevent input longer than macOS's typeahead buffer from going through
+   shx-max-input 1024
+   ;; prefer inlined images and plots to have a height of 250 pixels
+   shx-img-height 250
+   ;; don't show any incidental hint messages about how to use shx
+   ;; shx-show-hints nil
+   ;; flash previous comint prompt when using C-c C-p
+   shx-flash-prompt-time .5
+   ;; use `#' to prefix shx commands instead of the default `:'
+   shx-leader "#")
+  :config
+(shx-global-mode 1))
+
 
 ;; sly custom prompt
 ;; https://github.com/joaotavora/sly/issues/360

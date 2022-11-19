@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# when run from udev, we wont know anything about whats running
+# look to i3 process for x11 display env if not already set
+# hard code i3 as the expected windows manager where we're sure to have the var
+if [ -z "$DISPLAY" ] ; then
+  wmexec=$(pgrep i3$|sed 1q)
+  [ -z "$wmexec" ] && echo no i3, no x11? && exit 1
+  $(grep DISPLAY /proc/$wmexec/environ -z)
+fi
+
+# if any input change Kensington Expert mouse
+# but default to the cheap and weird original track mouse
+[ $# -eq 1 ] && dev=Kensington || dev=A4Tech
+
+# but actually don't care if there is only one of them
+devs=($(xinput --list|
+   grep -Po 'Kensington|A4Tech'|sort -u))
+[ ${#devs[@]} -eq 1 ] && dev=${devs[0]}
+
+test -n "$(xinput --list|grep $dev |grep -Po '(?<=id=)\d+')" && xinput --set-button-map $_ 3 2 1

@@ -25,9 +25,12 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 "
   (call-interactively 'org-journal-new-entry)
   (orb-insert-edit-note citekey))
+(defun my/cite-key-from-clip ()
+  (replace-regexp-in-string ".*cite{\\|}.*" "" (car kill-ring)))
+
 (defun my/journal-cite-from-clip ()
   (interactive)
-  (let ((clip (car kill-ring))
+  (let* ((clip (car kill-ring))
         (citekey (replace-regexp-in-string ".*cite{\\|}.*" "" clip)))
     (my/journal-cite citekey)))
 

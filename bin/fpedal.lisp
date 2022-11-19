@@ -16,24 +16,29 @@
 (cl-interpol:enable-interpol-syntax)
 (defparameter *action-list* 
   `(
-   (#?R"^$" . (
-       (:release . key-release)
-       (:left    . ,(lambda () (key-down "Control_L")))
-       (:center  . ,(lambda () (key-down "Escape" :k "key")))
-       (:right   . ,(lambda () (key-down "Alt_L")))))
-   (#?R"Firefox Developer Edition" . (
-       (:release . ,(lambda () nil))
-       (:center  . ,(lambda () (key-down "8" :k "click" ))) ; back history
-       (:left    . ,(lambda () (key-down "Page_Up" :k "key" )))
-       (:right   . ,(lambda () (key-down "Page_Down" :k "key")))
-       ;; (:left    . ,(lambda () (key-down "4" :k "click")))
-       ;; (:right   . ,(lambda () (key-down "5" :k "click")))
-       ))
-   (#?R"emacs" . (
-       ;; (:left    . ,(lambda () (key-down "Control_L+s" :k "key")))
-       (:left    . ,(lambda () (key-down "Control_L")))
-       (:center  . ,(lambda () (key-down "Control_L+g" :k "key")))
-       (:right   . ,(lambda () (key-down "Alt_L+x" :k "key")))))))
+    (#?R"^$" . (
+                (:release . key-release)
+                (:left    . ,(lambda () (key-down "Control_L")))
+                ;; (:center  . ,(lambda () (key-down "Escape" :k "key")))
+                (:center  . ,(lambda () (key-down "Super_L+d" )))
+                (:right   . ,(lambda () (key-down "Alt_L")))))
+    
+    (#?R"Firefox Developer Edition" .
+         ((:left    . ,(lambda () (key-down "Page_Up" :k "key" )))
+          (:right   . ,(lambda () (key-down "Page_Down" :k "key")))
+                (:release . key-release)
+     ;; (:left    . ,(lambda () (key-down "4" :k "click")))
+     ;; (:right   . ,(lambda () (key-down "5" :k "click")))
+     ;; (:release . ,(lambda () nil))
+     ;; (:center  . ,(lambda () (key-down "8" :k "click" )))
+                                        ; back history
+     ))
+    (#?R"emacs" . (
+                (:release . key-release)
+                   ;; (:left    . ,(lambda () (key-down "Control_L+s" :k "key")))
+                   (:left    . ,(lambda () (key-down "Control_L")))
+                   (:center  . ,(lambda () (key-down "Alt_L+x" :k "key")))
+                   (:right   . ,(lambda () (key-down "Alt_L" :k "key")))))))
 
 (defparameter *ev-input* "/dev/input/by-id/usb-VEC_VEC_USB_Footpedal-event-if00")
 (defparameter *num-to-pedal*
@@ -56,7 +61,8 @@
   "xdotool wrapper default to keydown K likely key or click"
   (cmd:cmd (c "xdotool " k " " kbd-keys)))
 (defun key-release (&rest _) 
-  (cmd:cmd "xdotool keyup Control_L keyup Alt_L keyup Hyper_L"))
+  (print "keyup")
+  (cmd:cmd "xdotool keyup Control_L keyup Alt_L keyup Hyper_L keyup Super_L"))
 
 (defun get-action (winregex pedal)
   "get double nested assoc from global list"
@@ -106,3 +112,4 @@
   ;; e.g. (bt:destroy-thread (nth 3 #v5))
 )
 (watch-pedal)
+

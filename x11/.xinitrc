@@ -13,8 +13,12 @@ samsung_tv(){
 # right shift -> -  [20211026] { (Shift_R|braceleft)
 # use editor/bash bindings to match pair
 # set time out to be quicker than .5s default. less accidental presses
-commmand -v xcape >/dev/null && xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus' -t 150
-# see also: space2ctrl (s2cctl start)
+# 20211219 rigth alt (mode_switch) is delete. b/c kinesis del remapped to super
+# 20220108 left alt backspace for non-kenisis keyboards
+# 20221015 get curly { with left control (was on shift 20211026?)
+command -v xcape >/dev/null && ! pgrep xcape &&
+ xcape -e '#66=Escape;Shift_L=parenleft;Shift_R=minus;#108=Delete;Alt_L=BackSpace;Control_L=Shift_L|bracketleft' -t 150
+# see also: space2ctrl (s2cctl start), and for wayland evscript
 
 ## CAPSLOCK and APL
 # 20211022 - xcape/setxkbmap order seems to matter. setxkbmap last
@@ -30,9 +34,17 @@ xmodmap -e "keysym Menu = Hyper_L"
 test -r ~/.Xdefaults && xrdb -merge $_
 
 case $HOSTNAME in
+   reese)
+      # 20221031 - reese on main config file after SSD upgrade
+      test -n $(xinput --list|grep A4Tech|grep -Po '(?<=id=)\d+') &&
+         xinput --set-button-map $_ 3 2 1
+      xrandr --output DVI-0 --rotate left  --right-of VGA-0
+      nitrogen --restore &
+      ;;
    kt)
+      xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
       # 20200815 - moved upstairs
-      xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
+      #xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
       # 20200526 - new curbed samsung w/ HDMI-DV1
       # xrandr --output HDMI-1 --mode 1920x1080;;
       # # old TV with overscan issue VGA setting
@@ -56,11 +68,17 @@ case $HOSTNAME in
       # 20211111 - no display manager so systemctl fails. run manually
       # 20211114 - now using nodm. leaving here for refrence (systemctl --user start greenclip)
       # pgrep greenclip || greenclip daemon &
+      # 20220111 - kinesis keyboard want alt back. remove apl layout
+      
+      # done for all (removed 20221031)
+      # setxkbmap -layout us -option # reset
+      # setxkbmap -layout us -option "caps:ctrl_modifier"
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768
+      xinput --map-to-output 'ELAN Touchscreen' LVDS1
       libinput-gestures-setup restart
       #synid=$(xinput list|perl -lne 'print $1 and exit if /Synaptics.*id=(\d+)/i')
       #xinput set-prop $synid 303 1 # enable tap
@@ -103,8 +121,8 @@ command -v deadd-notification-center && $_ &
 #easystroke & # commented out (20200515)
 # composite manager if needed (20200515)
 # enabled again (20210111)  need for DeskDockServer (and maybe citrix?)
-command -v picom && picom -bi 1 # -b =daemon, -i1 = inactive opacity disabled 
+command -v picom && picom -bi .95 # -b =daemon, -i1 = inactive opacity disabled
 # window management only if needed 
 # could call .xinitrc from i3/config
-(sleep 5; pgrep autokey-gtk || autokey-gtk) &
+(sleep 5; pgrep -af autokey.gtkui || /usr/bin/python -m autokey.gtkui) &
 pgrep i3 || i3

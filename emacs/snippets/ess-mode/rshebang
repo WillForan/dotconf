@@ -1,11 +1,27 @@
 # -*- mode: snippet -*-
 # name: r #!
 # key: #!
+# expand-env: ((yas-indent-line 'fixed))
 # --
 #!/usr/bin/env Rscript
 #
-#  ${1: }
+# ${1:`(file-name-nondirectory (file-name-sans-extension (or (buffer-file-name) (buffer-name))))`}
 #
-# `(insert (format-time-string "%Y%m%d"))` WF -- ${1:init}
+# `(format-time-string "%Y%m%d")`WF - ${2:init}
 
-${3: }
+library(dplyr)
+library(tidyr)
+
+#' @export
+${3:`(replace-regexp-in-string "[^A-Za-z0-9]+" "_" (file-name-sans-extension (buffer-name)))`} <- function(){
+  ${4:return(0)}
+}
+
+# if too big, move into tests/testthat/ cf. usethis::use_thatthat()
+# otherwise: Rscript -e "source('`(buffer-name)`'); test_$3()"
+test_$3 <- function(){
+   require(testthat)
+   test_that("initial", {
+    $3()
+   })
+}

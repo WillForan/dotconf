@@ -6,6 +6,7 @@ set -euo pipefail
 trap 'e=$?; [ $e -ne 0 ] && echo "$0 exited in error"' EXIT
 cd $(dirname $(readlink -f "$0")) # $HOME/config/bin
 configdir="$(cd ..; pwd)"
+#echo "# confdir: $configdir ($PWD/..)"
 [ -z "$configdir" ] && echo "error cannto find $(pwd)/.. !?" && exit 1
 [ $# -eq 0 ] && pkg=bin || pkg="$1"
 [ ! -d $configdir ] &&
@@ -27,17 +28,17 @@ case $pkg in
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   # in own folder but not in config
-  weechat) stowto ~/.$pkg;;
+  weechat|w3m) stowto ~/.$pkg;;
   # all files (likely just one) inside ~  (e.g. .xinitrc, .tmux.conf)
-  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux) stowto ~;;
+  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux|vale) stowto ~;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status) stowto ~/.config/$pkg;;
   # .desktop files inside XDG directory (20211204 xinit)
   app.desktop) stowto  ~/.local/share/applications/;;
-  # greenclip.toml lives inside .config instead of it's own directory
-  greenclip) stowto ~/.config/;;
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw) stowto ~/.config/$pkg;;
+  # picom.config and greenclip.toml lives inside .config instead of it's own directory
+  greenclip|picom) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look
   dynamic-colors) test -w  /usr/share/dynamic-colors && stowto $_ || echo "WARNING: cannot write to '$_'; chmod and rerun 'upbin $pkg'";;
   barriers|firefox) echo "$pkg will live in config. not installing";;
-  *) echo "$pkg not defined in $0"; exit 1;;
+  *) echo -e "ERROR: '$pkg' not defined in $0. try\n $(ls -d *|sed 's/^/\t/g')"; exit 1;;
 esac

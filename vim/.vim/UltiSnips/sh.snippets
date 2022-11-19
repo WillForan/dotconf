@@ -1,13 +1,38 @@
 snippet #! "bash shebang" bA
 #!/usr/bin/env bash
-set -euo pipefail
-trap 'e=$?; [ $e -ne 0 ] && echo "\$0 exited in error"' EXIT
-
+#
+# ${1:[c-b/c-z jump]}
 #
 # `date +%Y%m%d`WF - init
-#    ${1:[c-b/c-z jump]}
 #
 
-${0}
+${2:`!p snip.rv = snip.basename`_main}() {
+  $3
+  return 1
+}
+
+# if not sourced (testing), run as command
+eval "$(iffmain "$2")"
+
+####
+# testing with bats. use like
+#   bats ./`!p snip.rv = snip.fn` --verbose-run
+####
+$2_test() { #@test
+	run $2
+	[[ $output =~ ".*" ]]
+}
 endsnippet
 
+snippet iff "if and" b
+[ ${1:! -r} ] && ${2:continue}
+endsnippet
+
+snippet orr "if or" b
+[ ${1} ] || ${2:continue}
+endsnippet
+
+snippet regex "bash regexp" b
+[[ "$${1}" =~ ${2} ]] || continue
+${3} = "${BASH_REMATCH[0]}"
+endsnippet

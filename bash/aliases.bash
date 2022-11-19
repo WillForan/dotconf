@@ -13,6 +13,7 @@ alias bn=basename
 alias dn=dirname
 alias x='xargs -r'
 alias px='env_parallel -X -r'
+alias feh='feh --keep-zoom-vp -. -Z --zoom full'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
@@ -20,7 +21,10 @@ alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 alias en="emacsclient -n"
 
 # browse with images
-alias w3m='w3m -sixel -o display_image=1'
+alias w3m='w3m -sixel -o display_image=1 -o display_link_number=1'
+alias w3g='surfraw google'
+# https://search.marginalia.nu/search?query=w3m
+alias w3sm='surfraw marginalia'
 
 # play music not cover art
 alias mpv="mpv --no-audio-display"
@@ -32,8 +36,8 @@ alias sbcl="rlwrap sbcl"
 alias i='yay --noconfirm -S'
 alias pq='yay --color auto -Ss'
 
-# git - status short with no untracked
-alias gs='git status -s -uno'
+# git - status short with no untracked. gs is ghostscript
+alias gsuno='git status -s -uno'
 
 # calendar
 alias cala='gcalcli  --calendar "Meetings" --calendar "Will Foran" --calendar "LNCD Journal Club" --calendar "fun! run! climb!" agenda'
@@ -53,6 +57,10 @@ n() { ls -tlc $@|head;}
 sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 # which directory - 20200919
 wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
+
+# git vcs/scm
+gcm() { [ $# -eq 0 ] && return 1; g=$(gitmoji-select); [ -z "$g" ] && return 1; git commit -m "$g $*"; }
+
 
 # 20210421 - cd to a file.
 # doesnt work on symlinks (no easy way to tell if its a file or dir

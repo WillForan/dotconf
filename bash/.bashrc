@@ -5,6 +5,8 @@
 #   # stow bash -t ~ -d ~/config/ # brings in too much. just want this file
 #   ln -s ~/config/.bashrc ~/
 
+export LANG="en_US.UTF-8"
+
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
 
@@ -37,7 +39,6 @@ if [ -n "$INSIDE_EMACS" ]; then
 elif [ "$TERM" == "dumb" ]; then
     export PS1="$ "
 else
-    . $_BASHCFGDIR/PS1.bash
     # fzf keys
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
@@ -61,6 +62,12 @@ else
     bind -x '"\eG":"gitmoji_bash"'
 
     [ -n "$DISPLAY" ] && xset b off # no system bell if running X
+
+    # last to avoid DEBUG TRAP issues with fzf or fasd??
+    . $_BASHCFGDIR/PS1.bash
+   
+    export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
+    test -r $HOME/src/utils/bash-autopairs/autopairs.sh && source $_
 fi
 
 # autojump aliases: z a sd sf d f
@@ -72,6 +79,9 @@ eval "$(fasd --init auto)"
 
 # . $_BASHCFGDIR/xsh
 
+## internet search via surfraw
+# also see alias for enabling sixel imagse and line number
+export BROWSER=w3m
 
 ## bash settings
 HISTSIZE=10000

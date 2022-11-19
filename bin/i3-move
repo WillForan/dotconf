@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# from https://old.reddit.com/r/i3wm/comments/kxt2yj/move_window_to_container_using_the_mouse/
+# need to unfloat if floating
+i3-msg mark WindowToMove
+trg="$(xwininfo | grep -Po '(?<=Window id: )0x[[:alnum:]]*')"
+echo "targetid=$trg"
+i3-msg "[id=$trg] mark TargetWindow" |grep -q true || exit 1
+i3-msg floating disable
+i3-msg move window to mark TargetWindow
+i3-msg '[con_mark="WindowToMove"] focus'
+i3-msg unmark WindowToMove
+i3-msg unmark TargetWindow

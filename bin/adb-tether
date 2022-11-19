@@ -34,7 +34,7 @@ nameserver 192.168.56.1
 HEREDOC
 
 # connect to device
-adb wait-for-device
+adb-unlock # prev 'adb wait-for-device' but we have a script of this (20220209)
 adb shell monkey -p org.lfx.azilink 1 # launch tether app (added 20210612)
 adb forward tcp:41927 tcp:41927
 sudo openvpn --config $cfg
