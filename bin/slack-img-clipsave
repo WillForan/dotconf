@@ -16,7 +16,10 @@ test ! -d /mnt/storage/ && mount $_
 
 saveas=/mnt/storage/dl/slack/upload/upload.png
 
-# testing takes a long time. maybe trust we're uploading the right thing?
-! xclip -o -target TARGETS -se c |grep -m1 -q image && exit 1
-xclip -o -se c -t image/png > $saveas
+# testing takes a long time. maybe only upload images?
+if xclip -o -target TARGETS -se c |grep -m1 -q image; then
+   xclip -o -se c -t image/png > $saveas
+else
+   xclip -o -se c > ${saveas/png/txt}
+fi
 
