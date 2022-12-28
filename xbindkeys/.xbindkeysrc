@@ -143,6 +143,16 @@
 "echo playlist-next |socat - /tmp/mpv-socket"
   m:0x2040 + c:35 #c:0x1002192
 
+"rofi -modi emoji -show emoji -emoji-format '{emoji}:{name}/{keywords}'"
+ Mod4 + i
+
+"rofi -dmenu </mnt/storage/dl/slack/emoji.txt | sed 's/^\|$/:/g' | xargs -r xdotool sleep .1 type"
+ Mod4 + Shift + i
+
+"echo  slack-img-show'\n'slack-img-clipsave|rofi -dmenu|parallel -r exec"
+ Mod4 + Control + i
+
+# for fpedal
 "/home/foranw/bin/quick-menu"
   F12
   #R1 + release

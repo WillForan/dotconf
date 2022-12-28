@@ -55,3 +55,9 @@ inoremap <c-d> <ESC>:r!date +"\%Y\%m\%d "<CR>A
 " spell check: pick first 
 " stole from https://castel.dev/post/lecture-notes-1/
 inoremap <C-l> <c-g>u<Esc>[s1z=`]a<c-g>u
+
+" 20221107 - vim-test settings
+nmap <silent> <leader>tn :TestNearest<CR>
+nmap <silent> <leader>tf :TestFile<CR>
+nmap <silent> <leader>ta :TestSuite<CR>
+nmap <silent> <leader>tl :TestLast<CR>
