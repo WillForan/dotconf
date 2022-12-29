@@ -29,7 +29,7 @@ fi
 #   bats ./`(buffer-name)` --verbose-run
 ####
 if  [[ "$(caller)" =~ /bats.*/preprocessing.bash ]]; then
-@test "init" {
-	$2
+function init_test { #@test
+	[ 0 -eq 1 ]
 }
 fi
