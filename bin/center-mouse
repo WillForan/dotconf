@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# adapted from
+#  https://github.com/i3/i3/issues/2971
+# removed storing win. might be a problem for multiple screens?
+# get  X, WIDTH, Y, HEIGHT
+eval $(xdotool getwindowfocus getwindowgeometry --shell $win)
+xdotool mousemove $(($X + $WIDTH/2)) $(($Y + $HEIGHT/2))

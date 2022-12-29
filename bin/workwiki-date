@@ -1,0 +1,11 @@
+#!/usr/bin/env perl
+use strict; use warnings;
+use Time::Piece;
+use feature q/say/;
+$_ = <>;
+s/[^\d]//g;
+my $t=Time::Piece->strptime($_,"%Y%m%d");
+my $path = ":Calendar:" . $t->year . ":Week_" . $t->week;
+my $text = "[d: ". $t->ymd . "]";
+say "[[$path|$text]]";
+#say $path;

@@ -3,12 +3,21 @@
 (use-package emacs-everywhere :ensure t
   :init
   (defun emacs-everywhere-pidgin-paste ()
-    (when (string= (emacs-everywhere-app-class emacs-everywhere-current-app) "Pidgin")
-      (set 'emacs-everywhere-paste-cmd
-           '("xdotool" "key" "--clearmodifiers" "Control+V"))))
-    
+    (let ((app (emacs-everywhere-app-class emacs-everywhere-current-app))))
+    (set 'emacs-everywhere-paste-command
+         (case
+             (string= app "Pidgin") '("xdotool" "key" "--clearmodifiers" "Control+V")
+             (string= app "Firefox") '("xdotool" "key" "--clearmodifiers" "Control+v")
+             t emacs-everywhere-paste-command)))
+  :custom
+  (emacs-everywhere--display-server 'x11 "force x11")
   :config
- (add-hook 'emacs-everywhere-init-hooks 'emacs-everywhere-pidgin-paste))
+  (add-to-list 'emacs-everywhere-markdown-apps "Pidgin")
+  (add-hook 'emacs-everywhere-init-hooks #'emacs-everywhere-pidgin-paste)
+  (add-hook 'emacs-everywhere-init-hooks #'flyspell-mode-on)
+  ;; 20220314 pandoc check obscuring markdown-mode check?
+  (add-hook 'emacs-everywhere-init-hooks #'emacs-everywhere-major-mode-org-or-markdown))
+
 
 
 ;; ORIGINAL doesnt work on firefox developer edition (?!)

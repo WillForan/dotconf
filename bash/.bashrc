@@ -79,6 +79,9 @@ eval "$(fasd --init auto)"
 
 # . $_BASHCFGDIR/xsh
 
+## internet search via surfraw
+# also see alias for enabling sixel imagse and line number
+export BROWSER=w3m
 
 ## bash settings
 HISTSIZE=10000

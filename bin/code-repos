@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+REPO_CACHE=/tmp/code_repo.tsv
+
+gh_list(){
+  gh repo list -L 500 --no-archived "$@" --json name,url,pushedAt |jq -r '.[]|[.url, .pushedAt]|@tsv'
+}
+gt_list(){
+  tea repos list --lm 500 -f url,updated -o tsv |sed -n 's/"//g;/^https/p'
+}
+repo_update_cache(){
+  (gh_list WillForan; gh_list LabNeuroCogDevel; gt_list) | sort -t$'\t' -k2r > $REPO_CACHE
+}
+
+repo_select(){
+ sel="$(cat $REPO_CACHE | rofi -dmenu -i | cut -f1)"
+ [ -z "$sel" ] && return 1
+
+ # add to clipboard and paste
+ # type is slower but maybe more likely to work in gtk apps?
+ echo "$sel" | xclip -i
+ xdotool sleep .25 key Shift+Insert
+
+}
+
+[ $# -eq 0 ] && echo "USAGE: $0 [update,list,commits]" && exit 1
+
+case "$1" in
+  u*) repo_update_cache;;
+  s*|l*) repo_select;;
+  c*) shift; commits "$@";; # off load onto commits script
+  *) echo "$1 unknown command" >&2; exit 1;;
+esac
