@@ -153,7 +153,7 @@
     (goto-char pos)))
 
 (use-package "mu4e"
- :load-path "/usr/share/emacs/site-lisp/mu4e"
+ :load-path "/usr/share/emacs/site-lisp/"
  :config
  (setq mu4e-compose-reply-to-address "will.foran@gmail.com"
        user-mail-address "will.foran@gmail.com"
