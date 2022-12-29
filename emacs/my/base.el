@@ -83,7 +83,8 @@
 
 
 ; 20210504 - intially for R, but also lisps
-(global-prettify-symbols-mode +1)
+;; 20220727 - disabled
+;; (global-prettify-symbols-mode +1)
 
 
 ; 20210330 - greenclip X11 clipboard, maybe should get it's own file?
