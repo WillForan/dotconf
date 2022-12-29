@@ -21,7 +21,7 @@ done
 ## do we need to re cache
 CACHE=$HOME/.local/share/gitmoji
 get() {
-   curl "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/src/data/gitmojis.json" |
+   curl "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/packages/gitmojis/src/gitmojis.json" |
    jq -r '.[]|.[]|[.emoji, .name, .description]|@tsv' > $CACHE
 }
 sec() { date +%s "$@"; }
