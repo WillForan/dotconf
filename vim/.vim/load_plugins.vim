@@ -126,4 +126,8 @@ let g:test#shell#bats#patterns = {
 " 20221107 - quick view on registars: normal ^R, insert quote @
 Plug 'junegunn/vim-peekaboo'
 
+" 20221213
+Plug 'vim-test/vim-test'
+nmap <silent> <leader>t :TestNearest<CR>
+
 call plug#end()
