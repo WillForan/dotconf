@@ -153,7 +153,7 @@
     (goto-char pos)))
 
 (use-package "mu4e"
- :load-path "/usr/share/emacs/site-lisp/mu4e"
+ :load-path "/usr/share/emacs/site-lisp/"
  :config
  (setq mu4e-compose-reply-to-address "will.foran@gmail.com"
        user-mail-address "will.foran@gmail.com"
@@ -190,8 +190,11 @@
 
 (defun my/mail-org-header ()
   (interactive)
-  (let ((this-head (org-get-heading))
-        (content (progn  (org-mark-subtree) (buffer-substring (point) (mark)))))
+  (let* ((this-head (org-get-heading))
+        (content (progn  (org-mark-subtree) (buffer-substring (point) (mark))))
+        ;; (content-nohead (substring content (- (length this-head))))
+        ;; (content-nodate (replace-regexp-in-string "\[[0-9-]{10} [MWTFS][a-z][a-z]\]" content-nohead))
+        )
     (compose-mail "emily.mente@gmail.com" this-head)
     (insert content)))
 
