@@ -195,3 +195,6 @@
     (compose-mail "emily.mente@gmail.com" this-head)
     (insert content)))
 
+(defun my/simple-mail
+    ;; likley mu4e-user-agent
+    (setq mail-user-agent 'message-user-agent))
