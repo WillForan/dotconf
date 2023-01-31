@@ -20,7 +20,8 @@
 ;(set-default-font "Source Code Pro 14") ;; 20191022
 ;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
 ; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
-(set-frame-font "DejaVu Sans Mono-14" nil t); 20180810; 20191116 fix
+;; (set-frame-font "DejaVu Sans Mono-14" nil t)
+                                        ; 20180810; 20191116 fix
 ;; 20220911:  Roboto Mono won in https://www.codingfont.com/; also Azeret, B612, Cousine
 ;;            notably not Fira Code, Hack, Source Code Pro, or Iosevka
 ;;            also look at Input (yuk), Sudo, ttf-monoid
@@ -37,11 +38,31 @@
 ;; (set-frame-font "Fantasque Sans Mono-14")  ; 
 ;; (set-frame-font "Roboto Mono-14")       ; longer than dejavu
 ;; (set-frame-font "Cousine-14")           ; shorter but like DejaVu, closest to monoid
+;; (set-frame-font "Flexi IBM VGA False-12") ; shorter stretched
 ;; (set-frame-font "Monoid-12")            ; lightest - similiar to cousine
 ;; (set-frame-font "Sudo-17")              ; like iosevka but shorter; small -- need highr pt
 ;; (set-frame-font "Input Mono-12")        ; large and blocky (most different) good at lower pt
+;; (set-frame-font "Liberation Mono-12")   ; shorter than Input Mono, narrower
 ;; (set-frame-font "Fira Code-12")         ; like input. less blocky/heavy than input, otherwise same
 ;; (set-frame-font "Azeret Mono-12")       ; shorter than Input, less blocky. Too thin on low contract (comments)
 ;; (set-frame-font "B612 Mono-12")         ; blocky. hard to see () []; {} are distinct though
 ;; (set-frame-font "Verily Serif Mono-14")  ; sarif font. meh
 
+
+;; 20230130: appreachating Input, Flexi (IBM VGA), and Libreation Mono 
+;; 20230130: set random font. see describe-char (C-u C-x =)
+(defun my/font-random () (interactive)
+       (let* ((font-choices
+               (list
+                "JetBrains Mono-12" "Fantasque Sans Mono-14" "Code New Roman-14" "M+ 1M-14"
+                "Iosevka-14" "Consolas Ligaturized-14" "Source Code Pro-14" "Hack-14" "DejaVu Sans Mono-14"
+                "Fantasque Sans Mono-14" "Roboto Mono-14" "Cousine-14" "Flexi IBM VGA False-12"
+                "Monoid-12" "Sudo-17" "Input Mono-12" "Liberation Mono-12" "Fira Code-12" "Azeret Mono-12"
+                "B612 Mono-12" "Verily Serif Mono-14" "DejaVu Sans Mono-14")
+               )
+              ;; excluded: "Berkeley Mono Trial-12" 
+              (rand-font (seq-random-elt font-choices)))
+         (message (concat "random font:" rand-font))
+         (set-frame-font rand-font)))
+
+(my/font-random)
