@@ -1,13 +1,16 @@
+;;; frame-settings --- Title and font
+;;; Commentary:
 ;; should be sourced on any new frame with 'after-make-frame-functions hook
 ;; see my.el:#'my/frame-settings
 ;; 20210331 - extracted from my/base.el (run by my/loadinit)
+;;; Code:
 
 ;; no display, toolbar already off (dne)
 (when (display-graphic-p) (tool-bar-mode 0))
 (menu-bar-mode 0)
 
 ;; 20210209 lucid scroll bars are ugly but very functional
-;(toggle-scroll-bar 0) 
+;(toggle-scroll-bar 0)
 ; 20210209 just disable on minibuffer
 (set-window-scroll-bars (minibuffer-window) nil nil)
 

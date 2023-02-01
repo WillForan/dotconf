@@ -13,6 +13,7 @@
     ; 20210328 <up> at top goes to last
     ; NB. need to use C-o to go to next source
     (setq helm-move-to-line-cycle-in-source t)
+    (require 'comint)
 
     ;; 20181016 - tab instead of C-j: https://github.com/emacs-helm/helm/issues/1630
     ;(define-key helm-find-files-map "\t" 'helm-execute-persistent-action)
@@ -45,6 +46,7 @@
   (ivy-mode) ; enable ivy for completion, e.g. my/edit
 
   ;; 20211008 - https://github.com/abo-abo/swiper/issues/381
+  ;; 20230104 - M-o triggers, i and y are not listed in hydra. which key doesn't catch it either
   (defun ivy-yank-action (x) (kill-new x))
   (defun ivy-copy-to-buffer-action (x) (with-ivy-window (insert x)))
   (ivy-set-actions t
