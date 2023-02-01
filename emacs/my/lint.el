@@ -13,7 +13,7 @@
      ;; profiled with explain-pause-top
      flycheck-check-syntax-automatically '(save idle-change mode-enabled)
      ;; default delay is .5
-     flycheck-idle-change-delay 1)
+     flycheck-idle-change-delay 5)
 
   (flycheck-define-checker vale
     "A checker for prose"

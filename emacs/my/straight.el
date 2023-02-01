@@ -15,3 +15,6 @@
 ;;   :straight (explain-pause-mode :type git :host github :repo "lastquestion/explain-pause-mode")
 ;;   :config
 ;;   (explain-pause-mode))
+
+;; (use-package chromatext
+;;   :straight (chromatext :type git :host github :repo "alphapapa/chromatext.el"))
