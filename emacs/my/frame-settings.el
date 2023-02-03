@@ -49,22 +49,25 @@
 ;; (set-frame-font "Fira Code-12")         ; like input. less blocky/heavy than input, otherwise same
 ;; (set-frame-font "Azeret Mono-12")       ; shorter than Input, less blocky. Too thin on low contract (comments)
 ;; (set-frame-font "B612 Mono-12")         ; blocky. hard to see () []; {} are distinct though
-;; (set-frame-font "Verily Serif Mono-14")  ; sarif font. meh
+;; (set-frame-font "Verily Serif Mono-14") ; sarif font. meh
+;; (set-frame-font "SF Mono-12")           ; stiffer than berkeley, same shape
+;; (set-frame-font "Spleen")               ; dense, pixely
 
 
 ;; 20230130: appreachating Input, Flexi (IBM VGA), and Libreation Mono 
 ;; 20230130: set random font. see describe-char (C-u C-x =)
+;; also see 'helm-select-xfont' on C-x c F
+(defvar my/font-face-list 
+  (list
+   "JetBrains Mono-12" "Fantasque Sans Mono-14" "Code New Roman-14" "M+ 1M-14"
+   "Iosevka-14" "Consolas Ligaturized-14" "Source Code Pro-14" "Hack-14" "DejaVu Sans Mono-14"
+   "Fantasque Sans Mono-14" "Roboto Mono-14" "Cousine-14" "Flexi IBM VGA False-12"
+   "Monoid-12" "Sudo-17" "Input Mono-12" "Liberation Mono-12" "Fira Code-12" "Azeret Mono-12"
+   "B612 Mono-12" "Verily Serif Mono-14" "DejaVu Sans Mono-14"
+   "SF Mono-12" "Berkeley Mono Variable-12" "Spleen")
+  "List of possible font faces.")
 (defun my/font-random () (interactive)
-       (let* ((font-choices
-               (list
-                "JetBrains Mono-12" "Fantasque Sans Mono-14" "Code New Roman-14" "M+ 1M-14"
-                "Iosevka-14" "Consolas Ligaturized-14" "Source Code Pro-14" "Hack-14" "DejaVu Sans Mono-14"
-                "Fantasque Sans Mono-14" "Roboto Mono-14" "Cousine-14" "Flexi IBM VGA False-12"
-                "Monoid-12" "Sudo-17" "Input Mono-12" "Liberation Mono-12" "Fira Code-12" "Azeret Mono-12"
-                "B612 Mono-12" "Verily Serif Mono-14" "DejaVu Sans Mono-14")
-               )
-              ;; excluded: "Berkeley Mono Trial-12" 
-              (rand-font (seq-random-elt font-choices)))
+       (let ((rand-font (seq-random-elt my/font-face-list)))
          (message (concat "random font:" rand-font))
          (set-frame-font rand-font)))
 
