@@ -1,11 +1,24 @@
 #!/usr/bin/env perl
 use strict; use warnings;
 use Time::Piece;
-use feature q/say/;
-$_ = <>;
-s/[^\d]//g;
-my $t=Time::Piece->strptime($_,"%Y%m%d");
+use feature qw/say signatures/;
+no warnings qw(experimental::signatures);
+
+sub strp_safe($str, $fmt) {
+  # fail to parse is usually die
+  return(eval{ Time::Piece->strptime($str, $fmt)});
+}
+sub ymd{
+  # need /r nondestructive b/c $_ might be used later
+  return(strp_safe((s/[^\d]//gr),"%Y%m%d"))
+}
+sub notmuch{
+ # input like Tue, 06 Sep 2022 14:02:29 +0000
+ return(strp_safe($_, "%a, %d %b %Y %T %z"));
+}
+$_ = <>; chomp;
+my $t = ymd($_);
+$t = notmuch($_) unless $t;
 my $path = ":Calendar:" . $t->year . ":Week_" . $t->week;
 my $text = "[d: ". $t->ymd . "]";
 say "[[$path|$text]]";
-#say $path;
