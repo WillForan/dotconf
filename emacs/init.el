@@ -10,6 +10,9 @@
 ;; https://stackoverflow.com/questions/2068697/emacs-is-slow-opening-recent-files
 (setq recentf-keep '(file-remote-p file-readable-p))
 
+;; tiling windows manager handles window/"frame" size
+;; 20221026 from https://tony-zorman.com/posts/2022-10-22-emacs-potpourri.html
+(setq frame-inhibit-implied-resize t)
 
 ;; personal functions
 (load "~/.emacs.d/my/my.el")

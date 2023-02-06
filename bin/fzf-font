@@ -1,20 +1,26 @@
 #!/usr/bin/env bash
 
-DEFAULT_SIZE=16
+DEFAULT_SIZE=18
 set_font(){
+  # USAGE: set_font DejaVu Sans Mono:pixelsize=14
   [ $# -eq 0 ] && return
   font="$*"
   [[ "$*" =~ :pixelsize ]] || font="$font:pixelsize=$DEFAULT_SIZE"
-  # eg set_font DejaVu Sans Mono:pixelsize=14
-  set -x
+  #set -x
   echo -e "\033[?35h\033]50;$font\a\033"
-  set +x
+  #set +x 2>/dev/null
 }
 list_fonts(){
-  fc-list|grep -iP 'mono|hack|iosevka'  |cut -f2 -d:|sort -u
-}
-reset_font(){
- echo -e "\033[?35h\033]50;DejaVu Sans Mono:pixelsize=14\a\033"
+  fc-list|grep -iP 'flexi|M\+|mono|hack|iosevka'  |cut -f2 -d:|sort -u
 }
 
-set_font $(list_fonts | fzf )
+# not called. here for reference
+reset_font(){
+ echo -e "\033[?35h\033]50;DejaVu Sans Mono:pixelsize=18\a\033"
+}
+export -f set_font reset_font
+
+[ $# -eq 1 ] && DEFAULT_SIZE="$1"
+# TODO: execute works on alternate screen
+# execute-silent has no effect
+set_font "$(list_fonts | fzf --bind 'ctrl-v:execute-silent(set_font {})')"
