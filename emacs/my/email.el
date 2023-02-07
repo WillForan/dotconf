@@ -192,12 +192,14 @@
   (interactive)
   (let* ((this-head (org-get-heading))
         (content (progn  (org-mark-subtree) (buffer-substring (point) (mark))))
-        ;; (content-nohead (substring content (- (length this-head))))
-        ;; (content-nodate (replace-regexp-in-string "\[[0-9-]{10} [MWTFS][a-z][a-z]\]" content-nohead))
-        )
+        ;; remove head - canpt use (length this-head) b/c var num of '*' have been stripped
+        (content  (substring content (+ 1 (string-match "\n" content))))
+        ;; remove date
+        (content (replace-regexp-in-string "^\s*[[0-9-]\+ [MTWFS][a-z][a-z]\]\s*" "" content)))
     (compose-mail "emily.mente@gmail.com" this-head)
     (insert content)))
 
-(defun my/simple-mail
+(defun my/simple-mail ()
+    (interactive)
     ;; likley mu4e-user-agent
     (setq mail-user-agent 'message-user-agent))
