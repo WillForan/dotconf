@@ -81,3 +81,4 @@ ip_list_local(){
         ping -W 1 -c 1 \$ip >/dev/null && echo \$ip;
      done"
 }
+alias ed='rlwrap -Ac /usr/bin/ed -v -p"$(tput setaf 12)*$(tput sgr0) "'
