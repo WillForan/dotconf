@@ -33,8 +33,13 @@ alias mpv="mpv --no-audio-display"
 alias sbcl="rlwrap sbcl"
 
 # package managemnet
-alias i='yay --noconfirm -S'
-alias pq='yay --color auto -Ss'
+if command -v yay >/dev/null; then
+  alias i='yay --noconfirm -S'
+  alias pq='yay --color auto -Ss'
+elif command -v apt >/dev/null; then 
+  alias i='sudo apt install'
+  alias pq='apt search'
+fi
 
 # git - status short with no untracked. gs is ghostscript
 alias gsuno='git status -s -uno'

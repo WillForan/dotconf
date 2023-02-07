@@ -40,6 +40,8 @@ case $HOSTNAME in
          xinput --set-button-map $_ 3 2 1
       xrandr --output DVI-0 --rotate left  --right-of VGA-0
       nitrogen --restore &
+      # work computer probably needs to lock itself
+      xautolock -time 10 -locker "i3lock-fancy -p -g" -detectsleep &
       ;;
    kt)
       xrandr --output HDMI-0 --rotate right --left-of DVI-D-0

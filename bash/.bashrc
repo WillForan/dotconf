@@ -43,6 +43,8 @@ else
     #  CTRL-R - Paste the selected command from history into the command line
     #  ALT-C - cd into the selected directory
     test -r /usr/share/fzf/key-bindings.bash && source $_
+    # debian
+    test -r /usr/share/doc/fzf/examples/key-bindings.bash && source $_
 
     # history expand with space. !![space] ^tyop^typo[space]
     bind Space:magic-space

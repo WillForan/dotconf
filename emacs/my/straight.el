@@ -17,4 +17,5 @@
 ;;   (explain-pause-mode))
 
 ;; (use-package chromatext
-;;   :straight (chromatext :type git :host github :repo "alphapapa/chromatext.el"))
+;;   :straight (chromatext :type git :host github :repo "alphapapa/chromatext.el")
+;;   :config (setq chromatext-color-pairs '(("#558899" "#8B0000" "#778899"))))
