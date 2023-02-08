@@ -79,4 +79,9 @@
          (message (concat "random font:" rand-font))
          (set-frame-font rand-font)))
 
+(defun my/set-font-from-list ()
+  "Set font from restricted list.  Also see `helm-select-xfont'."
+  (interactive)
+       (set-frame-font (completing-read "font" my/font-face-list)))
+
 (my/font-random)
