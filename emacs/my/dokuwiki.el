@@ -19,8 +19,14 @@
   :config (require 'outline-magic))
 
 
+;; (require 'epa)
+;; (setenv "GPG_AGENT_INFO" nil)
+;; (setq epg-gpg-program "gpg2")
+;; edit ~/.authinfo
+
+
 (defun moonhog ()
-  "Open moonhog wiki."
+  "Open moonhog, the SWRD Trading LLC wiki."
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "https://www.swrd.trade/wiki/lib/exe/xmlrpc.php" "will"))
@@ -28,9 +34,7 @@
 (defun wpicprog ()
   "Open wpic programmers wiki."
   (interactive)
-  (require 'dokuwiki)
   (dokuwiki-launch "https://www.neuro-programmers.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
-
 (defun lncd ()
   "Open lncd wiki."
   (interactive)
