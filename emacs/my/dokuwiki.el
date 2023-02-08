@@ -13,7 +13,13 @@
 (defun my/dokuwiki-launch (url user &optional no-launch)
   "Login to dokuwiki using URL and USER.  Open a page.  Set NO_LAUNCH for no page jump"
   (require 'dokuwiki)
-  (setq dokuwiki-xml-rpc-url url
+
+  ;; (require 'epa)
+  ;; (setenv "GPG_AGENT_INFO" nil)
+  ;; (setq epg-gpg-program "gpg2")
+  ;; edit ~/.authinfo
+
+  (setq dokuwiki-xml-rpc-url (concat url "/lib/exe/xmlrpc.php")
         dokuwiki-login-user-name user)
   (dokuwiki-login)
   (unless no-launch
@@ -23,15 +29,15 @@
 (defun moonhog ()
   "Open moonhog wiki."
   (interactive)
-  (my/dokuwiki-launch "https://www.swrd.trade/wiki/lib/exe/xmlrpc.php" "will"))
+  (my/dokuwiki-launch "https://www.swrd.trade/wiki" "will"))
 (defun my/wpicprog ()
   "Open wpic programmers wiki."
   (interactive)
-  (my/dokuwiki-launch "https://www.neuro-programmers.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+  (my/dokuwiki-launch "https://www.neuro-programmers.pitt.edu/wiki" "will"))
 (defun my/lncd ()
   "Open lncd wiki."
   (interactive)
-  (my/dokuwiki-launch "https://www.lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+  (my/dokuwiki-launch "https://www.lncd.pitt.edu/wiki" "will"))
 
 (defvar dokuwiki-cached-page-list nil
   "List of all pages cached for quick linking and listing.")
