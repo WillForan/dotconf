@@ -16,7 +16,12 @@
 
 
 ;; title has filename in it
-(setq-default frame-title-format '("%f [emacs %m]"))
+;; and if mode-name/no file name,
+;; show the buffer name instade with current directory
+(setq-default frame-title-format
+              '("%f"
+                (:eval (when (not buffer-file-name) (concat "%b " default-directory)))
+                " [emacs]"))
 (setq-default icon-title-format frame-title-format)
 
 ;; Font
@@ -66,9 +71,17 @@
    "B612 Mono-12" "Verily Serif Mono-14" "DejaVu Sans Mono-14"
    "SF Mono-12" "Berkeley Mono Variable-12" "Spleen")
   "List of possible font faces.")
-(defun my/font-random () (interactive)
+
+(defun my/font-random ()
+  "Pick a random font."
+  (interactive)
        (let ((rand-font (seq-random-elt my/font-face-list)))
          (message (concat "random font:" rand-font))
          (set-frame-font rand-font)))
+
+(defun my/set-font-from-list ()
+  "Set font from restricted list.  Also see `helm-select-xfont'."
+  (interactive)
+       (set-frame-font (completing-read "font" my/font-face-list)))
 
 (my/font-random)
