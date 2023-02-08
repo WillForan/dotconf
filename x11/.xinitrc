@@ -40,6 +40,8 @@ case $HOSTNAME in
          xinput --set-button-map $_ 3 2 1
       xrandr --output DVI-0 --rotate left  --right-of VGA-0
       nitrogen --restore &
+      # work computer probably needs to lock itself
+      xautolock -time 10 -locker "i3lock-fancy -p -g" -detectsleep &
       ;;
    kt)
       xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
@@ -116,6 +118,10 @@ xbindkeys
 
 # 20210108 - add facny notification deamon
 command -v deadd-notification-center && $_ &
+# 20221228 - time tracking. activitymonitor not mature enough? using proprietary 
+command -v rescuetime && $_ &
+# 20230121 - screenshots. if daemon not running, copy/paste takes forever
+command -v flameshot && $_ &
 
 # mouse gesture actions (plum)
 #easystroke & # commented out (20200515)

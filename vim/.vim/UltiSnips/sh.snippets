@@ -28,8 +28,26 @@ snippet iff "if and" b
 [ ${1:! -r} ] && ${2:continue}
 endsnippet
 
+snippet ifx "if and or" b
+[[ ${1:! -r} ]] && ${2:continue} || ${3::}
+endsnippet
+
+snippet f "function" b
+${1}() { ${2::;} }
+endsnippet
+
+snippet test "bats test" b
+${1:_test}() { #@test
+  ${2:run }
+}
+endsnippet
+
 snippet orr "if or" b
 [ ${1} ] || ${2:continue}
+endsnippet
+
+snippet [ "bash square test" b
+[[ ${1} ]] ${2:&&}
 endsnippet
 
 snippet regex "bash regexp" b
