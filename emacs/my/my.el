@@ -9,31 +9,32 @@
 ;; https://www.emacswiki.org/emacs/download/oneonone.el
 
 (defun my/edit ()
-  "List files for editing local config using projectile"
+  "List files for editing local config using projectile."
   (interactive)
   ;(projectile-find-file-in-directory "~/.emacs.d/my/")
   ;(directory-files-recursively "~/.emacs.d/my" "[A-Za-z].*.el")
+  (require 'projectile)
   (let ((default-directory "~/.emacs.d/my/"))
     (projectile-find-file)
   )
 )
 
 (defun my/quit-other ()
-  "quit e.g. help buffer without switching to it.
+  "Quit e.g. help buffer without switching to it.
   with-selected+otherwindow from inspecting M-<next> (scroll-other-window)
   cf. my/other-window-kill"
   (interactive)
   (with-selected-window (other-window-for-scrolling) (quit-window)))
 
 (defun my/quit-help ()
-  "quit all *Help* buffers. using dash"
+  "Quit all *Help* buffers using dash."
   (apply #'quit-restore-window
    (-filter (lambda (w)
       (-> w (window-buffer) (buffer-name) (equal "*Help*")))
     (window-list))))
 
 (defun my/use-url (url)
-  "Download and load url. right now just loads basename from pkgs directory"
+  "Download and load URL.  Currently, only load basename from pkgs directory."
   (let ((pkg-dir "~/.emacs.d/pkgs/"))
     ;; TODO: exists or download to pkg-dir
     (load-file (expand-file-name (concat pkg-dir (file-name-base url) ".el")))
@@ -41,21 +42,32 @@
   )
 
 (defun my/dokuwiki ()
-  "Connects to the dokuwiki."
+  "Connects to the lncd dokuwiki."
   (interactive)
   (my/use 'dokuwiki)
   (dokuwiki-login)
   (dokuwiki-list-pages)
-  (dokuwiki-mode)
-  )
+  (dokuwiki-mode))
+
+(defun my/dokuwiki-np ()
+  "Connects to the neuroprogrammers dokuwiki."
+  (interactive)
+  (my/use 'dokuwiki)
+   (setq dokuwiki-xml-rpc-url
+         "http://arnold.wpic.upmc.edu/dokuwiki/lib/exe/xmlrpc.php"
+    dokuwiki-login-user-name "will")
+  (dokuwiki-login)
+  (dokuwiki-list-pages)
+  (dokuwiki-mode))
 
 (defun my/clip-fname ()
-  "buffer filename to clipboard"
+  "Buffer filename to clipboard."
   (interactive)
   (kill-new (buffer-file-name)))
 
 (defun last-message (&optional num)
-  "from https://unix.stackexchange.com/questions/154098/copy-the-last-emacs-message-into-the-current-buffer#answer-154154"
+  "Look NUM lines back in *Messages* buffer."
+  ;;https://unix.stackexchange.com/questions/154098/copy-the-last-emacs-message-into-the-current-buffer#answer-154154
   (or num (setq num 1))
   (save-excursion
     (set-buffer "*Messages*")
@@ -92,7 +104,7 @@
 	  (set-window-margins win margin margin)))
 
 (defun my/loadinit ()
-     "load default set of 'layers'"
+     "Load default set of 'layers'."
      (interactive)
      ;; use-package defintions for packages (a la spacemace layers?)
      (mapcar #'my/use
@@ -112,8 +124,7 @@
        org
        roam annote
        ;; last -- if not applied we know something went wrong
-       frame-settings theme
-       )))
+       frame-settings theme)))
 
 (defun my/note-now (&optional notes)
   "use org journal with org roam settings to start a note

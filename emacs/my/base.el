@@ -28,6 +28,19 @@
 ;; store recent files
 (recentf-mode 1)
 
+;; 20230131 - line numer helps distinquish buffers
+(setq display-line-numbers-type 'relative)
+(global-display-line-numbers-mode)
+(defun my/no-lines () "Disable linen numbers." (display-line-numbers-mode 0))
+(dolist (mode '(term-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook
+                inferior-ess-mode-hook
+                inferior-python-mode-hook
+                erc-mode-hook))
+  (add-hook mode #'my/no-lines))
+
 ;; learning new keyboard. find pairs helpful
 ;; (electric-pair-mode 0)
 ;; 20220329 - smartparens has better handing of pair ends
@@ -50,7 +63,7 @@
 (when (equal nil (executable-find "ispell"))
   (setq ispell-program-name (executable-find "hunspell")))
 
-;; disable message for every word. improve pefromance? 20191227 
+;; disable message for every word. improve performance? 20191227
 ;; https://www.emacswiki.org/emacs/FlySpell
 (setq flyspell-issue-message-flag nil)
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
