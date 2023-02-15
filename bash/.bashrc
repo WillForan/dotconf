@@ -114,4 +114,6 @@ setup_freesurfer(){
  export FREESURFER_HOME=/opt/ni_tools/freesurfer
  source $FREESURFER_HOME/SetUpFreeSurfer.sh
 }
-PROG=tea source "/home/foranw/.config/tea/autocomplete.sh"
+
+test -r "/home/foranw/.config/tea/autocomplete.sh" &&
+   PROG=tea source "$_" || :
