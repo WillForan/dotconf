@@ -6,3 +6,5 @@
   :config
     (quelpa '(screensend :fetcher github :repo "WillForan/screensend.el" :branch "more-tmux"))
     (quelpa '(zim-wiki-mode :fetcher github :repo "WillForan/zim-wiki-mode")))
+
+(use-package quelpa-use-package :ensure t)
