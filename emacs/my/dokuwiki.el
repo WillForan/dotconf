@@ -34,6 +34,7 @@
 (defun wpicprog ()
   "Open wpic programmers wiki."
   (interactive)
+  (require 'dokuwiki)
   (dokuwiki-launch "https://www.neuro-programmers.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
 (defun lncd ()
   "Open lncd wiki."
