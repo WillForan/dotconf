@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+wol -i 192.168.1.75 --port=9 e0:3f:49:6d:88:b7
