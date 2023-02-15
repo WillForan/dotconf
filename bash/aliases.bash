@@ -86,4 +86,6 @@ ip_list_local(){
         ping -W 1 -c 1 \$ip >/dev/null && echo \$ip;
      done"
 }
+ew3m(){ emacsclient -c -n -e "(w3m-goto-url \"$1\")"; }
 alias ed='rlwrap -Ac /usr/bin/ed -v -p"$(tput setaf 12)*$(tput sgr0) "'
+
