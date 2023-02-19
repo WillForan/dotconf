@@ -109,7 +109,6 @@
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
         ))
-
   ;; 20220911 org-protocol bookmarklet and desktop files
   ;; 20220922 require so it's actually loaded
    (require 'org-protocol)
@@ -118,7 +117,7 @@
          "www"
          entry
          (file+headline "~/notes/org-files/capture.org" "WWW Capture")
-         "** %:description\n\n  %u %:link\n %i"
+         "** %:description\n\n %u %:link\n%(replace-regexp-in-string \"^\" \"> \" \"%i\")"
          :empty-lines 1)
         ("f" "file note"
          entry (file+headline "~/notes/org-files/capture.org" "Files")
