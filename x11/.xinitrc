@@ -75,6 +75,11 @@ case $HOSTNAME in
       # done for all (removed 20221031)
       # setxkbmap -layout us -option # reset
       # setxkbmap -layout us -option "caps:ctrl_modifier"
+
+      # 20230219 - suspend to save power and quiet fan
+      # only after work hours and if cpu usage is low
+      # added after enabling wake-on-lan (wake_kt)
+      xautolock -time 30 -locker "zzz_idle" -detectsleep &
       ;;
    yogert)
       xrandr --output LVDS1 --mode 1600x900
