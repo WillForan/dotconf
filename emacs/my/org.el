@@ -39,6 +39,7 @@
   :custom
   (org-babel-tmux-terminal "xterm"))
 
+;; 20230211 - defer here means we need to have already opened an org doc to get org-capture/org-protocol from firefox?
 (use-package org :defer t
   :bind
     ("C-c a" . #'org-agenda)
