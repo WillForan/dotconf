@@ -115,5 +115,5 @@ setup_freesurfer(){
  source $FREESURFER_HOME/SetUpFreeSurfer.sh
 }
 
-test -r "/home/foranw/.config/tea/autocomplete.sh" &&
+test -r "$HOME/.config/tea/autocomplete.sh" &&
    PROG=tea source "$_" || :

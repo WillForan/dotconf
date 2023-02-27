@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+load_int=$(awk '{printf "%d", $3}' /proc/loadavg)
+xidle_s=$(xprintidle)
+hour_s=3600
+after_work=1080    
+time=$(date +"%H*60+%M"|bc )
+if [[ "${1:-}" != "loadonly" ]]; then
+  [ "$xidle_s" -lt $hour_s ] && echo "$xidle_s<$hour_s: not xidle" && exit
+  [ "$time" -lt $after_work ] && echo "$time<$after_work: still during work" && exit
+fi
+if test "$load_int" -lt 2; then
+   echo sudo systemctl suspsend
+else
+   echo high load. not suspending
+fi

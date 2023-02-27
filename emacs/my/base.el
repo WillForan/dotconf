@@ -69,6 +69,7 @@
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
 ; see C-;
 (add-hook #'mu4e-compose-mode-hook #'flyspell-mode)
+(add-hook #'markdown-mode-hook #'flyspell-mode)
 (add-hook #'git-commit-setup-hook #'git-commit-turn-on-flyspell)
 
 ; (global-linum-mode 1)
