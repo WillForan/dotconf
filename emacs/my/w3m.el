@@ -4,7 +4,8 @@
   (interactive "P")
   (message "readabilizing...")
   (erase-buffer)
-  (insert (shell-command-to-string (concat "curl " url " 2>/dev/null | readability " url))))
+  ;; 20230212 - switch from readability to reader-bin from https://github.com/mrusme/reader
+  (insert (shell-command-to-string (concat "curl -s " url " | reader " url))))
 
 (defun tsa/w3m-toggle-readability (&arg)
   "Toggle readibility and reload the current page"
@@ -30,16 +31,18 @@
 
 (use-package w3m
   :custom
-  (w3m-search-default-engine "duckduckgo")
+  (w3m-search-default-engine "google")
   (w3m-quick-start nil)
   (w3m-display-mode 'plain)
   (w3m-use-title-buffer-name t)
   (w3m-confirm-leaving-secure-page nil)
+  :hook (w3m-mode . (lambda() (display-line-numbers-mode -1)))
 
   :config
   ;; 20210218 - dont need numbers in links w/emacs, but enabled for cli
   ;; 20210930 - dont nconc -- adds too many times
   (setq w3m-command-arguments '("-o" "display_link_number=0"))
+  (add-to-list 'w3m-search-engine-alist '("m" "https://search.marginalia.nu/search?query=%s" utf-8))
 
   ;; kind of like having a space as the leader key
   ;; used on phone. modifier keys are more of a pain
@@ -49,6 +52,7 @@
   (key-chord-define w3m-mode-map "jk" #'evil-emacs-state)
   (key-chord-define w3m-mode-map " x" #'counsel-M-x)
   (key-chord-define w3m-mode-map " b" #'ivy-switch-buffer)
+  (key-chord-define w3m-mode-map " l" #'ace-link-w3m)
   (key-chord-define w3m-mode-map " o" "\C-xo")
   (key-chord-define w3m-mode-map " c" "\C-c")
 
@@ -64,4 +68,3 @@
 	 ("/" . swiper)
 	 ("<mouse-8>" . w3m-view-previous-page)
 	 ("<mouse-9>" . w3m-view-next-page)))
-

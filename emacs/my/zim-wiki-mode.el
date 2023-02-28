@@ -51,6 +51,10 @@
   :bind
   ("C-c z" . my/wiki-goto-now) 		;; same as hydra command. but when not in zim, go there
   ("C-c n w" . my/work-wiki)
+  (:map zim-wiki-mode-map
+          ("M-p" . #'outline-previous-visible-heading)
+          ("M-n". #'outline-next-visible-heading)
+          ("M-S-<return>" . #'org-insert-item))
   ;; c-c c-n used for org-roam/journal too. so dont overwrite by defult
   ; :bind ("C-c C-n" . my/wiki-goto-now)
   ;; maybe useful to have
@@ -63,4 +67,9 @@
     ;(key-chord-define evil-insert-state-map  "zz" 'zim-wiki-hydra/body))
     (evil-leader/set-key-for-mode 'zim-wiki-mode "z" 'zim-wiki-hydra/body)
     ;(my/home-wiki)
+
+
+    ;; (local-set-key (kbd "M-RET") #'dokuwiki-insert-next-header)
+    ;; (local-set-key (kbd "<backtab>") #'outline-cycle)
+    ;; (local-set-key (kbd "M-<iso-lefttab>") #'(lambda () (interactive) (outline-cycle '(4))))
     )
