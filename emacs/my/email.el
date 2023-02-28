@@ -96,6 +96,7 @@
 (defun my/notmuch ()
   (interactive)
   (setq user-mail-address "foranw@upmc.edu" user-full-name  "Will Foran")
+  (org-msg-mode-notmuch)
   (notmuch-tree "date:1week.. -tag:delete"))
 
 (use-package "notmuch" :ensure t
@@ -105,7 +106,7 @@
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
   :config
   ;; use remote server's database. todo: not if (system-name) is work?
-  (setq notmuch-command (expand-file-name "~/bin/notmuch-remote"))
+  (setq notmuch-command (if (not (string= (system-name) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
@@ -187,6 +188,19 @@
   (mu4e-get-mail-command "ssh s2 mbsync -a"))
 (use-package "mu4e-conversation" :ensure t)
 
+(defun my/html-email-org-msg ()
+  (interactive)
+  (org-msg-edit-mode)
+  (save-excursion
+    (beginning-of-buffer)
+    (search-forward "--text follows this line--")
+    (end-of-line)
+    (insert "\n")
+    (insert (org-msg-header 'new '(html)))
+    (search-backward "reply-to:")
+    (kill-whole-line)
+    (search-backward "OPTIONS")
+    (org-ctrl-c-ctrl-c)))
 
 (defun my/mail-org-header ()
   (interactive)
