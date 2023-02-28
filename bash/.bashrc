@@ -116,3 +116,4 @@ setup_freesurfer(){
 }
 
 ! test -r /home/foranw/.config/tea/autocomplete.sh || PROG=tea source "$_"
+test -e "$HOME/.cargo/env" && . "$_" || :
