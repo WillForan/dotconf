@@ -115,6 +115,7 @@ setup_freesurfer(){
  source $FREESURFER_HOME/SetUpFreeSurfer.sh
 }
 
+test -d "$HOME/.cargo/bin" && export PATH="$_:$PATH"
 test -e "$HOME/.cargo/env" && . "$_" || :
 test -r "$HOME/.config/tea/autocomplete.sh" &&
    PROG=tea source "$_" || :
