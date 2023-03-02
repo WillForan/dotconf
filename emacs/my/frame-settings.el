@@ -55,7 +55,7 @@
 ;; (set-frame-font "Azeret Mono-12")       ; shorter than Input, less blocky. Too thin on low contract (comments)
 ;; (set-frame-font "B612 Mono-12")         ; blocky. hard to see () []; {} are distinct though
 ;; (set-frame-font "Verily Serif Mono-14") ; sarif font. meh
-;; (set-frame-font "SF Mono-12")           ; stiffer than berkeley, same shape
+;; (set-frame-font "SF Mono-12")           ; stiffer than berkeley, same shape; 'i nerd-fonts-sf-mono'
 ;; (set-frame-font "Spleen")               ; dense, pixely
 
 
@@ -84,5 +84,7 @@
   (interactive)
        (set-frame-font (completing-read "font" my/font-face-list)))
 
-(set-frame-font "M+ 1M-13")
+;; 20230211 -- random font changes crashing emacs? maybe a font doesn't exist?
 ;; (my/font-random)
+(set-face-attribute 'default nil :font "M+ 1M-12")
+(set-frame-font "M+ 1M-12")

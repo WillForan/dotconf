@@ -96,6 +96,7 @@
 (defun my/notmuch ()
   (interactive)
   (setq user-mail-address "foranw@upmc.edu" user-full-name  "Will Foran")
+  (org-msg-mode-notmuch)
   (notmuch-tree "date:1week.. -tag:delete"))
 
 (use-package "notmuch" :ensure t
@@ -105,7 +106,7 @@
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
   :config
   ;; use remote server's database. todo: not if (system-name) is work?
-  (setq notmuch-command (expand-file-name "~/bin/notmuch-remote"))
+  (setq notmuch-command (if (not (string= (system-name) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
@@ -158,7 +159,18 @@
  (setq mu4e-compose-reply-to-address "will.foran@gmail.com"
        user-mail-address "will.foran@gmail.com"
        user-full-name  "Will Foran"
-       mail-user-agent 'mu4e-user-agent)
+       mail-user-agent 'mu4e-user-agent
+       ;; 20230226 - from mu manual: Type: text/plain; format=flowed
+       mu4e-compose-format-flowed t)
+
+ ;; 20230226 -- annotated by not added.
+ ;; inline email not displaying in outlook? change the replay format
+ ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
+
+ ;; 20230225 from 'man mbsync'
+ ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
+ ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
+ (setq mu4e-change-filenames-when-moving t)
 
  ; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
  (add-to-list 'mu4e-marks
@@ -187,6 +199,19 @@
   (mu4e-get-mail-command "ssh s2 mbsync -a"))
 (use-package "mu4e-conversation" :ensure t)
 
+(defun my/html-email-org-msg ()
+  (interactive)
+  (org-msg-edit-mode)
+  (save-excursion
+    (beginning-of-buffer)
+    (search-forward "--text follows this line--")
+    (end-of-line)
+    (insert "\n")
+    (insert (org-msg-header 'new '(html)))
+    (search-backward "reply-to:")
+    (kill-whole-line)
+    (search-backward "OPTIONS")
+    (org-ctrl-c-ctrl-c)))
 
 (defun my/mail-org-header ()
   (interactive)
