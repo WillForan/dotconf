@@ -84,4 +84,5 @@
   (interactive)
        (set-frame-font (completing-read "font" my/font-face-list)))
 
-(my/font-random)
+(set-frame-font "M+ 1M-13")
+;; (my/font-random)
