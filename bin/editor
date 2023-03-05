@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# EDITOR is vim if no display or no other emacsclient
+# 20230302 - init
+disp=${DISPLAY:-noX}
+if [ ${disp:0:1} = : ] && pgrep emacsclient >/dev/null; then
+   emacsclient -c "$@"
+else
+   vim "$@"
+fi
