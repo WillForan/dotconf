@@ -5,29 +5,11 @@
 ;; 20210331 - extracted from my/base.el (run by my/loadinit)
 ;;; Code:
 
-;; no display, toolbar already off (dne)
-(when (display-graphic-p) (tool-bar-mode 0))
-(menu-bar-mode 0)
-
-;; 20210209 lucid scroll bars are ugly but very functional
-;(toggle-scroll-bar 0)
-; 20210209 just disable on minibuffer
-(set-window-scroll-bars (minibuffer-window) nil nil)
-
-
-;; title has filename in it
-;; and if mode-name/no file name,
-;; show the buffer name instade with current directory
-(setq-default frame-title-format
-              '("%f"
-                (:eval (when (not buffer-file-name) (concat "%b " default-directory)))
-                " [emacs]"))
-(setq-default icon-title-format frame-title-format)
 
 ;; Font
-;(set-default-font "Source Code Pro 14") ;; 20191022
+                                        ;(set-default-font "Source Code Pro 14") ;; 20191022
 ;; https://superuser.com/questions/721634/different-font-size-when-running-emacs-and-emacsclient
-; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
+                                        ; (setq default-frame-alist '((font . "Iosevka-16"))) ; 20171229/ alist update 20181016 (for emacsclient)
 ;; (set-frame-font "DejaVu Sans Mono-14" nil t)
                                         ; 20180810; 20191116 fix
 ;; 20220911:  Roboto Mono won in https://www.codingfont.com/; also Azeret, B612, Cousine
@@ -86,5 +68,32 @@
 
 ;; 20230211 -- random font changes crashing emacs? maybe a font doesn't exist?
 ;; (my/font-random)
-(set-face-attribute 'default nil :font "M+ 1M-12")
-(set-frame-font "M+ 1M-12")
+
+
+(defun my/frame-settings ()
+  "Disable toolbar, buffer and directory in title, set font." 
+  ;; No display, toolbar already off (dne).
+  (when (display-graphic-p) (tool-bar-mode 0))
+  (menu-bar-mode 0)
+
+  ;; 20210209 lucid scroll bars are ugly but very functional
+                                        ;(toggle-scroll-bar 0)
+                                        ; 20210209 just disable on minibuffer
+  (set-window-scroll-bars (minibuffer-window) nil nil)
+
+
+  ;; title has filename in it
+  ;; and if mode-name/no file name,
+  ;; show the buffer name instade with current directory
+  (setq-default frame-title-format
+                '("%f"
+                  (:eval (when (not buffer-file-name) (concat "%b " default-directory)))
+                  " [emacs]"))
+  (setq-default icon-title-format frame-title-format)
+
+  ;; font
+  (set-face-attribute 'default nil :font "M+ 1M-12")
+  (set-frame-font "M+ 1M-12"))
+
+;; run when sourced
+(my/frame-settings)
