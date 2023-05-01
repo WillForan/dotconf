@@ -2,34 +2,48 @@
 set -euo pipefail
 
 # get web link for current dir or given file
-# using .git/config 
+# using .git/config
 # initiall for gitea (cf. tea open)
 # look at 'gh browse -u path' for github?
 #
 # 20221113 - init
+# 20230428 - fix no args @ git root vs no args/dir within git repo
 
 gitlink() {
   # 3 parts: (1) base url to repo. (2) branch. (3) file
+  if [ $# -gt 0 ]; then
+     file="$(readlink -f "$*")"
+     cd "$(dirname "$file")"
+  else
+     file="$(pwd)/"
+  fi
 
   ## Repo: replace git with https
   remote=$(git config --get remote.origin.url)
   perl -ne 'chomp;s|:|/|;s|git(ea)?@|https://|;s|.git$||;print' <<< "$remote"
 
+
   ## Branch: pattern varies by service
   #https://$github_repo/tree/$branch/$file_path
   #https://$gitea_repo/src/branch/$branch/$file_path
   [[ $remote =~ github.com ]] &&
-     echo -n "/tree/" ||
-     echo -n "/src/branch/" 
+  case $remote in
+     *github.com*) echo -n "/tree/";;
+     *)            echo -n "/src/branch/" ;;
+  esac
 
   echo -n "$(git branch --show-current)/"
 
-  ## file
-  # use current dir if no input. otherwise need absolute path of file
-  [ $# -eq 0 ] && x=$(pwd) || x=$(readlink -f "$*")
-  # and then need to remove the absolute part
+  # don't worry about pasting together paths if we're at the root
+  # but we do want to be mindful of branch (handled above)
+  # also need last echo to add suppressed-so-far newline
+  gitroot="$(git rev-parse --show-toplevel)/"
+  [[ $file == $gitroot ]] && echo && return
+
+  # not at root? remove up to root for provided file
+  # (or nested directory esp if run without args deep within git tree)
   # shellcheck disable=SC2001 #  can't use ${x//} b/c paths?
-  sed "s|$(git rev-parse --show-toplevel)/||" <<< "$x"
+  sed "s|$gitroot||" <<< "$file"
 }
 
 ! [[ $(caller) == 0* ]] || gitlink "$@"

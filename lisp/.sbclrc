@@ -1,8 +1,9 @@
 ;; -*-mode: lisp -*-
 
-;; 20200521
+;; 20200521 - archlinux
+;  20230306 - debian + mapcar
 #-quicklisp
-(load "/usr/lib/quicklisp/setup")
+(mapcar (lambda (f) (when (probe-file f) (load f))) '(#P"/usr/lib/quicklisp/setup" #P"/home/foranw/quicklisp/setup.lisp"))
 
 
 ; local quicklisp - customize as desird

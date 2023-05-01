@@ -55,8 +55,16 @@ for syspkg in ${SYSPKGS[@]}; do
    # 20211002 inetutils for hostname, silver-searcher-git for ag
    case $syspkg in silver-searcher-git) testcmd=ag;; inetutils) testcmd=hostname;; *) testcmd=$syspkg;; esac
 
+   echo "# $syspkg"
    command -v $testcmd >/dev/null && continue
    [ -r /etc/arch-release ] && ~/bin/yay -S $syspkg --noconfirm && continue
+
+   if [ -r /etc/debian_version ]; then
+      [[ $syspkg =~ easystroke ]] && continue
+      [[ $syspkg =~ silver-searcher ]] && syspkg=silversearcher-ag
+      sudo apt-get -y install $syspkg
+      continue
+   fi
    echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
    exit 1
 done
@@ -64,5 +72,6 @@ done
 # run upbin $PKG for each package
 for d in $CFGDIR/*/; do
    pkg=$(basename $d)
+   [[ $pkg = app.desktop ]] && continue
    $DRYRUN $CFGDIR/bin/upbin $pkg
 done
