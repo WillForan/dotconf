@@ -34,6 +34,7 @@
 (defun my/no-lines () "Disable linen numbers." (display-line-numbers-mode 0))
 (dolist (mode '(term-mode-hook
                 shell-mode-hook
+                w3m-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook
                 inferior-ess-mode-hook
@@ -68,8 +69,9 @@
 (setq flyspell-issue-message-flag nil)
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
 ; see C-;
-(add-hook #'mu4e-compose-mode-hook #'flyspell-mode)
-(add-hook #'markdown-mode-hook #'flyspell-mode)
+(add-hook #'mu4e-compose-mode-hook #'flyspell-mode-on)
+(add-hook #'message-mode-hook #'flyspell-mode-on)
+(add-hook #'markdown-mode-hook #'flyspell-mode-on)
 (add-hook #'git-commit-setup-hook #'git-commit-turn-on-flyspell)
 
 ; (global-linum-mode 1)

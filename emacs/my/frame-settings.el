@@ -71,9 +71,13 @@
 
 
 (defun my/frame-settings ()
-  "Disable toolbar, buffer and directory in title, set font." 
-  ;; No display, toolbar already off (dne).
-  (when (display-graphic-p) (tool-bar-mode 0))
+  "Disable toolbar, put buffer and directory in title, set font." 
+  ;; No display, toolbar already off (dne). no need for fonts
+  (when (display-graphic-p)
+    (tool-bar-mode 0)
+    ;; font
+    (set-face-attribute 'default nil :font "M+ 1M-12")
+    (set-frame-font "M+ 1M-12"))
   (menu-bar-mode 0)
 
   ;; 20210209 lucid scroll bars are ugly but very functional
@@ -89,11 +93,12 @@
                 '("%f"
                   (:eval (when (not buffer-file-name) (concat "%b " default-directory)))
                   " [emacs]"))
-  (setq-default icon-title-format frame-title-format)
-
-  ;; font
-  (set-face-attribute 'default nil :font "M+ 1M-12")
-  (set-frame-font "M+ 1M-12"))
+  (setq-default icon-title-format frame-title-format))
 
 ;; run when sourced
+(defun my/frame-settings-tohook (f) (my/frame-settings) )
+(add-hook 'after-make-frame-functions #'my/frame-settings-tohook)
 (my/frame-settings)
+
+(provide 'frame-settings)
+;;; frame-settings.el ends here

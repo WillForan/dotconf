@@ -16,7 +16,6 @@
 
 ;; personal functions
 (load "~/.emacs.d/my/my.el")
-(add-hook 'after-make-frame-functions #'my/frame-settings)
 (my/loadinit) ;; load most files in my/*el -- hardcoded selection
 
 
