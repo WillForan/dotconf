@@ -12,6 +12,8 @@ call plug#begin('~/.vim/plugged')
 " Plug 'junegunn/vim-easy-align'
 Plug 'vim-scripts/xoria256.vim'
 
+Plug 'easymotion/vim-easymotion' " space,space,f_ (leader,leader,find, letter)
+
 " --- tmux integration
 " vim-screen
 Plug 'ervandew/screen' 
@@ -22,11 +24,11 @@ let g:ScreenShellQuitOnVimExit = 0
 let g:ScreenShellTerminal = 'xterm'
 let g:ScreenIPython3 = 1
 " keybindings like nvim-R plugin 
-nmap <Leader>rf :ScreenShell<CR>
-nmap <Leader>pf :IPython<CR>
-nmap <Leader>rd V:ScreenSend<CR>Vj
-nmap <Leader>rb {V}:ScreenSend<CR>Vj
-vmap <Leader>rs :ScreenSend<CR>
+nmap <leader>rf :ScreenShell<CR>
+nmap <leader>pf :IPython<CR>
+nmap <leader>rd V:ScreenSend<CR>Vj
+nmap <leader>rb {V}:ScreenSend<CR>Vj
+vmap <leader>rs :ScreenSend<CR>
 
 Plug 'tpope/vim-surround'
 " e.g. change surrounding quotes cs"'
@@ -68,9 +70,11 @@ let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips', 'UltiSnips']
 Plug '~/src/world/utils/fzf/' " need to get fzf in vim
 Plug 'vim-scripts/ack.vim'    " ag search
 Plug 'junegunn/fzf.vim' " define :Buffers :Files :Ag, fzf-complete-*
-nmap <silent> <Leader>a :Ag<CR>
-nmap <silent> <Leader>b :Buffers<CR>
-nmap <silent> <Leader>t :Files<CR>
+nmap <silent> <leader>a :Ag<CR>
+nmap <silent> <leader>b :Buffers<CR>
+nmap <silent> <leader>t :Files<CR>
+" https://github.com/iggredible/Learn-Vim/blob/master/ch03_searching_files.md
+nnoremap <silent> <leader><C-f> :Files<CR>
 
 Plug 'tpope/vim-fugitive'     " :Gcommit, :Gblame
 Plug 'airblade/vim-gitgutter' " changes on side
@@ -87,13 +91,10 @@ Plug 'kana/vim-fakeclip' " work around for vim complile w/-clipbord
 let g:fakeclip_terminal_multiplexer_type="tmux"
 
 
-Plug 'easymotion/vim-easymotion' " space,space,f_ (leader,leader,find, letter)
-
-
 " -- replaced with fzf
 " Plug 'wincent/Command-T' " leader j,t,b
-" nmap <silent> <Leader>s <Plug>(CommandTSearch)
-" nmap <silent> <Leader>c <Plug>(CommandTHistory)
+" nmap <silent> <leader>s <Plug>(CommandTSearch)
+" nmap <silent> <leader>c <Plug>(CommandTHistory)
 
 
 Plug 'jalvesaq/Nvim-R'
