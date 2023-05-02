@@ -1,11 +1,12 @@
 " vim-plug: install and load plugins
+noremap <SPACE> <Nop>
+let mapleader=" "
 source ~/.vim/load_plugins.vim
 
 " ---- vanilla vim config options ----
 
 " mouse support
 set ttymouse=xterm2
-let mapleader="\<Space>"
 
 set nocompatible
 set hidden
@@ -14,6 +15,7 @@ set t_Co=256
 filetype on
 filetype plugin on
 syntax enable
+set incsearch
 set hlsearch
 
 set nu
