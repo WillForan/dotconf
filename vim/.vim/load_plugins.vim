@@ -130,4 +130,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'vim-test/vim-test'
 nmap <silent> <leader>t :TestNearest<CR>
 
+" 20230502 
+Plug 'wakatime/vim-wakatime'
+
 call plug#end()
