@@ -30,7 +30,7 @@ case $pkg in
   # in own folder but not in config
   weechat|w3m) stowto ~/.$pkg;;
   # all files (likely just one) inside ~  (e.g. .xinitrc, .tmux.conf)
-  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux|vale) stowto ~;;
+  stow|vim|xbindkeys|x11|R|i3|easystroke|lisp|mail|tmux|vale|wakatime) stowto ~;;
   # .desktop files inside XDG directory (20211204 xinit)
   app.desktop) stowto  ~/.local/share/applications/;;
   # inside ~/.config
