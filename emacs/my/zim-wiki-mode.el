@@ -29,6 +29,10 @@
 	(date (format-time-string "%A %B %02d")))
    (insert (string-join (list header-level date header-level) " "))))
 
+(defun my/zim-ws-plum ()
+  "find and run lines like ws::term:rhea:/Volumes/Hera/Projects/7TBrainMech/scripts/mri/MRSI_roi"
+  (interactive)
+       (save-excursion (beginning-of-buffer) (search-forward-regexp "^ws::") (beginning-of-line) (kill-new (buffer-substring-no-properties (point) (progn (end-of-line) (point)))) (call-process-shell-command "plum &")))
 
 
 ; 20200625 - broke?!
@@ -40,7 +44,7 @@
     (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
 
 (use-package dokuwiki-mode
-  :quelpa ((dokuwiki-mode :fetcher github :repo "WillForan/emacs-dokuwiki-mode") :upgrade t)
+  :quelpa ((dokuwiki-mode :fetcher github :repo "WillForan/emacs-dokuwiki-mode") :upgrade nil)
   :ensure t
   :config
    (require 'outline-magic)
