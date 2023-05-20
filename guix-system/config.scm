@@ -15,9 +15,19 @@
 	     (gnu services)
 	     (gnu services desktop) ; %desktop-services
 	     (gnu packages admin)
-	     (gnu services networking))
+	     (gnu services networking)
+             (srfi srfi-1) ; lset<=
+)
 (use-service-modules ssh xorg networking)
 
+;; 20230520 - remove services by name
+(define *desktop-rm* '(network-manager-applet network-manager gdm
+                       avahi mtp modem-manager sane  cups-pk-helper
+                       wpa-supplicant ; redefined
+                       gdm-file-system geoclue ))
+(define (not-excluded s)
+   "check the service kind name against an excluded list (global)"
+   (not (lset<= eq? (list (service-type-name (service-kind s))) *desktop-rm*)))
 
 (operating-system
   ;(locale %default-locale-definitions)
@@ -70,12 +80,14 @@
        (service dhcp-client-service-type (dhcp-client-configuration (interfaces '("wlp2s0"))))
 
        ;; desktop but without gdm (replace w/slim) and known wifi network
-       (modify-services %desktop-services
-			(delete network-manager-service-type)
-			(delete wpa-supplicant-service-type)
-			(delete gdm-service-type)
-			(delete avahi-service-type)
-			)))	
+       ;(modify-services %desktop-services
+       ; 		(delete network-manager-service-type)
+       ; 		(delete gdm-service-type)
+       ; 		(delete avahi-service-type))
+
+       ; service if not exclued otherwise false so filtermap will discard
+       (filter-map (lambda (x) (if (not-excluded x) x #f)) %desktop-services)))	
+
   ;; (services
   ;;  (append (list
   ;;                ;; To configure OpenSSH, pass an 'openssh-configuration'
