@@ -57,16 +57,22 @@ for syspkg in ${SYSPKGS[@]}; do
 
    echo "# $syspkg"
    command -v $testcmd >/dev/null && continue
-   [ -r /etc/arch-release ] && ~/bin/yay -S $syspkg --noconfirm && continue
-
-   if [ -r /etc/debian_version ]; then
+   if [ -r /etc/arch-release ]; then
+	   ~/bin/yay -S $syspkg --noconfirm
+	   continue
+   elif [ -r /etc/debian_version ]; then
       [[ $syspkg =~ easystroke ]] && continue
       [[ $syspkg =~ silver-searcher ]] && syspkg=silversearcher-ag
       sudo apt-get -y install $syspkg
       continue
+   elif command -v guix >/dev/null; then # || grep -q guix /etc/os-release 2>/dev/null; then
+      [[ $syspkg =~ easystroke|autokey-gtk|dynamic-colors ]] && continue
+      [[ $syspkg =~ silver-searcher ]] && syspkg=the-silver-searcher
+      guix install $syspkg
+   else
+      echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
+      exit 1
    fi
-   echo "missing system package '$syspkg'. use the package manager to get it (yay -S $syspkg || apt install $syspkg)"
-   exit 1
 done
 
 # run upbin $PKG for each package
