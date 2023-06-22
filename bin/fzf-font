@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
 
+#
+# fuzzy select available fonts
+# first argument is font size. 18 (DEFAULT_SIZE) if not given
+# use 0 as first arg to not set font size
+
 DEFAULT_SIZE=18
 set_font(){
   # USAGE: set_font DejaVu Sans Mono:pixelsize=14
   [ $# -eq 0 ] && return
   font="$*"
-  [[ "$*" =~ :pixelsize ]] || font="$font:pixelsize=$DEFAULT_SIZE"
+  [[ "$*" =~ :pixelsize || "${DEFAULT_SIZE:0}" -eq 0 ]] || font="$font:pixelsize=$DEFAULT_SIZE"
   #set -x
+  echo "# set font: $font" >&2
   echo -e "\033[?35h\033]50;$font\a\033"
   #set +x 2>/dev/null
 }
 list_fonts(){
-  fc-list|grep -iP 'flexi|M\+|mono|hack|iosevka'  |cut -f2 -d:|sort -u
+  # most monospaced fonts have 'Mono' somewhere in the name
+  # notable exceptions hard-coded in regexp
+  fc-list|grep -iP 'flexi|M\+|mono|hack|iosevka|Pragmata|Exo|spleen'  |cut -f2 -d:|sort -u
 }
 
 # not called. here for reference
