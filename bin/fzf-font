@@ -11,7 +11,7 @@ set_font(){
   #set +x 2>/dev/null
 }
 list_fonts(){
-  fc-list|grep -iP 'flexi|M\+|mono|hack|iosevka'  |cut -f2 -d:|sort -u
+  fc-list|grep -iP 'flexi|scientifica|M\+|mono|hack|iosevka|DEC'  |cut -f2 -d:|sort -u
 }
 
 # not called. here for reference
