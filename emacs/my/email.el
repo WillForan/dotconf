@@ -201,6 +201,7 @@
 
 (defun my/html-email-org-msg ()
   (interactive)
+  ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
   (org-msg-edit-mode)
   (save-excursion
     (beginning-of-buffer)
