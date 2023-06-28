@@ -33,9 +33,11 @@
   (evil-insert-state)
   ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
   ;; (ie. where gmail is blocked)
+
   (setq-local
    ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
    message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
+   user-mail-address "willforan@gmail.com"
    send-mail-function 'sendmail-send-it
    sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
 
