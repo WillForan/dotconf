@@ -45,8 +45,8 @@
     ("C-c a" . #'org-agenda)
     ("C-c l" . #'link-hint-open-link)
   :config
-  ;;; spelling. finally added 20210209
-  (add-hook 'org-mode-hook 'flyspell-mode)
+;;; spelling. finally added 20210209
+  (add-hook 'org-mode-hook 'turn-on-flyspell)
   ;; 20210417 - wrap lines
   (add-hook 'org-mode-hook 'visual-line-mode)
   ;; 20210428 - auto save to this file
