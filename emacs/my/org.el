@@ -45,8 +45,8 @@
     ("C-c a" . #'org-agenda)
     ("C-c l" . #'link-hint-open-link)
   :config
-  ;;; spelling. finally added 20210209
-  (add-hook 'org-mode-hook 'flyspell-mode)
+;;; spelling. finally added 20210209
+  (add-hook 'org-mode-hook 'turn-on-flyspell)
   ;; 20210417 - wrap lines
   (add-hook 'org-mode-hook 'visual-line-mode)
   ;; 20210428 - auto save to this file
@@ -208,3 +208,36 @@
    
 (evil-leader/set-key "c" 'org-clock-hydra/body)
 
+
+;; 20230514 - hugo/go-org functions
+
+(defun my/org-custom-id-from-header (&optional pom)
+  "Create a custom_id property from the header.
+Use header for POM (point of marker; when nil point)."
+  (interactive)
+  (org-with-point-at pom
+    (-when-let* ((id (car (last (org-get-outline-path t))))
+                 (id (string-replace " " "_" id)))
+      (message id)
+      (message pom)
+      (org-entry-put pom "CUSTOM_ID" id)
+      (org-id-add-location id (buffer-file-name (buffer-base-buffer))))))
+
+(defun k/alternate-path-element-wrapper (parser)
+  "Make `org-element-link-parser' try the relative directory and add `.org'.
+PARSER is `org-element-link-parser', passed in by the :around advice.
+Modified from https://kisaragi-hiu.com/links-in-both-hugo-and-org/"
+  (let* ((elem (funcall parser))
+         (path (org-element-property :path elem)))
+    (when (and (equal "file" (org-element-property :type elem))
+               (stringp path)
+               (f-absolute? path)
+               (not (f-exists? path)))
+      (-when-let* ((base (f-relative path "/"))
+                   (newpath (concat base ".org"))
+                   (exists (f-exists? newpath)) ;not used but if false, below not run
+                  )
+        (setq elem (org-element-put-property elem :path newpath))))
+    elem))
+
+(advice-add 'org-element-link-parser :around #'k/alternate-path-element-wrapper)

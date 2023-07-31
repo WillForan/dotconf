@@ -24,7 +24,8 @@ command -v xcape >/dev/null && ! pgrep xcape &&
 # 20211022 - xcape/setxkbmap order seems to matter. setxkbmap last
 # apl chars using right alt + key
 # capslock is control (combined with apl 20211028)
-setxkbmap -layout us,apl -variant ,dyalog -option grp:switch -option "caps:ctrl_modifier"
+setxkbmap -layout us,apl -variant ,dyalog \
+   -option grp:switch -option caps:ctrl_modifier -option compose:menu
 # could undo
 #setxkbmap -layout us -option ctrl:nocaps
 
@@ -95,6 +96,9 @@ case $HOSTNAME in
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
       #cbatticon &
       nitrogen --restore &
+      # 20230505: '/opt/paloaltonetworks/globalprotect/PanGPA start' is running
+      #  parent is bash running .xinitrc. where in here!? 'systemctl disable gpd'
+      #  maybe from /etc/profile.d/PanMSInit.sh
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
@@ -126,6 +130,8 @@ xbindkeys
 command -v deadd-notification-center && $_ &
 # 20221228 - time tracking. activitymonitor not mature enough? using proprietary 
 command -v rescuetime && $_ &
+# 20230329 - local only time tracking
+command -v  aw-qt && $_ &
 # 20230121 - screenshots. if daemon not running, copy/paste takes forever
 command -v flameshot && $_ &
 

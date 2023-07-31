@@ -117,8 +117,10 @@ setup_freesurfer(){
 
 test -d "$HOME/.cargo/bin" && export PATH="$_:$PATH"
 test -e "$HOME/.cargo/env" && . "$_" || :
-test -r  /opt/ni_tools/bash-wakatime/bash-wakatime.sh && . $_
+
+# quantify time usage/tracking
+test -r /opt/ni_tools/bash-wakatime/bash-wakatime.sh && . $_
+test -r /usr/share/bash-wakatime/bash-wakatime.sh && source "$_"
+
 test -r "$HOME/.config/tea/autocomplete.sh" &&
    PROG=tea source "$_" || :
-
-

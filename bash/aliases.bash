@@ -3,7 +3,7 @@ alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
 alias m=mosh
 alias ls='ls --color=auto'
-alias g='egrep --color=auto'
+alias g='grep -P --color=auto'
 alias G='git'
 alias dt='sudo dmesg|tail'
 alias v='vim'

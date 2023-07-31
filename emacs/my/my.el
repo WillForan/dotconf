@@ -92,10 +92,6 @@
      (if (string-match-p "*" next-name) 
        (kill-buffer next-buffer))))
 
-(defun my/frame-settings (_)
-  "load settings specific to frame display"
-  (my/use 'frame-settings))
-
 (defun my/center-text ()
   "add margins to current window to center at 80 characters"
     (interactive)

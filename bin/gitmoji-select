@@ -22,13 +22,19 @@ done
 ## do we need to re cache
 CACHE=$HOME/.local/share/gitmoji
 get() {
+   local tmp
+   tmp=$(mktemp "${TMPDIR:-/tmp}/gitmoji-XXX")
    curl "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/packages/gitmojis/src/gitmojis.json" |
-   jq -r '.gitmojis[]|[.emoji, .name, .description]|@tsv' > $CACHE
+     jq -r '.gitmojis[]|[.emoji, .name, .description]|@tsv' > "$tmp"
+   [ -s "$tmp" ] && mv "$tmp" "$CACHE"
+   [ -r "$tmp" ] && rm "$tmp"
+   return 0
 }
 sec() { date +%s "$@"; }
-[ ! -r $CACHE ] && get
+[ ! -s $CACHE ] && get
 cachedate="$(stat -c '%y' $CACHE)"
 # more than a week old (604800 seconds)
-echo $(sec) $(sec -d "$cachedate") "- 60 60 * 24 * 7 * / p" | dc | xargs test 1 -le && get
+weeks_old=10
+echo $(sec) $(sec -d "$cachedate") "- 60 60 * 24 * 7 * / p" | dc | xargs test $weeks_old -le && get
 
 cat $CACHE | $select | cut -f1 | xargs $cmd

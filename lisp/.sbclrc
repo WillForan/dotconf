@@ -3,13 +3,19 @@
 ;; 20200521 - archlinux
 ;  20230306 - debian + mapcar
 #-quicklisp
-(mapcar (lambda (f) (when (probe-file f) (load f))) '(#P"/usr/lib/quicklisp/setup" #P"/home/foranw/quicklisp/setup.lisp"))
+(mapcar (lambda (f) (when (probe-file f) (load f))) '(#P"/usr/lib/quicklisp/setup.lisp" #P"/home/foranw/quicklisp/setup.lisp"))
 
 
 ; local quicklisp - customize as desird
+; default is ~/quicklisp/local-projects/
 (defvar *my-quicklisp-dir* (merge-pathnames #P"src/quicklisp/" (user-homedir-pathname))
        "local lisp libaries root directory")
 (pushnew  *my-quicklisp-dir* ql:*local-project-directories*)
+
+; 20230527
+;(ql-dist:install-dist "http://dist.ultralisp.org/" :prompt nil)
+; (ql:update-dist "ultralisp")
+; (ql:quickload "unix-in-lisp")
 
 ; get code not in quicklisp/ultralisp. run by hand -- not run on startup
 #|
