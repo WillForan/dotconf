@@ -42,6 +42,7 @@ case $HOSTNAME in
       nitrogen --restore &
       # work computer probably needs to lock itself
       xautolock -time 10 -locker "i3lock-fancy -p -g" -detectsleep &
+      $HOME/src/utils/activitywatch/aw-qt &
       ;;
    kt)
       xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
