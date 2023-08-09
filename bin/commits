@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
-#
-# list commits made today using the github api
-#
 
-# USAGE:
-#  commits [FROMTIME [USER]]
-#
-# FROMTIME - days from current seconds. floored to day
-#            default to 0 -- just whats happened today
-# USERS     - github username like 'users/XXX' and/or 'orgs/YYYY'
 
 # defaults
-FROMTIME=0
+[[ "${1:-}" =~ ^-h|^--help ]] && cat <<HERE && exit
+list commits made today using the github api
+
+USAGE:
+  $0 [days [user1 user2]]
+
+OPTIONS:
+  DAYS   - days from current seconds. floored to day
+           default to 0 -- just whats happened today
+  USERS  - github username like 'users/XXX' and/or 'orgs/YYYY'
+
+HERE
+
+FROMTIME=${1:-0}
 USERS=(users/WillForan orgs/LabNeuroCogDevel)
 get_commits(){
   curl -sL https://api.github.com/$1/events | 
@@ -27,7 +31,6 @@ get_commits(){
 }
 
 # args
-[ $# -ge 1 ] && FROMTIME="$1"
 [ $# -ge 2 ] && USERS=("$@")
 
 # convert to seconds
