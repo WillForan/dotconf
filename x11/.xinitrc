@@ -98,6 +98,7 @@ case $HOSTNAME in
       # 20230505: '/opt/paloaltonetworks/globalprotect/PanGPA start' is running
       #  parent is bash running .xinitrc. where in here!? 'systemctl disable gpd'
       #  maybe from /etc/profile.d/PanMSInit.sh
+      cbatticon &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
