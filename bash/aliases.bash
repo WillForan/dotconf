@@ -50,12 +50,6 @@ alias calq='gcalcli --calendar "Will Foran" quick'
 
 # system
 alias zzz='sudo systemctl suspend'
-headphones(){ 
-   local hmac="FC:58:FA:27:45:0A"
-   local a=$1;
-   case $a in d*) a=disconnect;; c*|*) a=connect; bluetoothctl power on;; esac;
-   bluetoothctl $a $hmac;
-}
 
 # functions
 n() { ls -tlc $@|head;}
