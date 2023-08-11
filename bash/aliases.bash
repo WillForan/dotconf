@@ -1,16 +1,16 @@
 # generic 
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
-alias m=mosh
+alias m="mosh"
 alias ls='ls --color=auto'
 alias g='egrep --color=auto'
 alias G='git'
 alias dt='sudo dmesg|tail'
 alias v='vim'
-alias t='tmux -2'
+alias t='tmux -u -2'
 alias wh='which'
-alias bn=basename
-alias dn=dirname
+alias bn="basename"
+alias dn="dirname"
 alias x='xargs -r'
 alias px='env_parallel -X -r'
 alias feh='feh --keep-zoom-vp -. -Z --zoom full'
