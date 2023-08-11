@@ -146,3 +146,21 @@
 (use-package password-cache :ensure t
   :config
   (setq password-cache-expiry nil))
+
+;; news usenet
+(setq gnus-select-method '(nntp "news.eternal-september.org"))
+;; (add-to-list 'gnus-secondary-select-methods '(nntp "localhost"))
+;; (add-to-list 'gnus-secondary-select-methods '(nntp "news.gnus.org"))
+;; (add-to-list 'gnus-secondary-select-methods '(nnml ""))
+;; https://www.emacswiki.org/emacs/GnusFormatting
+(setq
+     gnus-summary-line-format "%U%R%z %(%-15,15f %B%s%)\n"
+     gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
+     gnus-summary-thread-gathering-function 'gnus-gather-threads-by-references
+     gnus-thread-sort-functions '(gnus-thread-sort-by-date)
+     gnus-sum-thread-tree-false-root ""
+     gnus-sum-thread-tree-indent " "
+     gnus-sum-thread-tree-leaf-with-other "├► "
+     gnus-sum-thread-tree-root ""
+     gnus-sum-thread-tree-single-leaf "╰► "
+     gnus-sum-thread-tree-vertical "│")
