@@ -24,6 +24,8 @@
   (save-excursion (beginning-of-buffer)
                   (if (re-search-forward "^From:.*tickle-me" nil t)
                       (replace-match "From: will.foran+from.emacs@gmail.com"))
+                  (if (re-search-forward "^From:.*foranw@u.*" nil t)
+                      (replace-match "From: will.foran+from.emacs@gmail.com"))
                   (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t)
                       (replace-match "From: will.foran+from.emacs@gmail.com")))
   ;; start a the To: line

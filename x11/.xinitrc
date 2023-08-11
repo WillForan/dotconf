@@ -43,6 +43,7 @@ case $HOSTNAME in
       nitrogen --restore &
       # work computer probably needs to lock itself
       xautolock -time 10 -locker "i3lock-fancy -p -g" -detectsleep &
+      $HOME/src/utils/activitywatch/aw-qt &
       ;;
    kt)
       xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
@@ -98,6 +99,7 @@ case $HOSTNAME in
       # 20230505: '/opt/paloaltonetworks/globalprotect/PanGPA start' is running
       #  parent is bash running .xinitrc. where in here!? 'systemctl disable gpd'
       #  maybe from /etc/profile.d/PanMSInit.sh
+      cbatticon &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
