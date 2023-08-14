@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+local hmac="FC:58:FA:27:45:0A"
+local a="$1"
+pgrep -af bluetoothd || systemctl restart bluetooth
+case "$a" in
+    d*) a=disconnect;;
+  c*|*)
+     a=connect;
+     bluetoothctl power on;;
+esac
+
+bluetoothctl $a $hmac;
