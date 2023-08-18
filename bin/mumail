@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+mbsync -a
+
+emacsclient -e '(mu4e-update-index)'||
+   mu index
