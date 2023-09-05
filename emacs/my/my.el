@@ -119,6 +119,7 @@
        lisp lint ;; these take a long time
        org
        roam annote
+       email
        ;; last -- if not applied we know something went wrong
        frame-settings theme)))
 
