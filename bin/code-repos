@@ -2,17 +2,23 @@
 REPO_CACHE=${TMPDIR:-/tmp}/code_repo.tsv
 [[ "$*" =~ "-noupdate" ]] && NOUPDATE=1 || NOUPDATE=
 
+MYGHREPOS=(WillForan LabNeuroCogDevel NPACore)
 gh_list(){
   gh repo list -L 500 --no-archived "$@" --json name,url,pushedAt |jq -r '.[]|[.url, .pushedAt]|@tsv'
 }
+export -f gh_list
 gt_list(){
   tea repos list --lm 500 -f url,updated -o tsv |sed -n 's/"//g;/^https/p'
 }
 repo_update_cache(){
   [ -n "$NOUPDATE" ] && return
   x=$REPO_CACHE.tmp
-  (gh_list WillForan; gh_list LabNeuroCogDevel; gt_list) | sort -t$'\t' -k2r > $x
-  [ -s "$x" ] && mv $x $REPO_CACHE || echo "WARNING! empty repo query. network down?" >&2
+  { parallel gh_list ::: "${MYGHREPOS[@]}";
+   gt_list; } |
+   sort -t$'\t' -k2r > "$x"
+  [ -s "$x" ] &&
+     mv "$x" "$REPO_CACHE" ||
+     echo "WARNING! empty repo query. network down?" >&2
 }
 
 needs_update(){
