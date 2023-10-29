@@ -3,6 +3,9 @@ noremap <SPACE> <Nop>
 let mapleader=" "
 source ~/.vim/load_plugins.vim
 
+" startup preformance measure:
+" rm -rf /tmp/vim-time.log; vim --startuptime /tmp/vim-time.log -s <(echo :q); sed 's/ \+/\t/g' /tmp/vim-time.log|sort -k2,2nr|head;  hyperfine 'vim --clean -s <(echo :q)' 'vim -s <(echo :q)'
+
 " ---- vanilla vim config options ----
 
 " mouse support
