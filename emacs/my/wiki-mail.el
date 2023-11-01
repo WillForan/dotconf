@@ -11,7 +11,7 @@
 (define-key zim-wiki-mode-map (kbd "C-c +") #'my/wiki-search-mail)
 
 (defun my/notmuch-mode-tag ()
-  (case major-mode
+  (cl-case major-mode
     ('notmuch-search-mode #'notmuch-search-tag)
     ('notmuch-show-mode #'notmuch-show-tag)
     ('notmuch-tree-mode #'notmuch-tree-tag)))
