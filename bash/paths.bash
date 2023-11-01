@@ -12,6 +12,10 @@ test -d $HOME/.gem/ruby &&
 # 20200531 xiki from git (no gem install)
 test -d $HOME/src/utils/xiki/bin && PATH="$PATH:$_"
 
+# 20221107 rust cargo
+test -d  "$HOME/.cargo/bin" &&
+  PATH="$PATH:$_"
+
 # pyenv setup if we have pyenv
 command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
@@ -33,6 +37,7 @@ for d in \
  /opt/ni_tools/c3d/bin \
  /opt/ANTs/bin\
  /opt/ni_tools/mrpeek\
+ /opt/ni_tools/lncdtools\
  $HOME/src/cIQ/bin            `# garmin connect IQ unzipped SDK` \
  /usr/share/perl6/vendor/bin/ `# raku/perl6 for zef`\
  ; do
