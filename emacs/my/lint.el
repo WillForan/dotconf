@@ -3,6 +3,9 @@
 ;; 20220811 - enable flycheck for all prog
 ;; 20220910 - tweak syntax check: add delay
 ;; 20221210 - (earlier) add flyspell-correct w/ ivy, bind correct-next
+;; 20231011 - ws-butler
+(use-package ws-butler :ensure t
+  :config (ws-butler-global-mode))
 
 (use-package flycheck :ensure t
   :init

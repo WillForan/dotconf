@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# 20230830 - notify of any events within the next 15 minutes
+# ideally used by cron every 5 min
+# inspired by https://gist.github.com/jcaesar/760562521077315c8e3892253d16ed1e
+#   which runs it's own while true loop, check bins exist, and 'cleans' title and desc
+notify_if15() {
+  local in etime dd
+  in="${1:?event datetime}"; shift
+  etime=$(date +%s -d "$in")
+  dd=$(( "$etime" - $(date +%s) ))
+
+  # if DEBUG is set, echo what we're looking at
+  [ -n "${DEBUG:-}" ] && echo "$in=$etime,$dd $*"
+
+  if [ $dd -gt -1 ] && [ $dd -le $((60*15)) ]; then
+    pri=normal
+    [ $dd -le $((60*5)) ] && pri=critical
+    notify-send -u $pri "$in$*"
+  fi
+
+  return 0
+}
+
+# does cron know what display to use for notify-send?
+# Xorg process has eg ':0' in the full name args
+find_display(){
+ [ -z "$DISPLAY" ] &&
+   export DISPLAY="$(pgrep  -af Xorg |grep -Po ':\d+'|sed 1d)"
+
+ return 0
+}
+
+# get a list of events. separate fields with \3 and records with null (\0)
+# pass onto notify_if15 using parallel
+notify_recent_events(){
+   khal list -f $'{start}\3{title} {description}\0' -df '' today|
+   parallel -0 --colsep $'\3' notify_if15 "{1}" "{2}"
+}
+
+test_notify(){
+ notify_if15 "$(date -d +5min)" "hello"
+}
+
+if [[ "$(caller)" == "0 "* ]]; then
+   export -f notify_if15
+   find_display
+   notify_recent_events
+fi

@@ -89,6 +89,7 @@
     (evil-leader/set-key "p" #'helm-projectile)
     (evil-leader/set-key "G" #'helm-projectile-find-file-in-known-projects)
     (evil-leader/set-key "n" #'neotree-find)
+    (evil-leader/set-key "N" #'my/notmuch)
 
     ;; f defined in folding.el
     ;; z for zim set in zim-wiki.el

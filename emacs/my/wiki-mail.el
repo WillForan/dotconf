@@ -36,5 +36,22 @@
 (define-key notmuch-tree-mode-map (kbd "C-c +") #'my/notmuch-wiki-tag)
 (define-key notmuch-show-mode-map (kbd "C-c +") #'my/notmuch-wiki-tag)
 
-;; TODO: get tags, split on ',', go to wiki{}
-(defun my/notmuch-to-wiki () (interactive))
+
+;; TODO: tag extraction probably useful on it's own. can do the ^: filter with elisp
+(defun my/notmuch-get-first-wiki-tag (id)
+  "Get the first zim wiki tag (':' at start) for an `ID'."
+  (let ((jq-cmd "jq -r '.[]|.[]|.[]|try(.tags[])|select(test(\"^:\"))'")
+        (nm-cmd (concat notmuch-command " show --format json " id)))
+    (car (split-string (shell-command-to-string (concat  nm-cmd " | " jq-cmd)) "\n"))))
+
+(defun my/notmuch-to-wiki ()
+  "Go to wiki page of first wiki-like tag in message"
+  (interactive)
+  (let
+      ((wikiroot "/home/foranw/notes/WorkWiki/")
+       (wikipath (my/notmuch-get-first-wiki-tag (notmuch-show-get-message-id))))
+    (if (not (string= wikipath ""))
+        (find-file (zim-wiki-wiki2path (concat "+" wikipath) wikiroot)))))
+
+
+;;; wiki-mail.el ends here

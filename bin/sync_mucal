@@ -1,0 +1,7 @@
+# online?
+ip addr |grep -v 127.0.0.1 | grep -q inet[^6] || exit 0
+
+# reverse proxy?
+pgrep ssh -af|grep -q 1080:localhost:1080 || exit 0
+vdirsyncer sync && khal calendar  >/dev/null
+

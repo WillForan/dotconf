@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-emacsclient -c --eval "(browse-url-mail \"$@\")"  
+emacsclient -c --eval "(progn (my/simple-mail) (browse-url-mail \"$@\"))"
