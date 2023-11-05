@@ -8,7 +8,7 @@
 export LANG="en_US.UTF-8"
 
 # where is .bashrc actually stored?  probably $HOME/config/bash
-_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
+_BASHCFGDIR=$(cd "$(dirname "$(readlink -f ~/.bashrc)")"; pwd)
 
 test -r /etc/bashrc && . $_
 
@@ -138,6 +138,6 @@ else
     export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
     test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
 
-    # last to avoid DEBUG TRAP issues with fzf or fasd??
+    # last to avoid DEBUG TRAP performance penelty for every command run
     . "$_BASHCFGDIR/PS1.bash"
 fi
