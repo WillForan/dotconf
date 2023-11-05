@@ -97,6 +97,11 @@ command -v env_parallel >/dev/null && source $(which env_parallel.bash)
 export PATH=$PATH:/opt/ni_tools/afni
 test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
 
+# 20231026  - julia doesn't want to be packaged. use their own dl on reese
+test -d /opt/ni_tools/julia-1.9.3/bin &&
+   export PATH="/opt/ni_tools/julia-1.9.3/bin:$PATH"
+
+
 # set up tab completion for AFNI programs
 if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
 then
