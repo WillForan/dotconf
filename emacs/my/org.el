@@ -109,6 +109,8 @@
         (tmux . t)
 	;(sh . t) ; old - removed from org mode
 	;(bash . t) ; doesn't exist
+	; 20230519
+	(scheme . t)
         ))
   ;; 20220911 org-protocol bookmarklet and desktop files
   ;; 20220922 require so it's actually loaded
