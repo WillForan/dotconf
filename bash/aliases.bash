@@ -1,9 +1,9 @@
-# generic 
+# generic
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
 alias m=mosh
 alias ls='ls --color=auto'
-alias g='egrep --color=auto'
+alias g='grep -P --color=auto'
 alias G='git'
 alias dt='sudo dmesg|tail'
 alias v='vim'
@@ -36,9 +36,12 @@ alias sbcl="rlwrap sbcl"
 if command -v yay >/dev/null; then
   alias i='yay --noconfirm -S'
   alias pq='yay --color auto -Ss'
-elif command -v apt >/dev/null; then 
+elif command -v apt >/dev/null; then
   alias i='sudo apt install'
   alias pq='apt search'
+elif command -v guix >/dev/null; then
+  alias i='guix install'
+  alias pq='guix search'
 fi
 
 # git - status short with no untracked. gs is ghostscript
@@ -50,7 +53,7 @@ alias calq='gcalcli --calendar "Will Foran" quick'
 
 # system
 alias zzz='sudo systemctl suspend'
-headphones(){ 
+headphones(){
    local hmac="FC:58:FA:27:45:0A"
    local a=$1;
    case $a in d*) a=disconnect;; c*|*) a=connect; bluetoothctl power on;; esac;
