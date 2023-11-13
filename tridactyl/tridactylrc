@@ -1,0 +1,6 @@
+" prev t and T do the same thing
+bind T tabdetach
+bind ,T tabpush
+
+" c-e same as j; but c-e used to toggle sidebarry
+unbind --mode=normal <C-e>

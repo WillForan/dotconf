@@ -41,3 +41,13 @@
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "http://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+
+
+;; 20230906 - editing github markdown as a wiki
+(use-package gfm-wiki
+  :quelpa ((gfm-wiki :fetcher github :repo "NPACore/gfm-wiki") :upgrade f)
+  :bind (:map markdown-mode-map
+              ("C-c M-L" . #'gfm-wiki-insert-link)
+              ("C-c M-l" . #'gfm-wiki-insert-link-header)
+              ("C-c M-i" . #'gfm-wiki-insert-issue)
+              ("C-c M-d" . #'gfm-wiki-deft)))

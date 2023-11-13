@@ -26,8 +26,15 @@ if [ "$TERM" == "linux" ]; then
  green="\[[1;32m\]"
 fi
 _hostname=$(hostname|cut -d. -f1 )
+
+prev_cmd_in_title(){
+   echo -ne "\033]2;$_hostinfo:$PWD "
+   history 1 | sed -z "s/^ *[0-9]* *//g;s/\n//g"
+   echo -ne "\007";
+}
+
 case $TERM in
-  *xterm*)
+  *xterm*|alacritty)
      _hostinfo="$USER@$_hostname"
      _x11title="\[\033]0;$_hostinfo:\w\007\]"
      # 20211201 - add the running program to the title
@@ -38,9 +45,7 @@ case $TERM in
      #  echo $(echo hi) && echo $_ # hi\n     \003.... hi
      #  similiar w/ xdotool set_window --name "test" $WINDOWID;
      #  instead use noop ':' with previous $_ to reinstantiate. 
-     trap '__prevarg="$_";
-           echo -ne "\033]2;$_hostinfo:$PWD $(history 1 | sed "s/^ *[0-9]* *//g")\007";
-           : "$__prevarg"' DEBUG
+     trap '__prevarg="$_"; prev_cmd_in_title; : "$__prevarg"' DEBUG
      ;;
   *) _x11title="";;
 esac

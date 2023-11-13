@@ -24,6 +24,8 @@
   (save-excursion (beginning-of-buffer)
                   (if (re-search-forward "^From:.*tickle-me" nil t)
                       (replace-match "From: will.foran+from.emacs@gmail.com"))
+                  (if (re-search-forward "^From:.*foranw@u.*" nil t)
+                      (replace-match "From: will.foran+from.emacs@gmail.com"))
                   (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t)
                       (replace-match "From: will.foran+from.emacs@gmail.com")))
   ;; start a the To: line
@@ -33,9 +35,11 @@
   (evil-insert-state)
   ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
   ;; (ie. where gmail is blocked)
+
   (setq-local
    ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
    message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
+   user-mail-address "willforan@gmail.com"
    send-mail-function 'sendmail-send-it
    sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
 
@@ -201,6 +205,7 @@
 
 (defun my/html-email-org-msg ()
   (interactive)
+  ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
   (org-msg-edit-mode)
   (save-excursion
     (beginning-of-buffer)

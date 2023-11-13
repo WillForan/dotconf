@@ -8,7 +8,7 @@
 export LANG="en_US.UTF-8"
 
 # where is .bashrc actually stored?  probably $HOME/config/bash
-_BASHCFGDIR=$(cd $(dirname $(readlink -f ~/.bashrc)); pwd)
+_BASHCFGDIR=$(cd "$(dirname "$(readlink -f ~/.bashrc)")"; pwd)
 
 test -r /etc/bashrc && . $_
 
@@ -30,6 +30,82 @@ test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
 [[ $- != *i* ]] && export PS1="$ " && return
 
 
+
+# autojump aliases: z a sd sf d f
+# N.B. 's' alias overwritten to 'ssh' later
+# 20231028 - cache fasd. it's half the laod time of interactive bash!
+command -v fasd >& /dev/null && {
+   FASD_SRC="${XDG_CACHE_DIR:-$HOME/.cache}/fasd.$(basename "$SHELL")"
+   # bash specific. 'fasd --init auto' runs another interal eval
+   test -r "$FASD_SRC" || fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install > "$FASD_SRC"
+   source "$FASD_SRC"
+}
+
+# get aliases after fasd (rewrite s to ssh insead of fasd)
+. $_BASHCFGDIR/aliases.bash
+
+# . $_BASHCFGDIR/xsh
+
+## internet search via surfraw
+# also see alias for enabling sixel imagse and line number
+export BROWSER=w3m
+
+## bash settings
+HISTSIZE=10000
+shopt -s histappend
+shopt -s cmdhist    # multi-line command written as one line in history file
+
+# GNU parallel
+command -v env_parallel >/dev/null && source $(which env_parallel.bash)
+
+# auto-inserted by @update.afni.binaries :
+export PATH=$PATH:/opt/ni_tools/afni
+test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
+
+# 20231026  - julia doesn't want to be packaged. use their own dl on reese
+test -d /opt/ni_tools/julia-1.9.3/bin &&
+   export PATH="/opt/ni_tools/julia-1.9.3/bin:$PATH"
+
+
+# set up tab completion for AFNI programs
+if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
+then
+   . $HOME/.afni/help/all_progs.COMP.bash
+fi
+export AFNI_FONTSIZE=MINUS
+
+export XDG_RUNTIME_DIR='/run/user/1000'
+
+# curl -L https://install.perlbrew.pl | bash
+test -r $HOME/perl5/perlbrew/etc/bashrc && . $_
+
+# freesurfer setup
+setup_freesurfer(){
+ export FREESURFER_HOME=/opt/ni_tools/freesurfer
+ source $FREESURFER_HOME/SetUpFreeSurfer.sh
+}
+
+test -d "$HOME/.cargo/bin" && export PATH="$_:$PATH"
+test -e "$HOME/.cargo/env" && . "$_" || :
+
+# quantify time usage/tracking
+test -r /opt/ni_tools/bash-wakatime/bash-wakatime.sh && . $_
+test -r /usr/share/bash-wakatime/bash-wakatime.sh && source "$_"
+
+test -r "$HOME/.config/tea/autocomplete.sh" &&
+   PROG=tea source "$_" || :
+
+test -r /usr/share/bash-completion/completions/git-bug && source "$_"
+
+# Automatically added by the Guix install script.
+if [ -n "$GUIX_ENVIRONMENT" ]; then
+    if [[ $PS1 =~ (.*)"\\$" ]]; then
+        PS1="${BASH_REMATCH[1]} [env]\\\$ "
+    fi
+fi
+
+### term setup
+# 20231028 - moved to bottom b/c PS1 xterm prompt trap runs on all commands!
 # kitty terminal
 #command -v kitty >/dev/null &&
 #   source <(kitty + complete setup bash)
@@ -70,57 +146,10 @@ else
 
     [ -n "$DISPLAY" ] && xset b off # no system bell if running X
 
-    # last to avoid DEBUG TRAP issues with fzf or fasd??
-    . $_BASHCFGDIR/PS1.bash
    
     export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
-    test -r $HOME/src/utils/bash-autopairs/autopairs.sh && source $_
+    test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
+
+    # last to avoid DEBUG TRAP performance penelty for every command run
+    . "$_BASHCFGDIR/PS1.bash"
 fi
-
-# autojump aliases: z a sd sf d f
-# N.B. 's' alias overwritten to 'ssh' later
-eval "$(fasd --init auto)"
-
-# get aliases after fasd (rewrite s to ssh insead of fasd)
-. $_BASHCFGDIR/aliases.bash
-
-# . $_BASHCFGDIR/xsh
-
-## internet search via surfraw
-# also see alias for enabling sixel imagse and line number
-export BROWSER=w3m
-
-## bash settings
-HISTSIZE=10000
-shopt -s histappend
-shopt -s cmdhist    # multi-line command written as one line in history file
-
-# GNU parallel
-command -v env_parallel >/dev/null && source $(which env_parallel.bash)
-
-# auto-inserted by @update.afni.binaries :
-export PATH=$PATH:/opt/ni_tools/afni
-test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
-
-# set up tab completion for AFNI programs
-if [ -f $HOME/.afni/help/all_progs.COMP.bash ]
-then
-   . $HOME/.afni/help/all_progs.COMP.bash
-fi
-export AFNI_FONTSIZE=MINUS
-
-export XDG_RUNTIME_DIR='/run/user/1000'
-
-# curl -L https://install.perlbrew.pl | bash
-test -r $HOME/perl5/perlbrew/etc/bashrc && . $_
-
-# freesurfer setup
-setup_freesurfer(){
- export FREESURFER_HOME=/opt/ni_tools/freesurfer
- source $FREESURFER_HOME/SetUpFreeSurfer.sh
-}
-
-test -d "$HOME/.cargo/bin" && export PATH="$_:$PATH"
-test -e "$HOME/.cargo/env" && . "$_" || :
-test -r "$HOME/.config/tea/autocomplete.sh" &&
-   PROG=tea source "$_" || :

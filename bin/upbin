@@ -34,7 +34,8 @@ case $pkg in
   # .desktop files inside XDG directory (20211204 xinit)
   app.desktop) stowto  ~/.local/share/applications/;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv) stowto ~/.config/$pkg;;
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv|tridactyl)
+      stowto ~/.config/$pkg;;
   # picom.config and greenclip.toml lives inside .config instead of it's own directory
   greenclip|picom) stowto ~/.config/;;
   # where dynamic-colors-git archlinux package will look

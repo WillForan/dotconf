@@ -1,14 +1,24 @@
-alias v=vim
-alias g=grep
-alias l="ls --color"
-alias s=ssh
-alias e="emacs -a'' -n"
-alias t='tmux -2'
-alias wh='which'
-n() { ls $@ -tcl|sed 10q; }
-alias m=mosh
-alias s=ssh
+eval "$(fasd --init auto)"
+source ~/dotconf/bash/aliases.bash
+alias l="lsd --blocks date,name -F --icon never -tr"
+alias se="ssh -t s2 emacsclient -tn"
 export PATH="$PATH:$HOME/.termux/tasker"
 alias i="pkg install"
+alias pq="pkg search"
 
 export PATH="$PATH:$HOME/bin"
+source "${EXTERNAL_STORAGE}/termuxlauncher/.apps-launcher"
+L() {
+  launch -l| fzf | while read app; do launch $app; done
+}
+F(){  am start --user 0 -a android.intent.action.VIEW -n org.mozilla.firefox/.App -d "$1" >/dev/null
+}
+alias wordle="F https://www.nytimes.com/games/wordle/index.html"
+# 20221127 - regex and freq counting for wordle
+g-and(){ for l in "$@"; do echo "|grep '$l'"; done|sed 's/^|//';  } 
+wdl(){ 
+  letters="$(echo "$1" | grep -o [a-z]| paste -sd'-'|sed 's/-/ | grep /g')"
+   [ -n "$letters" ] && letters="grep $letters" || letters=cat
+   g "^$1$"  $HOME/words | g -v "'" | g -v "[${2-:}]" | eval "$letters"
+}
+letters(){ sed 's/./&\n/g'|sort|uniq -c| sort -nr; }

@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+#
+# get the current tab's url in firefox
+# https://askubuntu.com/questions/887234/how-to-get-the-url-from-a-firefox-tab-to-the-terminal-using-command-line/1405940#1405940
+#
+# maybe can use with keepmenu to get user/password
+#
+# 20230513WF - init
+#
+
+# shellcheck disable=SC2012 # use ls to sort by date. easier than find
+sesdir="$(ls -dtc .mozilla/firefox/*/|sed 1q)"
+db="$sesdir/sessionstore-backups/recovery.jsonlz4"
+
+# helpful hints about what went wrong
+[ ! -r "$db" ] && echo "no firefox db file: $db" >&2 && exit 2
+! command -v lz4jsoncat >/dev/null &&
+   echo "missing program. install 'lz4jsoncat'" >&2 && exit 83
+
+lz4jsoncat "$db" |
+  jq -r ".windows[0].tabs | sort_by(.lastAccessed)[-1] | .entries[.index-1] | .url"

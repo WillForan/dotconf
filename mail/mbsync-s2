@@ -1,0 +1,118 @@
+# last reviewed: 2022-03-21
+#  - gmail uses app password
+#  - confirm expunge is removing remote (want this to be backup)
+#  - comment upmc (davmail is on reese, need ssh -L. still update passcmd to use 'pass')
+# 
+# REMOTE
+#  gmail. prevs also davmail office365
+#
+# PASSWORDS
+#  pass
+######################################
+# see config below for "Near". namely 'Near :gmailremote:'
+############# GMAIL
+## HOST
+IMAPAccount gmailimap
+Host imap.gmail.com
+User willforan
+PassCmd "pass gmail/apppass"
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+## Stores
+IMAPStore gmailremote
+Account gmailimap
+
+MaildirStore gmaillocal
+Path ~/Maildir/gmail/
+Inbox ~/Maildir/gmail/INBOX
+Subfolders Verbatim
+# 20230225 TODO: add rsync to /mnt/storage/gmail
+# Defaulting to home dir for SSD storage
+#Inbox ~/Mailbox 
+# WAS
+#Path /mnt/storage/gmail/
+#Inbox /mnt/storage/gmail/Inbox
+
+
+## what `mbsync gmail` looks like
+# NB. 20230225 - near and far are swapped!
+# why?!
+Channel gmail
+CopyArrivalDate yes
+Far :gmailremote:
+Near :gmaillocal:
+#Expunge Far
+Create Both
+# 20230225 - trying to get all mail.
+# swapped near and far, far=remote
+Patterns * !\[Gmail\]* "\[Gmail\]/Sent Mail" "\[Gmail\]/All Mail"
+
+
+####### swrdtrading.com
+# Host
+IMAPAccount swrdtradingimap
+Host prod.swrdtrading.com
+User will
+PassCmd "pass swrd/email"
+SSLType IMAPS
+
+# Stores
+IMAPStore swrdtradingremote
+Account swrdtradingimap
+
+MaildirStore swrdtradinglocal
+Inbox /mnt/storage/swrd/lin
+
+# Usage
+Channel swrdtrading
+Expunge None
+Far :swrdtradingremote:
+Near  :swrdtradinglocal:
+
+####### swrd.trade on private email
+# Host
+IMAPAccount swrdimap
+Host mail.privateemail.com
+User will@swrd.trade
+PassCmd "pass swrd/privateemail"
+SSLType IMAPS
+
+# Stores
+IMAPStore swrdremote
+Account swrdimap
+
+MaildirStore swrdlocal
+Inbox /mnt/storage/swrd/pe
+
+# Usage
+Channel swrd
+Expunge None
+Far :swrdremote:
+Near  :swrdlocal:
+
+
+
+# ############# WORK
+# ## HOST
+# IMAPAccount upmc365
+# Host localhost
+# Port 1143
+# User foranw@upmc.edu
+# PassCmd "pass work/upmc"
+# SSLType None
+# AuthMechs LOGIN
+# 
+# ## remote
+# IMAPStore upmcstore
+# Account upmc365
+# 
+# ## local
+# MaildirStore upmclocal
+# Path /mnt/storage/upmc_mail
+# 
+# ## what `mbsync upmc` looks like
+# Channel upmc
+# Near :upmcstore:
+# Far :upmclocal:
+# 

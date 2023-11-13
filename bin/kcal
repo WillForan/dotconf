@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+khal  calendar \
+   -f '{start-end-time-style} {calendar-color}{title}{repeat-symbol}{reset} ({calendar})' \
+   today "$(date -d "2 week" +%F)" \
+   "$@"
+

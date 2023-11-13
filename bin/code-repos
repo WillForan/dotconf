@@ -1,17 +1,34 @@
 #!/usr/bin/env bash
-REPO_CACHE=/tmp/code_repo.tsv
+REPO_CACHE=${TMPDIR:-/tmp}/code_repo.tsv
+[[ "$*" =~ "-noupdate" ]] && NOUPDATE=1 || NOUPDATE=
 
+MYGHREPOS=(WillForan LabNeuroCogDevel NPACore)
 gh_list(){
   gh repo list -L 500 --no-archived "$@" --json name,url,pushedAt |jq -r '.[]|[.url, .pushedAt]|@tsv'
 }
+export -f gh_list
 gt_list(){
   tea repos list --lm 500 -f url,updated -o tsv |sed -n 's/"//g;/^https/p'
 }
 repo_update_cache(){
-  (gh_list WillForan; gh_list LabNeuroCogDevel; gt_list) | sort -t$'\t' -k2r > $REPO_CACHE
+  [ -n "$NOUPDATE" ] && return
+  x=$REPO_CACHE.tmp
+  { parallel gh_list ::: "${MYGHREPOS[@]}";
+   gt_list; } |
+   sort -t$'\t' -k2r > "$x"
+  [ -s "$x" ] &&
+     mv "$x" "$REPO_CACHE" ||
+     echo "WARNING! empty repo query. network down?" >&2
+}
+
+needs_update(){
+ # cache needs to be updated if it's a week old or doesn't exist
+ ! find "$REPO_CACHE" -mtime -7 2>/dev/null | read
 }
 
 repo_select(){
+ needs_update && repo_update_cache
+
  sel="$(cat $REPO_CACHE | rofi -dmenu -i | cut -f1)"
  [ -z "$sel" ] && return 1
 
@@ -22,7 +39,7 @@ repo_select(){
 
 }
 
-[ $# -eq 0 ] && echo "USAGE: $0 [update,list,commits]" && exit 1
+[ $# -eq 0 ] && echo "USAGE: $0 [update,list,commits] [-noupdate]" && exit 1
 
 case "$1" in
   u*) repo_update_cache;;

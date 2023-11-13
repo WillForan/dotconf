@@ -36,7 +36,9 @@
   (w3m-display-mode 'plain)
   (w3m-use-title-buffer-name t)
   (w3m-confirm-leaving-secure-page nil)
-  :hook (w3m-mode . (lambda() (display-line-numbers-mode -1)))
+  (w3m-home-page (expand-file-name "~/.w3m/bookmark.html"))
+  ;; 20230325: line number disabling done in base.el for all modes
+  ;; :hook (w3m-mode . (lambda() (display-line-numbers-mode -1)))
 
   :config
   ;; 20210218 - dont need numbers in links w/emacs, but enabled for cli

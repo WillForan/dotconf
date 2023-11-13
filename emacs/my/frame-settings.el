@@ -16,7 +16,8 @@
 ;;            notably not Fira Code, Hack, Source Code Pro, or Iosevka
 ;;            also look at Input (yuk), Sudo, ttf-monoid
 ;; (set-frame-font "JetBrains Mono-12") ; taller lines,shorter chars than Fantasque/Berkeley
-;; (set-frame-font "Berkeley Mono Trial-12") ; Not free. missing 7S. like JetBrains. shorter lines
+;; (set-frame-font "IBM Plex Mono-12")  ; like JetBrains but with more serif
+;; (set-frame-font "Berkeley Mono Variable-12") ; Not free. missing 7S. like JetBrains. shorter lines
 ;; (set-frame-font "Fantasque Sans Mono-14") ; narrow and short; like Berkeley but heavier; compact lines
 ;; (set-frame-font "Code New Roman-14") ; a little more blocky than fantasque but similiar
 ;; (set-frame-font "M+ 1M-14") ; taller heavier but same width as fantasque
@@ -39,6 +40,7 @@
 ;; (set-frame-font "Verily Serif Mono-14") ; sarif font. meh
 ;; (set-frame-font "SF Mono-12")           ; stiffer than berkeley, same shape; 'i nerd-fonts-sf-mono'
 ;; (set-frame-font "Spleen")               ; dense, pixely
+;; (set-frame-font "IntelOne Mono-12")     ; 20230513 hackernews. angry {}. tall lines
 
 
 ;; 20230130: appreachating Input, Flexi (IBM VGA), and Libreation Mono 
@@ -51,7 +53,7 @@
    "Fantasque Sans Mono-14" "Roboto Mono-14" "Cousine-14" "Flexi IBM VGA False-12"
    "Monoid-12" "Sudo-17" "Input Mono-12" "Liberation Mono-12" "Fira Code-12" "Azeret Mono-12"
    "B612 Mono-12" "Verily Serif Mono-14" "DejaVu Sans Mono-14"
-   "SF Mono-12" "Berkeley Mono Variable-12" "Spleen")
+   "SF Mono-12" "Berkeley Mono Variable-12" "Spleen") ; "IBM Plex Mono-12"
   "List of possible font faces.")
 
 (defun my/font-random ()
