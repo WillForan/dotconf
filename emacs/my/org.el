@@ -94,7 +94,9 @@
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
 	(R . t)      ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"
+        (emacs-lisp . t)
 	(python . t)
+        ;; ob-ipython-get-kernels json-number-format error
 	;(ipython . t) ; (wrong-type-argument stringp sh)
 	(octave . t)
 	(perl . t)
@@ -148,7 +150,7 @@
    	     new))
   (advice-add #'org-export-new-reference :override #'org-export-deterministic-reference))
 
-(use-package ob-ipython :ensure t :after org)
+;; (use-package ob-ipython :ensure t :after org) ;; json error
 (use-package ob-async :ensure t :after org) ; use :async in src_block header
 (use-package org-bullets :ensure t :after org
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
