@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+git_args=""
+[[ "${1:-}" =~ ^- ]] && git_args="$1" && shift 
+[ $# -eq 0 ] && echo "no message!" >&2 && exit 1
+g=$(gitmoji-select)
+[ -z "$g" ] && echo "no emoji!" >&2 && exit 1
+# shellcheck disable=SC2086 # no arg if git_args empty
+git commit $git_args -m "$g $*"
