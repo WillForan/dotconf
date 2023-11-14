@@ -1,4 +1,4 @@
-# generic 
+# generic
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
 alias m="mosh"
@@ -38,9 +38,12 @@ alias sbcl="rlwrap sbcl"
 if command -v yay >/dev/null; then
   alias i='yay --noconfirm -S'
   alias pq='yay --color auto -Ss'
-elif command -v apt >/dev/null; then 
+elif command -v apt >/dev/null; then
   alias i='sudo apt install'
   alias pq='apt search'
+elif command -v guix >/dev/null; then
+  alias i='guix install'
+  alias pq='guix search'
 fi
 
 # git - status short with no untracked. gs is ghostscript

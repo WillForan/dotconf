@@ -114,6 +114,10 @@ case $HOSTNAME in
           samsung_tv --output LVDS1 --off ||
           xrandr --output LVDS1 --mode 1366x768
      ;;
+  cn60-guix)
+     #xrandr --output DP-1 --left-of HDMI-1 --mode 1920x1080 --rotate right
+     xrandr --output DP-1 --mode 1920x1080 --rotate normal --left-of HDMI-1 --output HDMI-1 --rotate right
+     ;;
 esac
 
 # no bell
