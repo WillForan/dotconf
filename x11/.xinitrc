@@ -46,7 +46,8 @@ case $HOSTNAME in
       $HOME/src/utils/activitywatch/aw-qt &
       ;;
    kt)
-      xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
+      #xrandr --output HDMI-0 --rotate right --left-of DVI-D-0
+      xrandr  --output DVI-D-0 --mode 1680x1050 --rotate right --output HDMI-0 --mode 1920x1080 --rotate normal --left-of DVI-D-0
       # 20200815 - moved upstairs
       #xrandr --output DVI-D-0 --rotate normal --left-of HDMI-0
       # 20200526 - new curbed samsung w/ HDMI-DV1
@@ -114,6 +115,10 @@ case $HOSTNAME in
       xrandr | grep -q HDMI1\ connected &&
           samsung_tv --output LVDS1 --off ||
           xrandr --output LVDS1 --mode 1366x768
+     ;;
+  cn60-guix)
+     #xrandr --output DP-1 --left-of HDMI-1 --mode 1920x1080 --rotate right
+     xrandr --output DP-1 --mode 1920x1080 --rotate normal --left-of HDMI-1 --output HDMI-1 --rotate right
      ;;
 esac
 

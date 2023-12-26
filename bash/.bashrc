@@ -14,6 +14,11 @@ SLOWSHELL=1 # load /etc/bashrc, perlbrew
 [ -n "${SLOWSHELL}" ] && [ -r /etc/bashrc ] && . /etc/bashrc
 
 
+# 20230519 - guix sd
+export GUIX_PROFILE="$HOME/.guix-profile"
+test -r "$GUIX_PROFILE/etc/profile" && source "$_"
+
+
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
 . "$_BASHCFGDIR/paths.bash"
@@ -127,7 +132,7 @@ else
     test -r /usr/share/doc/fzf/examples/key-bindings.bash && source $_
 
     # history expand with space. !![space] ^tyop^typo[space]
-    bind Space:magic-space
+    #bind Space:magic-space
 
     # change color scheme using uses 'dynamic-colors-git'
     #bind -x '"\el":"dynamic-colors cycle"'

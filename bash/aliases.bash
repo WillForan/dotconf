@@ -1,4 +1,4 @@
-# generic 
+# generic
 alias l='ls -tlc --color=auto'
 alias s='ssh -AY'
 alias m="mosh"
@@ -38,9 +38,12 @@ alias sbcl="rlwrap sbcl"
 if command -v yay >/dev/null; then
   alias i='yay --noconfirm -S'
   alias pq='yay --color auto -Ss'
-elif command -v apt >/dev/null; then 
+elif command -v apt >/dev/null; then
   alias i='sudo apt install'
   alias pq='apt search'
+elif command -v guix >/dev/null; then
+  alias i='guix install'
+  alias pq='guix search'
 fi
 
 # git - status short with no untracked. gs is ghostscript
@@ -58,10 +61,7 @@ n() { ls -tlc $@|head;}
 sp() { host=$1; shift; sshpass -f ~/passwd/ssh/$host ssh $host $@; }
 # which directory - 20200919
 wd() { [ $# -lt 1 ] && pwd || dirname $(which $1);}
-
-# git vcs/scm
-gcm() { [ $# -eq 0 ] && return 1; g=$(gitmoji-select); [ -z "$g" ] && return 1; git commit -m "$g $*"; }
-
+# 20231021 - gcm moved to own script
 
 # 20210421 - cd to a file.
 # doesnt work on symlinks (no easy way to tell if its a file or dir

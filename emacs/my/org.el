@@ -91,24 +91,29 @@
   (setq org-babel-python-command "python3")
   (org-babel-do-load-languages 'org-babel-load-languages
       '(
-        (R . t) ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"
-        (python . t)
-        ;(ipython . t) ; (wrong-type-argument stringp sh)
-        (octave . t)
-        (perl . t)
-        (ruby . t)
-        (sql . t)
-        (sqlite . t)
-        (shell . t) ; req newer org mode
-        ;; (J . t) ; will fail if not j-mode
+	(R . t)      ; rm ob-R.elc if "Invalid function: org-babel-header-args-safe-fn"
+        (emacs-lisp . t)
+	(python . t)
+        ;; ob-ipython-get-kernels json-number-format error
+	;(ipython . t) ; (wrong-type-argument stringp sh)
         ;; (jupyter . t)
+	(octave . t)
+	(perl . t)
+	(ruby . t)
+	(sql . t)
+	(sqlite . t)
+	;(sh . t) ; old - removed from org mode
+	;(bash . t) ; doesn't exist
+	(shell . t) ; req newer org mode
+	;; (J . t) ; will fail if not j-mode
         (plantuml . t)
         ;; 20220510 - with ob-tmux
         (tmux . t)
-        ;(sh . t) ; old - removed from org mode
-        ;(bash . t) ; doesn't exist
         ;; 20230629
-        (go . t)))
+        (go . t)
+	; 20230519
+	(scheme . t)
+        ))
   ;; 20220911 org-protocol bookmarklet and desktop files
   ;; 20220922 require so it's actually loaded
   (require 'org-protocol)
@@ -147,7 +152,7 @@
       new))
   (advice-add #'org-export-new-reference :override #'org-export-deterministic-reference))
 
-(use-package ob-ipython :ensure t :after org)
+;; (use-package ob-ipython :ensure t :after org) ;; json error
 (use-package ob-async :ensure t :after org) ; use :async in src_block header
 (use-package org-bullets :ensure t :after org
   :init (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
