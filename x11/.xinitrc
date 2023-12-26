@@ -88,7 +88,7 @@ case $HOSTNAME in
       xrandr | grep -q HDMI1\ connected &&
       xrandr --output HDMI1 --above LVDS1 --mode 1360x768
       xinput --map-to-output 'ELAN Touchscreen' LVDS1
-      libinput-gestures-setup restart
+      libinput-gestures-setup restart &
       #synid=$(xinput list|perl -lne 'print $1 and exit if /Synaptics.*id=(\d+)/i')
       #xinput set-prop $synid 303 1 # enable tap
       xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
@@ -100,6 +100,8 @@ case $HOSTNAME in
       #  parent is bash running .xinitrc. where in here!? 'systemctl disable gpd'
       #  maybe from /etc/profile.d/PanMSInit.sh
       cbatticon &
+
+      # barrierc  --enable-drag-drop --disable-crypto -f 192.168.1.75 &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
