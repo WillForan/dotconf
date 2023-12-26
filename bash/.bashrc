@@ -148,6 +148,20 @@ else
     export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
     test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
 
+    # 20231105 autin - sqlite3 based history
+    # w/  204.9 ms … 244.4 ms (using bash-preexec) 20231211 blesh very slow
+    # w/o 187.9 ms … 237.1 ms
+    command -v atuin >/dev/null && {
+      [[ -f /usr/share/bash-preexec/bash-preexec.sh ]] && source /usr/share/bash-preexec/bash-preexec.sh
+      #[[ -f /usr/share/blesh/ble.sh ]] && source /usr/share/blesh/ble.sh
+      [[ -f "$_BASHCFGDIR/atuin.init.sh" ]] || atuin init bash > "$_"
+      # NB. local changes make C-r not full screen and remove atuin 'up' binding
+      source "$_BASHCFGDIR/atuin.init.sh"
+
+      # fzf still nice to have around
+      bind -m emacs-standard '"\e\C-r": "\C-e \C-u\C-y\ey\C-u`__fzf_history__`\e\C-e\er"'
+    }
+
     # last to avoid DEBUG TRAP performance penelty for every command run
     . "$_BASHCFGDIR/PS1.bash"
 fi
