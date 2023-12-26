@@ -10,7 +10,9 @@ export LANG="en_US.UTF-8"
 # where is .bashrc actually stored?  probably $HOME/config/bash
 _BASHCFGDIR=$(cd "$(dirname "$(readlink -f ~/.bashrc)")"; pwd)
 
-test -r /etc/bashrc && . $_
+SLOWSHELL=1 # load /etc/bashrc, perlbrew
+[ -n "${SLOWSHELL}" ] && [ -r /etc/bashrc ] && . /etc/bashrc
+
 
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
@@ -72,7 +74,9 @@ export AFNI_FONTSIZE=MINUS
 export XDG_RUNTIME_DIR='/run/user/1000'
 
 # curl -L https://install.perlbrew.pl | bash
-test -r $HOME/perl5/perlbrew/etc/bashrc && . $_
+# 20231105 - slow. only use when slowshell
+test -n "${SLOWSHELL:-}" -a -r "$HOME/perl5/perlbrew/etc/bashrc"  &&
+   . "$_"
 
 # freesurfer setup
 setup_freesurfer(){
