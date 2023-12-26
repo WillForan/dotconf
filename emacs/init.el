@@ -16,7 +16,8 @@
 
 ;; personal functions
 (load "~/.emacs.d/my/my.el")
-(my/loadinit) ;; load most files in my/*el -- hardcoded selection
+; 20230629 - fast startup. my/loadinit manually
+;(my/loadinit) ;; load most files in my/*el -- hardcoded selection
 
 
 ;(if (string-equal (system-name) "reese") (progn ))
