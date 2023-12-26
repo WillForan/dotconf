@@ -133,3 +133,21 @@ if any NOTES will insert that"
   (when notes (insert notes)))
 
 (defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))
+
+;; 20231210 - quick blog
+(defun my/weblog ()
+  "open new wf log org "
+  (interactive)
+  ;(helm-find-files "~/src/play/WillForan.github.io/reports")
+  (let* ((root "~/src/play/WillForan.github.io/reports")
+         (titles (directory-files root))
+         (pick (ivy-completing-read "title: " titles))
+         (fname (expand-file-name pick root)))
+    (when pick
+      (find-file fname)
+      (if (not (file-exists-p pick))
+        (insert (concat
+                 "#+TITLE: " (file-name-base pick)  "\n"
+           "#+DATE: "  (format-time-string "%Y-%m-%d") "\n"
+           "#+OPTIONS: _:{} ^:{} toc:nil num:nil\n"
+           "#+DRAFT: true"))))))
