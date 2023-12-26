@@ -14,10 +14,10 @@ test -r /etc/bashrc && . $_
 
 # where to find binaires outside of package manager
 # includes local python (pyenv), perl (cpanm), ~/bin, ~/.local/bin
-. $_BASHCFGDIR/paths.bash
+. "$_BASHCFGDIR/paths.bash"
 
 # where to get music from
-test -r $HOME/passwd/config/mpd_host && export MPD_HOST=$(cat $_)
+test -r "$HOME/passwd/config/mpd_host" && export MPD_HOST=$(cat "$_")
 
 
 # If not running interactively, be done -- only handle paths
@@ -130,18 +130,17 @@ else
     bind -x '"\el":"dynamic-colors fzf"'
 
     # ctrl-r for alt-. using \ea or ^x^a
-    source $HOME/src/utils/fuzzy_arg/fuzzy_arg.bash
+    source "$HOME/src/utils/fuzzy_arg/fuzzy_arg.bash"
     #  \en for new file list
-    source $HOME/src/utils/fuzzy_arg/fuzzy_new_complete.bash
+    source "$HOME/src/utils/fuzzy_arg/fuzzy_new_complete.bash"
 
     # gitmoji
     _bash_insert() { perl -le 'ioctl(STDIN,0x5412,$_) for split "", join " ", @ARGV' -- "$@";}
-    gitmoji_bash() { _bash_insert $(gitmoji-select echo); }
+    gitmoji_bash() { _bash_insert "$(gitmoji-select echo)"; }
     bind -x '"\eG":"gitmoji_bash"'
 
     [ -n "$DISPLAY" ] && xset b off # no system bell if running X
 
-   
     export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
     test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
 
