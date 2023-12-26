@@ -147,8 +147,11 @@ else
     [ -n "$DISPLAY" ] && xset b off # no system bell if running X
 
    
-    export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
-    test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
+    # autopair eating spaces
+    if ! [[ $HOSTNAME =~ reese ]]; then
+       export BASH_AUTOPAIR_BACKSPACE=1 # sideffect: disables bind-tty-special-chars
+       test -r "$HOME/src/utils/bash-autopairs/autopairs.sh" && source "$_"
+    fi
 
     # last to avoid DEBUG TRAP performance penelty for every command run
     . "$_BASHCFGDIR/PS1.bash"
