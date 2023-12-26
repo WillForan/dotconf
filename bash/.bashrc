@@ -127,7 +127,7 @@ else
 
     # change color scheme using uses 'dynamic-colors-git'
     #bind -x '"\el":"dynamic-colors cycle"'
-    bind -x '"\el":"dynamic-colors fzf"'
+    bind -x '"\el":"dynamic-colors fuzzyall"'
 
     # ctrl-r for alt-. using \ea or ^x^a
     source "$HOME/src/utils/fuzzy_arg/fuzzy_arg.bash"
