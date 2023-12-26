@@ -18,6 +18,16 @@
     (projectile-find-file)
   )
 )
+(use-package projectile
+  :config
+  (setq projectile-project-search-path
+       '("~/config/"
+         ("~/src/" . 1 )
+         ;("~/src/utils/" . 1 )
+         ("~/src/work/" . 1 )
+         ("~/src/play/" . 1)))
+; (projectile-discover-projects-in-search-path)
+)
 
 (defun my/quit-other ()
   "Quit e.g. help buffer without switching to it.
