@@ -71,7 +71,7 @@ export PATH="$PATH:$HOME/.local/share/racket/8.9/bin/"
 
 
 # 20211002 - want auto updates from zotero and firefox
-#test -r $HOME/bin/firefox && export PATH="$_:$PATH"
-#test -r $HOME/bin/zotero && export PATH="$_:$PATH"
+test -r "$HOME/bin/firefox" && export PATH="$_:$PATH"
+test -r "$HOME/bin/zotero" && export PATH="$_:$PATH"
 
 
