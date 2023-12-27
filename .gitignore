@@ -1,5 +1,6 @@
 vim/.vim/plugged
 vim/.vim/autoload
 vim/.vim/.netrwhist
+autokey/.*json
 .*-compiled-*.el
 emacs/.trello/
