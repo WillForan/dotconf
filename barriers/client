@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# run barrier client to match *.sgc files
+# use env var REMOTEHOST
+# or try to guess good default
+# 20240110
+
+kt_ip=192.168.1.75
+alias b='barrierc -f --no-tray --disable-crypto' 
+
+case $HOSTNAME in
+ yogert)
+   b ${REMOTEHOST:-$kt_ip};;
+ *)
+   echo unknown host '$HOSTNAME'; exit 1;;
+esac
