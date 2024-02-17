@@ -20,21 +20,24 @@ __atuin_history() {
     # shellcheck disable=SC2048,SC2086
     HISTORY="$(ATUIN_SHELL_BASH=t ATUIN_LOG=error atuin search --inline-height 20 $* -i -- "${READLINE_LINE}" 3>&1 1>&2 2>&3)"
 
-    if [[ $HISTORY == __atuin_accept__:* ]]
-    then
+    # 20231230 - comment out enter running selection
+    #            now enter and tab do the same thing. pull up dont run
+    #            matches fzf and gets around bug where enter-accept didn't go into history
+    if [[ $HISTORY == __atuin_accept__:* ]]; then
       HISTORY=${HISTORY#__atuin_accept__:}
-      echo "$HISTORY"
-      # Need to run the pre/post exec functions manually
-      _atuin_preexec "$HISTORY"
-      eval "$HISTORY"
-      _atuin_precmd
-      echo
-      READLINE_LINE=""
-      READLINE_POINT=${#READLINE_LINE}
-    else
+    fi
+    #  echo "$HISTORY"
+    #  # Need to run the pre/post exec functions manually
+    #  _atuin_preexec "$HISTORY"
+    #  eval "$HISTORY"
+    #  _atuin_precmd
+    #  echo
+    #  READLINE_LINE=""
+    #  READLINE_POINT=${#READLINE_LINE}
+    #else
       READLINE_LINE=${HISTORY}
       READLINE_POINT=${#READLINE_LINE}
-    fi
+    #fi
 
 }
 

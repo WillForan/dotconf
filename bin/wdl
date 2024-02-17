@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+wdl() { 
+    letters="$(echo "$1" | grep -o [a-z]| paste -sd'-'|sed 's/-/ | grep /g')";
+    [ -n "$letters" ] && letters="grep $letters" || letters=cat;
+    egrep --color=auto "^$1$" $HOME/words | egrep --color=auto '^[a-z]+$' | egrep --color=auto -v "[${2-:}]" | eval "$letters"
+}
+
+wdl "$@"

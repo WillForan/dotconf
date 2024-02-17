@@ -31,7 +31,7 @@
   (interactive)
   (if current-prefix-arg (org-backward-heading-same-level 1)
     (org-forward-heading-same-level 1))
-  (call-interactively (my/org-show-just-me)))
+  (call-interactively #'my/org-show-just-me))
 
 ;; 20220510
 ;; use src tmux to play. then change to shell when done
@@ -65,8 +65,8 @@
 
 
   (setq org-use-speed-commands t)
-  (add-to-list 'org-speed-commands ("m" . my/org-show-just-me))
-  (add-to-list 'org-speed-commands ("M" . my/org-move-and-show-just-me))
+  (add-to-list 'org-speed-commands '("m"  . my/org-show-just-me))
+  (add-to-list 'org-speed-commands '("M"  . my/org-move-and-show-just-me))
 
 
   ;;20170626: don't ask about evaluting code: 
