@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+#
+# set left handed mouse buttons a la
+#   xinput --set-button-map "$devid" 3 2 1
+
+# used by config/udev/01-lefttrackball.rules
+# see
+#   udevadm info --attribute-walk --path=$(udevadm info --query path --name=/dev/input/*Kensington*)
 
 # when run from udev, we wont know anything about whats running
 # look to i3 process for x11 display env if not already set
@@ -6,16 +13,33 @@
 if [ -z "$DISPLAY" ] ; then
   wmexec=$(pgrep i3$|sed 1q)
   [ -z "$wmexec" ] && echo no i3, no x11? && exit 1
-  $(grep DISPLAY /proc/$wmexec/environ -z)
+  eval "$(grep DISPLAY "/proc/$wmexec/environ" -z|sed 's/\x0/\n/g')"
+  [ -z "$DISPLAY" ] && echo "WARNING: failed to get display from i3 process=$wmexec" && exit 1
+  export DISPLAY
 fi
 
+# 20240217. I'm only using Kensngton ball
+# but can imagine if A4 is attached, I'd want it to be left too
+#
 # if any input change Kensington Expert mouse
 # but default to the cheap and weird original track mouse
-[ $# -eq 1 ] && dev=Kensington || dev=A4Tech
-
+# [ $# -eq 1 ] && dev=Kensington || dev=A4Tech
 # but actually don't care if there is only one of them
-devs=($(xinput --list|
-   grep -Po 'Kensington|A4Tech'|sort -u))
-[ ${#devs[@]} -eq 1 ] && dev=${devs[0]}
 
-test -n "$(xinput --list|grep $dev |grep -Po '(?<=id=)\d+')" && xinput --set-button-map $_ 3 2 1
+
+mapfile -t devs < \
+   <(xinput --list|
+     grep -Po 'Kensington|A4Tech'|
+     sort -u)
+
+[ -z "${devs[*]}" ] &&
+   echo "WARNING: no devs matching Kensington or A4Tech (DISPLAY=$DISPLAY)" &&
+   exit 1
+
+for dev in "${devs[@]}"; do
+   devid=$(xinput --list|grep "$dev" |grep -Po '(?<=id=)\d+')
+   ! test -n "$devid" &&
+      echo "WARNING: $dev has no id= in xinput list" &&
+      continue
+   xinput --set-button-map "$devid" 3 2 1
+done
