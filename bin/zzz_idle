@@ -1,15 +1,34 @@
 #!/usr/bin/env bash
+export DISPLAY=:0
 load_int=$(awk '{printf "%d", $3}' /proc/loadavg)
-xidle_s=$(xprintidle)
-hour_s=3600
-after_work=1080    
-time=$(date +"%H*60+%M"|bc )
+xidle_s=$(($(xprintidle)/1000)) # outputs in ms
+# cf.
+#  test $(DISPLAY=:0 xssstate -t) -eq 0 # suckless time until screensaver
+#
+hour_s=3600 # 60^2; 1 hour in seconds
+after_work=1080   # 6pm -> 18*60 minutes since midnight
+time=$(date +"%H*60+%M"|bc ) # current time in minutes since midnight
+
+# dpms status
+xset q |grep -q 'Monitor is On' && monitor_status=On || monitor_status="off"
+
+# last login time
+#last_login=$(who | perl -MList::Util=min -slane 'BEGIN{ $now=qx/date +%s/;} push @hours, (($now - qx/date +%s -d "@F[2..3]"/)/60/60); END{ print min(@hours) }')
+#last_input=$(stat -c "%y" /dev/input/by-id/*|sort -nr|sed 1q|xargs -I{} date +%s -d "{}")
+#
+since_shell=$(($(date +%s) - $(date +%s -d "$(stat -c %y  .wakatime.bdb )")))
+
+[ -v DRYRUN ] && DRYRUN="echo" || DRYRUN=""
+[ -n "$DRYRUN" ] &&
+   echo "# load_int $load_int; current: $time min since midnight; idle: $xidle_s sec; monitor: $monitor_status; last_shell $since_shell"
+
 if [[ "${1:-}" != "loadonly" ]]; then
-  [ "$xidle_s" -lt $hour_s ] && echo "$xidle_s<$hour_s: not xidle" && exit
+  [ $since_shell -lt $hour_s ] && echo "$since_shell seconds since shell access (.wakatime.bdb) < 1 hour" && exit
   [ "$time" -lt $after_work ] && echo "$time<$after_work: still during work" && exit
+  [ "$xidle_s" -lt $hour_s ] && echo "xidle $xidle_s seconds < $hour_s (1 hour)" && exit
 fi
 if test "$load_int" -lt 2; then
-   echo sudo systemctl suspsend
+   $DRYRUN sudo systemctl suspend
 else
    echo high load. not suspending
 fi
