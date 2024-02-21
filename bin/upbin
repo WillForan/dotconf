@@ -25,6 +25,7 @@ cd $configdir
 case $pkg in
   # in there own place
   bash) test ! -h ~/.bashrc && ln -s $configdir/bash/.bashrc ~/.bashrc || echo "# have $_";;
+  udev) sudo stow -d "$configdir" -t /etc/udev/rules.d/ "$pkg";;
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   # in own folder but not in config

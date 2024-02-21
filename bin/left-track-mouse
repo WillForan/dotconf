@@ -5,7 +5,11 @@
 
 # used by config/udev/01-lefttrackball.rules
 # see
-#   udevadm info --attribute-walk --path=$(udevadm info --query path --name=/dev/input/*Kensington*)
+#   udevadm info --attribute-walk --path=$(udevadm info --query path --name=/dev/input/by-id/*Kensington*)
+# and 
+#   udevadm control --log-priority=debug
+#   journalctl -f
+
 
 # when run from udev, we wont know anything about whats running
 # look to i3 process for x11 display env if not already set
@@ -26,14 +30,18 @@ fi
 # [ $# -eq 1 ] && dev=Kensington || dev=A4Tech
 # but actually don't care if there is only one of them
 
-
-mapfile -t devs < \
-   <(xinput --list|
-     grep -Po 'Kensington|A4Tech'|
-     sort -u)
+# 20240221: xinput list might take a few seconds
+for _ in {0..5}; do
+  mapfile -t devs < \
+     <(xinput --list|
+       grep -Po 'Kensington|A4Tech'|
+       sort -u)
+  [ -n "${devs[*]}" ] && break
+  sleep 1;
+done
 
 [ -z "${devs[*]}" ] &&
-   echo "WARNING: no devs matching Kensington or A4Tech (DISPLAY=$DISPLAY)" &&
+   echo "WARNING: no devs matching Kensington or A4Tech (DISPLAY=$DISPLAY) xinput: $(xinput --list)" &&
    exit 1
 
 for dev in "${devs[@]}"; do
