@@ -4,6 +4,11 @@ load_int=$(awk '{printf "%d", $3}' /proc/loadavg)
 xidle_s=$(($(xprintidle)/1000)) # outputs in ms
 # cf.
 #  test $(DISPLAY=:0 xssstate -t) -eq 0 # suckless time until screensaver
+#  use in cron
+#    # m     h  dom mon dow   command
+#    */15    *    *   *   *   zzz_idle
+#  see
+#    journalctl -u cronie
 #
 hour_s=3600 # 60^2; 1 hour in seconds
 after_work=1080   # 6pm -> 18*60 minutes since midnight
@@ -28,6 +33,7 @@ if [[ "${1:-}" != "loadonly" ]]; then
   [ "$xidle_s" -lt $hour_s ] && echo "xidle $xidle_s seconds < $hour_s (1 hour)" && exit
 fi
 if test "$load_int" -lt 2; then
+   echo trying to suspending
    $DRYRUN sudo systemctl suspend
 else
    echo high load. not suspending
