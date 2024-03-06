@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# pipe to Xorg (clipboard or message)
+
+# echo hi |]X    # "hi" into primary
+# echo hi |]X x  # "hi" into primary
+# echo hi |]X c  # "hi" onto clipboard
+# echo hi |]X m  # "hi" in xmessage
+# ]X p xargs xmessage
+
+
+[ $# -eq 0 ] && arg=x || arg="$1"
+
+case $arg in
+ c) xclip -i -selection clipboard;;
+ x) xclip -i;;
+ m*) xmessage $(cat);;
+ p) shift; xclip -o | $@;;
+ #s) shift; bash -c "$@";;
+esac

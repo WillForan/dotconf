@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+ip addr |grep 192.168.1. -q && host=s2 || host=h
+ssh $host -t tmux -2u a -t work
+

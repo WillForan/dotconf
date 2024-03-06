@@ -1,0 +1,2 @@
+{ ip addr|grep nebula -q && pgrep -af nebula >/dev/null } ||
+  tmux new -s conn -Ad sudo nebula -config /etc/nebula/config.yaml

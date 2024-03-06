@@ -16,3 +16,4 @@ _e(){
     emacsclient -a '' $args "$@"
 }
 [[ $(basename "$0") == "e" ]] && _e "$@"
+df

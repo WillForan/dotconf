@@ -1,0 +1,3 @@
+export DOKUWIKI_CLIENT_BASE=http://www.amfcapital.org/wiki/
+export DW_MACHINE=moonhog
+dokuwiki-client "$@"

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cat <<H
+dynamic-colors dynamic-colors-git
+
+H

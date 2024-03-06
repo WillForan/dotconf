@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+# want to save screenshot on clipboard (from flameshot)
+# to file on server running weechat for easy upload to slack
+# BUT /upload isn't working :(
+#
+# ALTENATIVES
+# * use flameshots paste bin feature and send link to image instead
+# * slacker-cli or other api/cli tool to send image
+
+name=$((date +%F_%H:%M:%S;date +%F; xclip -o|tr '\n' ' '|cut -c1-60) |
+ rofi -e "image name: [C-space to select]" -dmenu |
+  sed 's/[^A-Za-z0-9.,:@%+=-]\+/_/g')
+saveas="/tmp/imgs/$name.png"
+xclip -selection clipboard -t image/png -o | ssh s2 "mkdir -p /tmp/imgs; cat > $saveas"
+echo "$saveas"

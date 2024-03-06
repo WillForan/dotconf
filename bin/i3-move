@@ -1,12 +1,66 @@
 #!/usr/bin/env bash
+# initially
 # from https://old.reddit.com/r/i3wm/comments/kxt2yj/move_window_to_container_using_the_mouse/
+# 20220930 - multiselect, click or rofi
+
+hexid(){ grep -Pom1 '0x[0-9a-z]{4,}'; }
+
+# id of currently focused window
+# xdotool knows the window but not in hex
+# wmctrl outputs hex in 8 digits, xprop uses 7 (?)
+cwid(){ printf "0x%08X" "$(xdotool getwindowfocus)";}
+wmlist_class(){
+   wmctrl -l|cut -f1 -d' '|
+    while read -r id; do
+     echo "$id $(xprop -id "$id" WM_CLASS WM_NAME|
+        perl -pe 's/.*?=//'|paste -s)"
+    done
+}
+
+# use rofi to select the window 
+# can just push enter for the currently focused
+# ctrl+enter to do multiselect
+select_wins(){ 
+  local cur="$(cwid)"  # will need to lowercase hex
+  wmlist_class|
+   rofi -dmenu -p WinToMove\
+        -case-insensitive\
+        -multi-select -select "${cur,,}" |
+   cut -f1 -d' '
+}
+
+# single target. can push enter ('click' default)
+# to mouse select window.
+# otherwise pick id from rofi
+get_target(){
+  local trg=$( (echo 'click'; wmlist_class)|rofi -dmenu -case-insensitive|cut -f1 -d' ')
+  [[ $trg == 'click' ]] && trg="$(xwininfo | hexid)"
+  echo "$trg"
+}
+debug_info(){
+  echo -e "targetid=$1\n\t$(xprop -id $1 |perl -lne 'print if s/^WM_NAME.*?= //')"
+}
+
+mapfile -t mv_ids < <(select_wins)
+[ -z "${mv_ids[*]}" ] && exit 1
+
+trg=$(get_target)
+echo -e "targetid=$(debug_info "$trg")"
+
+# mark target or die
+# fails when we click titlebar of container
+i3-msg "[id=$trg] mark TargetWindow; [id=$trg] split h; [id=$trg] floating disable" |grep -q true || exit 1
+
 # need to unfloat if floating
-i3-msg mark WindowToMove
-trg="$(xwininfo | grep -Po '(?<=Window id: )0x[[:alnum:]]*')"
-echo "targetid=$trg"
-i3-msg "[id=$trg] mark TargetWindow" |grep -q true || exit 1
-i3-msg floating disable
-i3-msg move window to mark TargetWindow
-i3-msg '[con_mark="WindowToMove"] focus'
-i3-msg unmark WindowToMove
+for id in "${mv_ids[@]}"; do
+   echo -e "* focus=$(debug_info "$id")"
+   #wmctrl -a "$id"
+   i3-msg "[id=$id]" focus 
+   i3-msg floating disable
+   i3-msg move window to mark TargetWindow
+done
 i3-msg unmark TargetWindow
+
+# forcus first of moved windows
+wmctrl -a "${mv_ids[0]}"
+#i3-msg '[con_mark="WindowToMove"] focus'

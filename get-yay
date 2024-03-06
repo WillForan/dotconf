@@ -1,0 +1,8 @@
+if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
+  yay_ver=10.2.3 # 20210614
+  curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
+  tar -xzvf yay.tar.gz
+  mv yay*/yay $HOME/bin
+  rm -r yay*/ yay.tar.gz
+  export PATH="$HOME/bin:$PATH"
+fi

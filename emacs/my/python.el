@@ -15,8 +15,12 @@
 
 (use-package lsp-ui :ensure t :commands lsp-ui-mode)
 
+;; (setq python-shell-interpreter "python3"
+;;       python-shell-interpreter-args "") ;  -m asyncio
+;; 20220818 back to ipython
+ (setq python-shell-interpreter "ipython3"
+       python-shell-interpreter-args "--simple-prompt -i")
 ;; 20220804
-(setq python-shell-interpreter-args "-m asyncio")
 (use-package lsp-pyright :ensure t 
   :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp) (flycheck-mode)))
   :init (when (executable-find "python3")

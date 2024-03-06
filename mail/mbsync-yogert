@@ -1,0 +1,79 @@
+# last reviewed: 20230629
+# only gmail on yogert laptop. and only the most recent 200 mails
+
+IMAPAccount gmailimap
+Host imap.gmail.com
+User willforan
+PassCmd "pass gmail/apppass"
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+## Stores
+IMAPStore gmailremote
+Account gmailimap
+
+MaildirStore gmaillocal
+ Path ~/Maildir/gmail/
+ Inbox ~/Maildir/gmail/INBOX
+ Subfolders Verbatim
+
+
+Channel gmail
+ MaxMessages 200
+ ExpireUnread yes
+ CopyArrivalDate yes
+ Far :gmailremote:
+ Near :gmaillocal:
+ Create Near
+ Pattern !* "\[Gmail\]/Sent Mail" "imapprimary"
+
+## foran
+
+IMAPAccount foran_imap
+Host mail.foran.cc
+User will@foran.cc
+PassCmd "pass mail.foran.cc"
+SSLType None
+#IMAPS
+
+IMAPStore foran_remote
+Account foran_imap
+
+MaildirStore foran_local
+ Path ~/Maildir/foran.cc/
+ Inbox ~/Maildir/foran.cc/INBOX
+ Subfolders Verbatim
+
+Channel foran
+ MaxMessages 200
+ ExpireUnread yes
+ CopyArrivalDate yes
+ Far :foran_remote:
+ Near :foran_local:
+ Create Near
+
+# ### WORK
+# # 20240302 (earlier) use notmuch-remote
+# MaildirStore work_local
+#  Inbox        ~/Maildir/work/Inbox/
+#  Path         ~/Maildir/work/
+# 
+# IMAPStore davmail_remote
+#  Host      reese
+#  User      foranw@upmc.edu
+#  PassCmd   "pass work/upmc"
+#  Port      1143
+#  SSLType   None
+#  AuthMech  LOGIN
+#  Timeout 0
+#  Tunnel "ssh reese_s2 -W localhost:1143"
+# 
+# Channel   work
+#  Far      :davmail_remote:
+#  Near     :work_local:
+#  Patterns  INBOX Sent !LocalArchive
+#  Create    Near
+#  MaxMessages 100
+#  ExpireUnread yes
+#  CopyArrivalDate yes
+

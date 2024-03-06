@@ -1,0 +1,11 @@
+host=s2
+prog=xterm
+display=100
+
+# single shot. what happens if already running?
+# xpra start ssh:$host:$display --exit-with-children --start-child="$prog"
+
+# with pgrep
+ssh $host "pgrep -af xpra.*:$display || xpra start :$display --start-child='$prog' --start-via-proxy=no --opengl=yes"
+
+xpra attach ssh:$host:$display

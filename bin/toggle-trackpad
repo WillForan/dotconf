@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# 20210406 - toggle track pad 
+
+devid=13 # trackpad id
+prop="Device Enabled"
+to=$(xinput list-props $devid|perl -lne 'print $2==0?1:0
+  if m/(^\s+Device Enabled \(\d+\):\s+)([01])$/')
+[ $to -eq 0 ] && xdotool mousemove 0 0
+xinput set-prop $devid "$prop" $to

@@ -37,6 +37,7 @@ section: options
 	clipboardSharing = true
 	switchCorners = none 
 	switchCornerSize = 0
-	keystroke(Super+`) = switchInDirection(up)
+	# keystroke(Super+`) = switchInDirection(up)
+	keystroke(Alt+`) = switchInDirection(up)
 end
 

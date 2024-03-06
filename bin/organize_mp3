@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-[ $# -eq 0 ] && indir="$HOME/Soulseek Downloads/complete" || indir="$1"
+[ $# -eq 0 ] && indir=("$HOME/Soulseek Downloads/complete") || indir=("$@")
 
 outdir=/mnt/storage/Music/Sorted # no trailing slash
 [ ! -d $outdir ] && echo "ERROR: cannot find $outdir; maybe mount it?" && exit 1
@@ -48,9 +48,7 @@ sub rmjunk {
 HEREDOC
 
 exiftool '-filename<'$outdir'/$myArtist/${myYear}_$myAlbum/${myTrack}-$myTitle.%e' \
-   -r -ext mp3 -ext ogg -ext flac -ext m4a "$indir"
+   -r -ext mp3 -ext ogg -ext flac -ext m4a "${indir[@]}"
 
 # remove empty directories
-while [ $(find "$indir" -mindepth 1 -type d -empty|wc -l) -gt 0 ]; do
-   find "$indir" -mindepth 1 -type d -empty -exec rmdir {} \+
-done
+find "${indir[@]}" -mindepth 1 -type d -empty -exec rmdir {} \+ || :

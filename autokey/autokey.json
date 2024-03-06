@@ -1,5 +1,5 @@
 {
-    "version": "0.95.4",
+    "version": "0.96.0",
     "userCodeDir": null,
     "settings": {
         "isFirstRun": true,
@@ -12,10 +12,10 @@
         "interfaceType": "XRecord",
         "undoUsingBackspace": true,
         "windowDefaultSize": [
-            1596,
-            861
+            384,
+            826
         ],
-        "hPanePosition": 662,
+        "hPanePosition": 160,
         "columnWidths": [
             150,
             50,
@@ -28,7 +28,13 @@
         "disabledModifiers": [
             "<capslock>"
         ],
-        "scriptGlobals": {}
+        "scriptGlobals": {},
+        "gtkTheme": "classic",
+        "gtkExpandedRows": [
+            "1",
+            "0"
+        ],
+        "pathLastOpen": "1:2"
     },
     "folders": [],
     "toggleServiceHotkey": {

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+dict="/usr/share/dict/usa"
+patt="${1:?need a wordle patttern}"; shift
+exclude="${1:-_}" # default to excluding a character we don't expect
+charmatch=$(perl -lne '
+  push @a, "[$1]" while m/\[\^([^]]+)\]/g;
+  END{print join " -e ", @a}
+  ' <<<  "$patt")
+[ -v VERBOSE ] && echo "patt: '$patt'; exclude: '$exclude'; charmatch '$charmatch'"
+grep "^$patt$" "$dict"|grep -P "^[a-z]+$" | grep -v "[$exclude]" | grep "${charmatch:-$}"

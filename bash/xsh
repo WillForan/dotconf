@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Define some key shortcuts for quickly switching from your shell to xsh
+# see `bind -p` for conflicts
+xiki_open_key="\eo"      # open in xsh
+xiki_search_key="\es"    # search shared commands on XikiHub
+xiki_tasks_key="\et"     # show the tasks dropdown
+xiki_go_key="\eg"       # grab commands between xsh and your shell
+xiki_reverse_key="\er"   # search shell history
+xiki_key="\ex"           # show a xiki files
+
+# Make the 'xsh' command available in the shell
+export PATH=/home/foranw/src/utils/xiki/bin:$PATH
+
+# Enable the key shortcuts and the xsh wrapper function
+source /home/foranw/src/utils/xiki/bin/.xsh
+

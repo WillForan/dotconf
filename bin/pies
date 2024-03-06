@@ -1,0 +1,54 @@
+#!/usr/bin/env perl
+use warnings; use strict;
+use 5.36.0;
+# PIES:
+#  priority
+#  impact
+#  excitment
+#  size (time commitment)
+#
+# 20230218WF - init
+
+my @sparks=qw/▁ ▂ ▃ ▄ ▅ ▆ ▇ █/;
+sub num2spark($in) {
+  $in =~ s/(\d)/$sparks[$1-1]/gr;
+}
+sub spark2num($in){
+  my @vals = ();
+  my @syms = (split //, $in);
+  for my $s (@syms){
+    my ($i) = grep { $sparks[$_] =~ /$s/ } (0 .. @sparks-1);
+    push @vals, defined $i ? $i : 0;
+  }
+  say (split //, $in);
+  return @vals
+}
+
+sub pies_stdin(){
+  if((-t STDIN and $#ARGV==-1) ||
+     grep {/^-+h/} @ARGV) {
+     print("USAGE: pies 1234 [-r]
+priority, impact, excitment, size
+valued 1-8 (sparklines unicode)
+-r to reverse
+-h for help
+");
+     exit()
+  }
+  # which way do we go?
+  my $fun=\&num2spark;
+  if(grep {/^-+r/} @ARGV) {
+    $fun = \&spark2num; 
+    @ARGV = grep {!/^-+r/} @ARGV;
+   }
+
+  print(&$fun($_)) for(@ARGV);
+  if(! -t STDIN){
+      print(&$fun($_)) while($_=<STDIN>);
+  }
+}
+
+# run if not sourced
+# spark might be useful elsewhere
+pies_stdin unless(caller);
+1;

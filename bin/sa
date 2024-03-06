@@ -1,0 +1,212 @@
+
+[4mROFI-DMENU[24m(5)                                    File Formats Manual                                    [4mROFI-DMENU[24m(5)
+
+[1mNAME[0m
+       [1mrofi dmenu mode [22m- Rofi dmenu emulation
+
+[1mDESCRIPTION[0m
+       To  integrate  [1mrofi [22minto scripts as simple selection dialogs, [1mrofi [22msupports emulating [1mdmenu(1) [22m(A dynamic menu
+       for X11).
+
+       The website for [1mdmenu [22mcan be found here ⟨http://tools.suckless.org/dmenu/⟩.
+
+       [1mrofi [22mdoes not aim to be 100% compatible with [1mdmenu[22m. There are simply too many flavors of [1mdmenu[22m.  The  idea  is
+       that  the  basic  usage command-line flags are obeyed, theme-related flags are not.  Besides, [1mrofi [22moffers some
+       extended features (like multi-select, highlighting, message bar, extra key bindings).
+
+[1mBASIC CONCEPT[0m
+       In [1mdmenu [22mmode, [1mrofi [22mreads data from standard in, splits them into separate entries and displays them.  If  the
+       user selects an row, this is printed out to standard out, allow the script to process it further.
+
+       By  default  separation of rows is done on new lines, making it easy to pipe the output a one application into
+       [1mrofi [22mand the output of rofi into the next.
+
+[1mUSAGE[0m
+       By launching [1mrofi [22mwith the [1m-dmenu [22mflag it will go into dmenu emulation mode.
+
+              ls | rofi -dmenu
+
+   [1mDMENU DROP-IN REPLACEMENT[0m
+       If [1margv[0] [22m(calling command) is dmenu, [1mrofi [22mwill start in dmenu mode.  This way, it can be used as  a  drop-in
+       replacement for dmenu. Just copy or symlink [1mrofi [22mto dmenu in [1m$PATH[22m.
+
+              ln -s /usr/bin/rofi /usr/bin/dmenu
+
+   [1mDMENU VS SCRIPT MODE[0m
+       Script  mode is used to extend [1mrofi[22m, dmenu mode is used to extend a script.  The two do share much of the same
+       input format. Please see the [1mrofi-script(5) [22mmanpage for more information.
+
+   [1mDMENU SPECIFIC COMMANDLINE FLAGS[0m
+       A lot of these options can also be modified by the script using special input. See the [1mrofi-script(5)  [22mmanpage
+       for more information about this syntax.
+
+       [1m-sep [4m[22mseparator[0m
+
+       Separator for [1mdmenu[22m. Example: To show a list of 'a' to 'e' with '|' as a separator:
+
+              echo "a|b|c|d|e" | rofi -sep '|' -dmenu
+
+       [1m-p [4m[22mprompt[0m
+
+       Specify the prompt to show in [1mdmenu [22mmode. For example, select 'monkey', a,b,c,d, or e.
+
+              echo "a|b|c|d|e" | rofi -sep '|' -dmenu -p "monkey"
+
+       Default: [4mdmenu[0m
+
+       [1m-l [4m[22mnumber[24m [4mof[24m [4mlines[24m [4mto[24m [4mshow[0m
+
+       Maximum number of lines the menu may show before scrolling.
+
+              rofi -dmenu -l 25
+
+       Default: [4m15[0m
+
+       [1m-i[0m
+
+       Makes [1mdmenu [22msearches case-insensitive
+
+       [1m-a [4m[22mX[0m
+
+       Active  row,  mark  [4mX[24m as active. Where [4mX[24m is a comma-separated list of python(1)-style indices and ranges, e.g.
+       indices start at 0, -1 refers to the last row with -2 preceding it, ranges are left-open and right-close,  and
+       so on. You can specify:
+
+              • A single row: '5'
+
+              • A range of (last 3) rows: '-3:'
+
+              • 4 rows starting from row 7: '7:11' (or in legacy notation: '7-10')
+
+              • A set of rows: '2,0,-9'
+
+              • Or any combination: '5,-3:,7:11,2,0,-9'
+
+       [1m-u [4m[22mX[0m
+
+       Urgent row, mark [4mX[24m as urgent. See [1m-a [22moption for details.
+
+       [1m-only-match[0m
+
+       Only return a selected item, do not allow custom entry.  This mode always returns an entry. It will not return
+       if no matching entry is selected.
+
+       [1m-no-custom[0m
+
+       Only return a selected item, do not allow custom entry.  This mode returns directly when no entries given.
+
+       [1m-format [4m[22mformat[0m
+
+       Allows the output of dmenu to be customized (N is the total number of input entries):
+
+              • 's' selected string
+
+              • 'i' index (0 - (N-1))
+
+              • 'd' index (1 - N)
+
+              • 'q' quote string
+
+              • 'p' Selected string stripped from Pango markup (Needs to be a valid string)
+
+              • 'f' filter string (user input)
+
+              • 'F' quoted filter string (user input)
+
+       Default: 's'
+
+       [1m-select [4m[22mstring[0m
+
+       Select first line that matches the given string
+
+       [1m-mesg [4m[22mstring[0m
+
+       Add  a  message  line  below  the  filter entry box. Supports Pango markup.  For more information on supported
+       markup, see here ⟨https://docs.gtk.org/Pango/pango_markup.html⟩
+
+       [1m-dump[0m
+
+       Dump the filtered list to stdout and quit.  This can be used to get the list as [1mrofi [22mwould filter it.  Use to‐
+       gether with [1m-filter [22mcommand.
+
+       [1m-input [4m[22mfile[0m
+
+       Reads from [4mfile[24m instead of stdin.
+
+       [1m-password[0m
+
+       Hide the input text. This should not be considered secure!
+
+       [1m-markup-rows[0m
+
+       Tell [1mrofi [22mthat DMenu input is Pango  markup  encoded,  and  should  be  rendered.   See  here  ⟨https://devel‐
+       oper.gnome.org/pygtk/stable/pango-markup-language.html⟩ for details about Pango markup.
+
+       [1m-multi-select[0m
+
+       Allow multiple lines to be selected. Adds a small selection indicator to the left of each entry.
+
+       [1m-sync[0m
+
+       Force  [1mrofi [22mmode to first read all data from stdin before showing the selection window. This is original dmenu
+       behavior.
+
+       Note: the default asynchronous mode will also be automatically disabled if used with conflicting options, such
+       as [1m-dump[22m, [1m-only-match [22mor [1m-auto-select[22m.
+
+       [1m-window-title [4m[22mtitle[0m
+
+       Set name used for the window title. Will be shown as Rofi - [4mtitle[0m
+
+       [1m-w [4m[22mwindowid[0m
+
+       Position [1mrofi [22mover the window with the given X11 window ID.
+
+       [1m-keep-right[0m
+
+       Set ellipsize mode to start. So, the end of the string is visible.
+
+       [1m-display-columns[0m
+
+       A comma seperated list of columns to show.
+
+       [1m-display-column-separator[0m
+
+       The column separator. This is a regex.
+
+       [4mdefault[24m: '\t'
+
+       [1m-ballot-selected-str [4m[22mstring[0m
+
+       When multi-select is enabled, prefix this string when element is selected.
+
+       [4mdefault[24m: "☑ "
+
+       [1m-ballot-unselected-str [4m[22mstring[0m
+
+       When multi-select is enabled, prefix this string when element is not selected.
+
+       [4mdefault[24m: "☐ "
+
+[1mRETURN VALUE[0m
+              • [1m0[22m: Row has been selected accepted by user.
+
+              • [1m1[22m: User cancelled the selection.
+
+              • [1m10-28[22m: Row accepted by custom keybinding.
+
+[1mSEE ALSO[0m
+       rofi(1), rofi-sensible-terminal(1), dmenu(1), rofi-theme(5), rofi-script(5), rofi-theme-selector(1), ascii(7)
+
+[1mAUTHOR[0m
+       Qball Cow qball@gmpclient.org ⟨mailto:qball@gmpclient.org⟩
+
+       Rasmus Steinke rasi@xssn.at ⟨mailto:rasi@xssn.at⟩
+
+       Morgane Glidic sardemff7+rofi@sardemff7.net ⟨mailto:sardemff7+rofi@sardemff7.net⟩
+
+       Original code based on work by: Sean Pringle sean.pringle@gmail.com ⟨mailto:sean.pringle@gmail.com⟩
+
+       For a full list of authors, check the AUTHORS file.
+
+                                                      rofi-dmenu                                        [4mROFI-DMENU[24m(5)

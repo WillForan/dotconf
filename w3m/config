@@ -3,7 +3,7 @@
 extbrowser firefox %s
 extbrowser2 url=%s && printf %s "$url" | xclip -i &
 extbrowser3 emacsclient -nc --eval "(progn (require 'w3m) (w3m-browse-url \"%s\"))"
-extbrowser4 mpv %s &
+extbrowser4 mpv %s
 
 
 # edit with emacsclient
