@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-#
-# select from clippings and add to primary clipboard 
-# only getting items from lines that start with ' * ', like
+# select from clippings and add to primary clipboard
+# find lines in notebook like @clip or from dedicated clipings text file.
+# in dedicated file, only getting items from lines that start with ' * ', like
 #
 #  * item
 #
@@ -16,8 +16,63 @@
 # if rofi exits (esc) without seleciton there's no clipboard change
 #
 # 20231204 - init
-clipings_file=$HOME/notes/zimwork/clippings.txt
+# 20240307 - add @clip(s) tag search, rofi wide theme
+# 20240310 - search whole notebook for @clip, setup rofi alt-exec funcs; rofi style
 
-grep -Po '(?<=^ \* ).*' $clipings_file |
-  rofi -dmenu|
-  xclip -i
+NOTEDIR=$HOME/notes/zimwork
+clipings_file=$NOTEDIR/clippings.txt
+file_line_clip(){
+    # dedicated clippings file
+    # look for items starting with ' *'
+    # add '$file:' to the start of all results
+    # will already have line number
+    # output like
+    #  .../clippings.txt:4:https://....
+    grep -nPo '(?<=^ \* ).*' "$clipings_file" |
+        sed "s;^;$clipings_file:;"
+
+    # anything wtih '@clip' in the entire notebook
+    # remove '@clip' from match
+    grep -nR @clip "$NOTEDIR" |
+        sed 's/\@clip[s ]*//g'
+}
+
+rofi_seps(){
+  # turn file:num:match_text to tab sep:
+  #  file:num match_text
+  # remove dirname of clip file
+  # change new line sep to \x0f
+  # TODO: would like to use multiline
+  sed 's/\([0-9]\):/\1\t/' |
+  tr '\n' $'\x0f' | #fmt -w 180  |
+  sed "s:$NOTEDIR/::;s/\n/<br>/g"
+}
+_rofi(){
+  rofi  -dmenu \
+   -mesg "RET clipboard; M-. ellipse; M-2 edit file; M-1 plum" \
+   -sep $'\x0f' \
+   -eh 2 ` # line per entry ` \
+   -display-column-separator '\t' \
+   -display-columns 2 `# hide first 'file:num' column `\
+   -keep-right ` # bug? does nothing? `\
+   -theme-str 'window{width:70%; height: 70%; }' \
+   -theme-str 'element-text { tab-stops: [0,1]; }'
+}
+
+text="$(file_line_clip | rofi_seps | _rofi)"
+stat=$? # exit status 10-30 are rofi custom action ('alt-1' to 'alt-)')
+IFS=$'\t' read file res <<< "$text"
+if [ -z "$res" ]; then
+    exit 1
+elif [ $stat -eq 10 ]; then # Alt-1
+    xclip -i <<< "$res"
+    plum
+elif [ $stat -eq 11 ]; then # Alt-2
+    # split my:file_name.txt:num such that last : becomes ' +' and feed to editor
+    # emacsclient
+    #perl -F: -ne 'print  "+",$F[$#F]=~s/\s//gr,"\0",join(":", @F[0..($#F-1)])' <<< "$file" |
+    #    xargs -n 2 -x -r -t -0 emacsclient -n -c -a''
+    emacsclient -n -c -a'' $(sed s/.*:/+:/ <<< "$file") "$(sed 's/:[0-9]\+$//' <<< "$file")"
+else
+    xclip -i <<< "$res"
+fi
