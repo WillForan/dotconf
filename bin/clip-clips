@@ -16,8 +16,10 @@
 # if rofi exits (esc) without seleciton there's no clipboard change
 #
 # 20231204 - init
-clipings_file=$HOME/notes/zimwork/clippings.txt
+clipings_file=$HOME/notes/WorkWiki/clippings.txt
+[ ! -r "$clipings_file" ] &&
+   clipings_file=$HOME/notes/zimwork/clippings.txt
 
-grep -Po '(?<=^ \* ).*' $clipings_file |
+grep -Po '(?<=^ \* ).*' "$clipings_file" |
   rofi -dmenu|
   xclip -i
