@@ -152,6 +152,9 @@
 "echo  slack-img-show'\n'slack-img-clipsave|rofi -dmenu|parallel -r exec"
  Mod4 + Control + i
 
+"i3-easyfocus -a -f lucidasans-bolditalic-24"
+ Mod4 + period
+
 # for fpedal
 "/home/foranw/bin/quick-menu"
   F12
