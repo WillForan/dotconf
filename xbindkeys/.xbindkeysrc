@@ -60,7 +60,7 @@
 "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i' --tabbed"
   Mod4 + Shift + p 
 
-"/home/foranw/src/utils/wf-utils/zim/quickjump.bash"
+"/home/foranw/src/utils/wf-utils/zim/quickjump.bash work"
   Mod4 + t 
 
 "/home/foranw/src/utils/wf-utils/i3/i3-zim-go.bash" 
