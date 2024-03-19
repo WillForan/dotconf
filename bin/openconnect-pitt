@@ -1,0 +1,25 @@
+# openconnect package install location differences
+test -r /usr/libexec/openconnect/hipreport.sh && wrap="$_" # debian
+test -r /usr/lib/openconnect/hipreport.sh && wrap="$_" # arch
+user=foran
+gateway=BYOD-GATEWAY-CL 
+mfa_method=push1
+
+
+sudo openconnect -v --protocol=gp \
+  portal-palo.pitt.edu \
+  --csd-wrapper="$wrap" \
+  --authgroup=$gateway \
+  -u $user \
+  --form-entry main:Challenge=$mfa_method \
+  --form-entry hidden_form:choice=$mfa_method \
+  --form-entry hidden_form:challenge=$mfa_method
+
+
+# form-entry tests, none-working. pass cannot be sent unless it's the only prompt on stdin
+#  https://gitlab.com/openconnect/openconnect/-/issues/270
+#  suggests: pass work/pitt | cat - /dev/tty |
+#
+#  https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
+# suggets:
+# { pass work/pitt; sleep 1; echo $mfa_method; } |
