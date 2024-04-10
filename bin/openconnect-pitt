@@ -1,25 +1,52 @@
-# openconnect package install location differences
-test -r /usr/libexec/openconnect/hipreport.sh && wrap="$_" # debian
-test -r /usr/lib/openconnect/hipreport.sh && wrap="$_" # arch
-user=foran
-gateway=BYOD-GATEWAY-CL 
-mfa_method=push1
+#!/usr/bin/env expect
 
-
-sudo openconnect -v --protocol=gp \
-  portal-palo.pitt.edu \
-  --csd-wrapper="$wrap" \
-  --authgroup=$gateway \
-  -u $user \
-  --form-entry main:Challenge=$mfa_method \
-  --form-entry hidden_form:choice=$mfa_method \
-  --form-entry hidden_form:challenge=$mfa_method
-
-
-# form-entry tests, none-working. pass cannot be sent unless it's the only prompt on stdin
-#  https://gitlab.com/openconnect/openconnect/-/issues/270
-#  suggests: pass work/pitt | cat - /dev/tty |
+# automate some parts of global protect VPN
+# using openconnect and pass
 #
-#  https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
-# suggets:
-# { pass work/pitt; sleep 1; echo $mfa_method; } |
+# 20240410: from bash to tcl expect b/c
+#  pass cannot be sent unless it's the only prompt on stdin.
+#  I could get niether of below to correctly send inputs.
+#     https://gitlab.com/openconnect/openconnect/-/issues/270
+#     suggests: pass work/pitt | cat - /dev/tty | openconnect
+#
+#     https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
+#     suggests:
+#     { pass work/pitt; sleep 1; echo $mfa_method; } | openconnect
+
+set vpn_host portal-palo.pitt.edu
+set user foran
+set pass [exec pass work/pitt]; # 'pass' cli password manager
+set gateway BYOD-GATEWAY-CL 
+set mfa_method push1
+
+# TODO: use WillForan/duo-hotp/duo.py
+# to get passphrase instead of push
+
+# debain
+set wrap /usr/libexec/openconnect/hipreport.sh
+# arch
+if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
+# unknown
+if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
+
+
+spawn sudo openconnect -v --protocol=gp \
+  $vpn_host \
+  --csd-wrapper=$wrap \
+  --authgroup=$gateway \
+  -u $user
+
+# haven't found challenge/choice forum option
+# use expect to endter instead
+# tried:
+#  --form-entry main:Challenge=$mfa_method \
+#  --form-entry hidden_form:choice=$mfa_method \
+#  --form-entry hidden_form:challenge=$mfa_method
+
+expect -re "Enter login credentials(\n|\r)*Password:" 
+send "$pass\r"
+expect "Choose a secondary factor from ('push1', 'push2', 'push3', 'phone2', 'sms2') or enter passcode:"
+send "$mfa_method\r"
+
+# without giving back tty, program will exit
+interact
