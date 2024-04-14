@@ -39,6 +39,7 @@
                 eshell-mode-hook
                 inferior-ess-mode-hook
                 inferior-python-mode-hook
+                summary-mode-hook
                 erc-mode-hook))
   (add-hook mode #'my/no-lines))
 
@@ -69,11 +70,10 @@
 (setq flyspell-issue-message-flag nil)
 ; (setq flyspell-auto-correct-binding (kbd "<S-f12>")))
 ; see C-;
-(add-hook #'mu4e-compose-mode-hook #'turn-on-flyspell)
-(add-hook #'org-mode-hook #'turn-on-flyspell)
-(add-hook #'message-mode-hook #'turn-on-flyspell)
-(add-hook #'notmuch-message-mode #'turn-on-flyspell)
-(add-hook #'markdown-mode-hook #'turn-on-flyspell)
+(add-hook #'mu4e-compose-mode-hook #'flyspell-mode-on)
+(add-hook #'message-mode-hook #'flyspell-mode-on)
+(add-hook #'notmuch-message-mode #'flyspell-mode-on)
+(add-hook #'markdown-mode-hook #'flyspell-mode-on)
 (add-hook #'git-commit-setup-hook #'git-commit-turn-on-flyspell)
 
 ; (global-linum-mode 1)
