@@ -58,7 +58,16 @@ export PATH
 
 # 20200408
 # only needs to happen once. slow to run. grep first to check
-! grep prefix= ~/.npmrc  -q 2>/dev/null && command -v npm >/dev/null && npm config set prefix ~/.local
+__config_node(){
+   command -v npm >/dev/null || return
+   # perl 2x (5ms vs 10ms) faster than:
+   #   grep prefix= "$HOME/.npmrc" -sq
+   # but only checking first line
+   perl -lne 'exit 0 if m/prefix=/;exit 1' ~/.npmrc && return
+   # this is slow but only done once
+   npm config set prefix ~/.local
+}
+__config_node
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
 export PATH=$PATH:/opt/afni/
 
@@ -71,7 +80,7 @@ export PATH="$PATH:$HOME/.local/share/racket/8.9/bin/"
 
 
 # 20211002 - want auto updates from zotero and firefox
-#test -r $HOME/bin/firefox && export PATH="$_:$PATH"
-#test -r $HOME/bin/zotero && export PATH="$_:$PATH"
+test -r "$HOME/bin/firefox" && export PATH="$_:$PATH"
+test -r "$HOME/bin/zotero" && export PATH="$_:$PATH"
 
 

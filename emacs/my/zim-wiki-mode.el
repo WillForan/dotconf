@@ -77,3 +77,15 @@
     ;; (local-set-key (kbd "<backtab>") #'outline-cycle)
     ;; (local-set-key (kbd "M-<iso-lefttab>") #'(lambda () (interactive) (outline-cycle '(4))))
     )
+
+
+(defun ws-notebook ()
+  "Run ws:: lines in zim wiki text file and jump to dedictated i3 workspace.
+For running a single ws:: line, see `my/zim-ws-plum'."
+  (interactive)
+  ;; forks do not run in (start-process) or (async-shell-command)
+  ;; shell-command waits for forked children to end too
+  (call-process "/home/foranw/src/utils/wf-utils/i3/zim-i3-go.bash"
+                nil 0 nil           ; no output, no wait, no redisplay
+                ""                  ; gen workspace name from filename
+                (buffer-file-name)))

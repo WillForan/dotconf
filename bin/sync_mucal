@@ -1,7 +1,22 @@
+#!/usr/bin/env bash
 # online?
 ip addr |grep -v 127.0.0.1 | grep -q inet[^6] || exit 0
 
-# reverse proxy?
-pgrep ssh -af|grep -q 1080:localhost:1080 || exit 0
-vdirsyncer sync && khal calendar  >/dev/null
+# sync mail. see ~/.mbsyncrc
+# for laptop, limited to 200 messages from personal accounts
+# (see "notmuch-remote" for work)
+mbsync -a
+
+# reverse proxy for mail
+if ! sudo fuser -v -n tcp 1080 >/dev/null 2>&1; then
+  host=localhost
+  ip addr|grep -q nebula && host=192.168.100.2
+  ssh -L 1080:localhost:1080 $host -MNf
+  sleep 1
+fi
+# did proxy get applied?
+! pgrep ssh -af|grep -q 1080:localhost:1080 && echo "no davmail connection!" && exit 1
+
+# sync calendars
+vdirsyncer sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
 

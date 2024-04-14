@@ -40,6 +40,7 @@
                 inferior-ess-mode-hook
                 inferior-python-mode-hook
                 summary-mode-hook
+                deft-mode
                 erc-mode-hook))
   (add-hook mode #'my/no-lines))
 

@@ -60,7 +60,7 @@
 "ph --database ~/passwd/p.kdbx type 'rofi -dmenu -i' --tabbed"
   Mod4 + Shift + p 
 
-"/home/foranw/src/utils/wf-utils/zim/quickjump.bash"
+"/home/foranw/src/utils/wf-utils/zim/quickjump.bash work"
   Mod4 + t 
 
 "/home/foranw/src/utils/wf-utils/i3/i3-zim-go.bash" 
@@ -151,6 +151,9 @@
 
 "echo  slack-img-show'\n'slack-img-clipsave|rofi -dmenu|parallel -r exec"
  Mod4 + Control + i
+
+"i3-easyfocus -a -f lucidasans-bolditalic-24"
+ Mod4 + period
 
 # for fpedal
 "/home/foranw/bin/quick-menu"

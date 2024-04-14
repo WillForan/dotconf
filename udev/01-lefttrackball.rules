@@ -1,0 +1,2 @@
+ACTION=="add", KERNEL=="mouse[0-9]*", SUBSYSTEM=="input", ATTRS{name}=="A4Tech PS/2+USB Mouse", RUN+="/home/foranw/bin/left-track-mouse"
+ACTION=="add", KERNEL=="mouse[0-9]*", SUBSYSTEM=="input", ATTRS{product}=="Kensington Expert Mouse", RUN+="/home/foranw/bin/left-track-mouse"

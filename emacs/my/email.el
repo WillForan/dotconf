@@ -103,7 +103,7 @@
   (org-msg-mode-notmuch)
   (notmuch-tree "date:1week.. -tag:delete"))
 
-(use-package "notmuch" :ensure t
+(use-package notmuch :ensure t
   :custom
   ;; 20220107 - redefine jumps on 'j'
   (notmuch-saved-searches '((:name "week" :query "(date:1w.. -tag:delete) OR tag:todo" :key "w")

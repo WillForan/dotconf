@@ -5,7 +5,7 @@
   :load-path "~/src/utils/emacs-dokuwiki"
   :ensure t
   :hook
-  ((dokuwiki-open-page .
+  ((dokuwiki-page-opened .
     (lambda ()
       (dokuwiki-setup)
       (company-mode 1)

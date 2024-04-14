@@ -1,7 +1,12 @@
 #!/bin/bash
 # mostly copy of notmuch-remote
 printf -v ARGS "%q " "$@"
-exec ssh reese msmtp ${ARGS}
+
+# connect depends on how we're connected
+host=reese
+pgrep nebula >/dev/null && host=reese-nebula
+
+exec ssh $host msmtp ${ARGS}
 
 # in emacs (TODO: does this work with attachments?!)
 # (setq sendmail-program (expand-file "~/bin/sendmail-remote"))
