@@ -3,6 +3,9 @@
 # automate some parts of global protect VPN
 # using openconnect and pass
 #
+# 20240416:
+#   add $argv obsensibly for
+#    -s "vpn-slice 136.142.217.118/24"
 # 20240410: from bash to tcl expect b/c
 #  pass cannot be sent unless it's the only prompt on stdin.
 #  I could get niether of below to correctly send inputs.
@@ -29,13 +32,24 @@ if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
 # unknown
 if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
 
+set cmd "openconnect"
+set precmd ":"
 
-spawn sudo openconnect -v --protocol=gp \
+# use python script 'vpn-slice' to use vpn only for specific range
+# need to pass 'vpn-slice ip_range' as single argument
+set vpnslice [file normalize ~/src/utils/vpn-slice/bin/activate]
+if [file isfile $vpnslice] {
+   set precmd "source $vpnslice"
+   set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
+}
+
+spawn sudo bash -c [list {*}$precmd && {*}$cmd \
+  -v --protocol=gp \
   $vpn_host \
   --csd-wrapper=$wrap \
   --authgroup=$gateway \
-  -u $user
-
+  -u $user  \
+]
 # haven't found challenge/choice forum option
 # use expect to endter instead
 # tried:
