@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+tmp=$(mktemp /tmp/XXX.png)
+base=${tmp/.png/}
+trap 'test -r $tmp && rm $_; test -r $base.txt && rm $_' EXIT SIGINT
+# scrot
+# xclip -selection clipboard -target image/png -o > /tmp/ocr.png; tesseract -l eng  /tmp/ocr.png /tmp/ocr; cat /tmp/ocr.txt
+
+flameshot gui --raw > $tmp
+tesseract -l eng  $tmp $base
+cat $base.txt | xclip -i
