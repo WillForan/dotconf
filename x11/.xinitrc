@@ -95,7 +95,6 @@ case $HOSTNAME in
       xinput set-prop "SynPS/2 Synaptics TouchPad" "libinput Tapping Enabled" 1
       (sudo ifconfig wlp0s26u1u4i2 up;
       iwlist wlp0s26u1u4i2 scanning|grep abraham_linksys -q && wifi || sudo ifconfig wlp0s26u1u4i2 down) &
-      #cbatticon &
       nitrogen --restore &
       # 20230505: '/opt/paloaltonetworks/globalprotect/PanGPA start' is running
       #  parent is bash running .xinitrc. where in here!? 'systemctl disable gpd'
@@ -103,6 +102,13 @@ case $HOSTNAME in
       cbatticon &
 
       # barrierc  --enable-drag-drop --disable-crypto -f 192.168.1.75 &
+      ;;
+  x260)
+      # disable gaps here rather than in config. like gaps for all other hosts
+      (while ! pgrep i3; do sleep 1; done; i3-msg gaps outer all set 0; i3-msg gaps inner all set 0) &
+      cbatticon &
+      dunst &
+      nitrogen --restore &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
