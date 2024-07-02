@@ -2,14 +2,16 @@
 # get next calendar event and either show colorized for polybar or do some action
 # 20240620WF - init
 get_next(){
-  /usr/bin/python3 -m khal list --format "{start-time}	{title}	{description}" --day-format "" now 2d
+  /usr/bin/python3 -m khal list --format "{start-date} {start-time}	{title}	{description}" --day-format "" now 2d
 }
 cal_polybar(){
    # underbar color based on min until event 0-5=red, 5-15=bright, 15+=gray
    perl -F'\t' -slanE '
    $tm=$F[0]; $tl=$F[1];
-   $min=(qx/date -d $tm +%s/ - $now)/60;
+   $min=(qx/date -d "$tm" +%s/ - $now)/60;
    $color=$min<5?"ff0000":($min<15?"990000":"333333");
+   $date=qx/date +%F/; chomp $date;
+   $tm =~ s/$date |(AM|PM)//e;
    say "%{u#$color}%{+u}$tm $tl";
    exit; # show only one event
    
