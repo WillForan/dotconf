@@ -73,7 +73,7 @@
 ; see C-;
 (add-hook #'mu4e-compose-mode-hook #'flyspell-mode-on)
 (add-hook #'message-mode-hook #'flyspell-mode-on)
-(add-hook #'notmuch-message-mode #'flyspell-mode-on)
+(add-hook #'notmuch-message-mode-hook #'flyspell-mode-on)
 (add-hook #'markdown-mode-hook #'flyspell-mode-on)
 (add-hook #'git-commit-setup-hook #'git-commit-turn-on-flyspell)
 
