@@ -39,7 +39,12 @@ case $HOSTNAME in
       # 20221031 - reese on main config file after SSD upgrade
       test -n $(xinput --list|grep A4Tech|grep -Po '(?<=id=)\d+') &&
          xinput --set-button-map $_ 3 2 1
-      xrandr --output DVI-0 --rotate left  --right-of VGA-0
+      #xrandr --output DVI-0 --rotate left  --right-of VGA-0
+      #xrandr --output DVI-I-1 --rotate left  --right-of VGA-1
+      xrandr --output VGA-1 --mode 1920x1080 --output HDMI-1 --right-of VGA-1
+      xrandr --output HDMI-2 --rotate left
+
+
       nitrogen --restore &
       # work computer probably needs to lock itself
       xautolock -time 10 -locker "i3lock-fancy -p -g" -detectsleep &
