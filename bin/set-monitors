@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# 20240815 - x260 laptop in dock mount?
+if xrandr | grep -q DP-2-3 connected; then
+  xrandr --output DP-2-3 --mode 1920x1080 --right-of eDP-1
+  xrandr --output DP-2-2 --rotate right --right-of DP-2-3 --mode 1680x1050
+else
+  xrandr --output DP-2-3 --off
+  xrandr --output DP-2-1 --off
+
+fi
