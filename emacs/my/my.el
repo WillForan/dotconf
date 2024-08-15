@@ -161,3 +161,23 @@ if any NOTES will insert that"
            "#+DATE: "  (format-time-string "%Y-%m-%d") "\n"
            "#+OPTIONS: _:{} ^:{} toc:nil num:nil\n"
            "#+DRAFT: true"))))))
+
+;; 20240715
+(defun my/ring-to-buff ()
+  "Send last executed command to the other window.
+Useufl for interactively building a script"
+  (interactive)
+  (require 'ring)
+  (require 'switch-window)
+  (let* ((val (ring-ref comint-input-ring 0))
+         (other-buff (save-window-excursion (other-window 1) (current-buffer)))
+         (new-pnt (with-current-buffer other-buff
+                    (end-of-line)
+                    (insert "\n")
+                    (insert val)
+                    (end-of-line)
+                    (point))))
+    (set-window-point other-buff (new-pnt))))
+
+(define-key comint-mode-map (kbd "C-c :") #'my/ring-to-buff)
+;; (define-key inferior-python-mode-map (kbd "C-c :") 'my/ring-to-buff)
