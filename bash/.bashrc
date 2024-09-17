@@ -115,10 +115,10 @@ fi
 #   source <(kitty + complete setup bash)
 
 # if emacs, set term. but dont set bindings
-if [ -n "$INSIDE_EMACS" ]; then
+# 20240917 - EAT handles normal terminal stuff just fine
+if [ -n "$INSIDE_EMACS" -a -z "$EAT_SHELL_INTEGRATION_DIR" ]; then
     export TERM=eterm-color \
            EDITOR='emacsclient -n'
-
     alias pass='EDITOR=emacsclient pass'
     PS1="\t \w\n\$ "
 elif [ "$TERM" == "dumb" ]; then
@@ -172,4 +172,12 @@ else
 
     # last to avoid DEBUG TRAP performance penelty for every command run
     . "$_BASHCFGDIR/PS1.bash"
+
+    if [ -n "$EAT_SHELL_INTEGRATION_DIR" ]; then
+       source "$EAT_SHELL_INTEGRATION_DIR/bash"
+       EDITOR='emacsclient -n'
+    fi
 fi
+
+# auto-inserted by @update.afni.binaries :
+export PATH=$PATH:/home/foranw/abin
