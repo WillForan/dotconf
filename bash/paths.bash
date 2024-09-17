@@ -60,6 +60,7 @@ export PATH
 # only needs to happen once. slow to run. grep first to check
 __config_node(){
    command -v npm >/dev/null || return
+   [ -r ~/.npmrc ] || return
    # perl 2x (5ms vs 10ms) faster than:
    #   grep prefix= "$HOME/.npmrc" -sq
    # but only checking first line
