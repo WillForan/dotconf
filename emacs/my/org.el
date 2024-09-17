@@ -217,7 +217,8 @@
 
 (defun my/org-custom-id-from-header (&optional pom)
   "Create a custom_id property from the header.
-Use header for POM (point of marker; when nil point)."
+Use header for POM (point of marker; when nil point).
+Used for hugo/go-org.  See `org-id-get-create` for org-roam."
   (interactive)
   (org-with-point-at pom
     (-when-let* ((id (car (last (org-get-outline-path t))))
