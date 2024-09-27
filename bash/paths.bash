@@ -83,4 +83,9 @@ export PATH="$PATH:$HOME/.local/share/racket/8.9/bin/"
 test -r "$HOME/bin/firefox" && export PATH="$_:$PATH"
 test -r "$HOME/bin/zotero" && export PATH="$_:$PATH"
 
+[ -d /home/foranw/.radicle/ ] &&
+   export PATH="$PATH:/home/foranw/.radicle/bin"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# export PATH="$PATH:$HOME/.rvm/bin"
 
