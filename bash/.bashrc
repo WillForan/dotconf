@@ -70,8 +70,6 @@ shopt -s cmdhist    # multi-line command written as one line in history file
 # GNU parallel
 command -v env_parallel >/dev/null && source $(which env_parallel.bash)
 
-# auto-inserted by @update.afni.binaries :
-export PATH=$PATH:/opt/ni_tools/afni
 test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
 
 # 20231026  - julia doesn't want to be packaged. use their own dl on reese
@@ -125,10 +123,10 @@ fi
 #   source <(kitty + complete setup bash)
 
 # if emacs, set term. but dont set bindings
-if [ -n "$INSIDE_EMACS" ]; then
+# 20240917 - EAT handles normal terminal stuff just fine
+if [ -n "$INSIDE_EMACS" -a -z "$EAT_SHELL_INTEGRATION_DIR" ]; then
     export TERM=eterm-color \
            EDITOR='emacsclient -n'
-
     alias pass='EDITOR=emacsclient pass'
     PS1="\t \w\n\$ "
 elif [ "$TERM" == "dumb" ]; then
@@ -182,4 +180,9 @@ else
 
     # last to avoid DEBUG TRAP performance penelty for every command run
     . "$_BASHCFGDIR/PS1.bash"
+
+    if [ -n "$EAT_SHELL_INTEGRATION_DIR" ]; then
+       source "$EAT_SHELL_INTEGRATION_DIR/bash"
+       EDITOR='emacsclient -n'
+    fi
 fi

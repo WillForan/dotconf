@@ -161,3 +161,43 @@ if any NOTES will insert that"
            "#+DATE: "  (format-time-string "%Y-%m-%d") "\n"
            "#+OPTIONS: _:{} ^:{} toc:nil num:nil\n"
            "#+DRAFT: true"))))))
+
+;; 20240715
+(defun my/ring-to-buff ()
+  "Send last executed command to the other window.
+Useufl for interactively building a script"
+  (interactive)
+  (require 'ring)
+  (require 'switch-window)
+  (let* ((val (ring-ref comint-input-ring 0))
+         (other-buff (save-window-excursion (other-window 1) (current-buffer)))
+         (new-pnt (with-current-buffer other-buff
+                    (end-of-line)
+                    (insert "\n")
+                    (insert val)
+                    (end-of-line)
+                    (point))))
+    (set-window-point other-buff (new-pnt))))
+
+(define-key comint-mode-map (kbd "C-c :") #'my/ring-to-buff)
+;; (define-key inferior-python-mode-map (kbd "C-c :") 'my/ring-to-buff)
+
+(defun my/crc-email ()
+  (interactive)
+  (goto-char 0)
+  (let ((id (->>
+             (save-excursion (search-forward-regexp "Created account.*?id [^ <]*") (match-string 0))
+             (s-replace-regexp ".* " "" )
+             (substring-no-properties))))
+    (search-forward "To:") (kill-line)
+    (insert (concat  " " id "@pitt.edu\n"))
+    (search-forward "Subject:") (kill-line)
+    (insert (concat  " [crc account!] " id "@h2p.crc.pitt.edu"))
+    (search-forward "--text follows this line--\n")
+    (insert (concat "\nWelcome to the 'npac' CRC group!\nYou'll likely need Global Connect to VPN to the same network as the CRC cluster.\n"
+                    "See more on connecting at https://crc.pitt.edu/getting-started/accessing-cluster\n\n"
+                    "Afterward, connect like:\n   ssh " id "@h2p.crc.pitt.edu\n"
+                    "\nTry some neuroimaging with the module system:\n   module load afni\n   3dinfo -help\n\n"
+                    "The semi-automatic VPN connecting script might also be useful:\n"
+"https://github.com/WillForan/dotconf/blob/master/bin/openconnect-pitt\n\n"
+                    ))))

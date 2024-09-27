@@ -44,6 +44,7 @@ for d in \
  $HOME/src/utils/org-export   `# github pages: willforan.github.io `\
  $HOME/src/work/lncdtools     `# work functions (mkifdiff, mkls, mkstat, m, etc)` \
  /opt/ni_tools/afni           `# NIMH nueroimaging` \
+ $HOME/abin \
  /opt/ni_tools/fmri_processing_scripts  \
  /opt/ni_tools/c3d/bin \
  /opt/ANTs/bin\
@@ -60,6 +61,7 @@ export PATH
 # only needs to happen once. slow to run. grep first to check
 __config_node(){
    command -v npm >/dev/null || return
+   [ -r ~/.npmrc ] || return
    # perl 2x (5ms vs 10ms) faster than:
    #   grep prefix= "$HOME/.npmrc" -sq
    # but only checking first line

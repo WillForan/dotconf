@@ -1,13 +1,36 @@
-" prev t and T do the same thing
+" in firefox, run :nativeinstall  and paste clip-copied curl command
+" this files goes in $XDG_CONFIG_DIR/tridactyl/tridactylrc or ~/.tridactylrc
+" in firefox, run :source to reload
+
+" prev t and T do the same thing -- open "history and bookmarks"
 bind T tabdetach
 bind ,T tabpush
 
-" c-e same as j; but c-e used to toggle sidebarry
-unbind --mode=normal <C-e>
-
+"""" compatiblity 
+" dont want github and gitlab editor features by default
+" 20240825 - not working? maybe wait for https://github.com/tridactyl/tridactyl/issues/2485
+seturl github.com disableautofocus true
+seturl gitlab.com disableautofocus true
 " github.com eats /, maybe just shift-esc first?
 unbind --mode=normal <C-f>
 
 " delete is useful but will use ctl+w.
 " outlook.com work email sometimes in normal mode
 unbind --mode=normal d
+
+" c-e same as j; but c-e used to toggle sidebarry
+unbind --mode=normal <C-e>
+
+"""" search
+set searchurls.lncd https://lncd.pitt.edu/wiki/doku.php?do=search&q=
+set searchurls.fw https://www.google.com/search?q=site:http://docs.flywheel.io/%20
+
+"" from example on https://github.com/tridactyl/tridactyl/blob/master/.tridactylrc
+" open in reader mode. untoggle: Ctrl + Alt + R
+bind gr reader
+
+" right click on link
+bind ;C composite hint_focus; !s xdotool key Menu
+
+" New reddit is bad
+autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
