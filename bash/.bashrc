@@ -60,8 +60,6 @@ shopt -s cmdhist    # multi-line command written as one line in history file
 # GNU parallel
 command -v env_parallel >/dev/null && source $(which env_parallel.bash)
 
-# auto-inserted by @update.afni.binaries :
-export PATH=$PATH:/opt/ni_tools/afni
 test -d /opt/ni_tools/lncdtools && export PATH="$PATH:$_"
 
 # 20231026  - julia doesn't want to be packaged. use their own dl on reese
@@ -174,10 +172,8 @@ else
     . "$_BASHCFGDIR/PS1.bash"
 
     if [ -n "$EAT_SHELL_INTEGRATION_DIR" ]; then
-       source "$EAT_SHELL_INTEGRATION_DIR/bash"
+       : source "$EAT_SHELL_INTEGRATION_DIR/bash"
        EDITOR='emacsclient -n'
     fi
 fi
 
-# auto-inserted by @update.afni.binaries :
-export PATH=$PATH:/home/foranw/abin
