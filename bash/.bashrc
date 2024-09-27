@@ -15,8 +15,18 @@ SLOWSHELL=1 # load /etc/bashrc, perlbrew
 
 
 # 20230519 - guix sd
-export GUIX_PROFILE="$HOME/.guix-profile"
-test -r "$GUIX_PROFILE/etc/profile" && source "$_"
+#export GUIX_PROFILE="$HOME/.guix-profile"
+#test -r "$GUIX_PROFILE/etc/profile" && source "$_"
+# 20240209; 20240319 updated again
+#GUIX_PROFILE="/home/foranw/.config/guix/current"
+#if [ -e $GUIX_PROFILE ]; then
+#  . "$GUIX_PROFILE/etc/profile"
+#  export PATH="$HOME/.guix-profile//bin:$PATH"
+#fi
+
+# 20240524 - on reese emacs 30 from source
+[ -d $HOME/src/utils/emacs/src/ ] && PATH="$HOME/src/utils/emacs/src/:$PATH"
+
 
 
 # where to find binaires outside of package manager
