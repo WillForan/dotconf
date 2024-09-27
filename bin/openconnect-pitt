@@ -3,6 +3,9 @@
 # automate some parts of global protect VPN
 # using openconnect and pass
 #
+# 20240927:
+#   argv for 'noslice' to disable vpn-slice even if it exists
+#   add DRYRUN=1 support to just print what we'd do instead of doing it
 # 20240416:
 #   add $argv obsensibly for
 #    -s "vpn-slice 136.142.217.118/24"
@@ -15,7 +18,7 @@
 #     https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
 #     suggests:
 #     { pass work/pitt; sleep 1; echo $mfa_method; } | openconnect
-
+set dryrun $::env(DRYRUN) ;  if { $dryrun ne ""} { set dryrun "echo" }
 set vpn_host portal-palo.pitt.edu
 set user foran
 set pass [exec pass work/pitt]; # 'pass' cli password manager
@@ -32,24 +35,33 @@ if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
 # unknown
 if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
 
+# use custom built openconnect? debian is too old (20240703 v9.01-3 vs v9.12-137-g42623144)
+set openconnect [file normalize ~/src/utils/openconnect]
+if ![file exist $openconnect] { set openconnect openconnect }
+
 set cmd "openconnect"
 set precmd ":"
 
 # use python script 'vpn-slice' to use vpn only for specific range
 # need to pass 'vpn-slice ip_range' as single argument
 set vpnslice [file normalize ~/src/utils/vpn-slice/bin/activate]
-if [file isfile $vpnslice] {
+if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
    set precmd "source $vpnslice"
-   set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
+   #set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
+   # 20240703 - htc.crc.pitt.edu        = 136.142.28.148
+   # 20240926 - ewi-prod.cssd.pitt.edu  = 130.49.230.169
+   set cmd "openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24\\\'"
 }
 
-spawn sudo bash -c [list {*}$precmd && {*}$cmd \
+spawn sudo $dryrun bash -c [list {*}$precmd && {*}$cmd \
   -v --protocol=gp \
   $vpn_host \
   --csd-wrapper=$wrap \
   --authgroup=$gateway \
   -u $user  \
 ]
+
+if [regexp {echo} $dryrun ] { exit }
 # haven't found challenge/choice forum option
 # use expect to endter instead
 # tried:

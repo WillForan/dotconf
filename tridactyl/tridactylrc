@@ -6,15 +6,22 @@
 bind T tabdetach
 bind ,T tabpush
 
-" c-e same as j; but c-e used to toggle sidebarry
-unbind --mode=normal <C-e>
-
+"""" compatiblity 
 " dont want github and gitlab editor features by default
 " 20240825 - not working? maybe wait for https://github.com/tridactyl/tridactyl/issues/2485
 seturl github.com disableautofocus true
 seturl gitlab.com disableautofocus true
+" github.com eats /, maybe just shift-esc first?
+unbind --mode=normal <C-f>
 
-" search
+" delete is useful but will use ctl+w.
+" outlook.com work email sometimes in normal mode
+unbind --mode=normal d
+
+" c-e same as j; but c-e used to toggle sidebarry
+unbind --mode=normal <C-e>
+
+"""" search
 set searchurls.lncd https://lncd.pitt.edu/wiki/doku.php?do=search&q=
 set searchurls.fw https://www.google.com/search?q=site:http://docs.flywheel.io/%20
 

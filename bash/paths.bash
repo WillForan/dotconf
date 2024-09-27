@@ -84,4 +84,9 @@ test -d "$HOME/.radicle/bin" && PATH="$PATH:$_"
 test -d "$HOME/bin/firefox" && export PATH="$_:$PATH"
 test -d "$HOME/bin/zotero" && export PATH="$_:$PATH"
 
+[ -d /home/foranw/.radicle/ ] &&
+   export PATH="$PATH:/home/foranw/.radicle/bin"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# export PATH="$PATH:$HOME/.rvm/bin"
 
