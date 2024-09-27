@@ -4,3 +4,10 @@ bind ,T tabpush
 
 " c-e same as j; but c-e used to toggle sidebarry
 unbind --mode=normal <C-e>
+
+" github.com eats /, maybe just shift-esc first?
+unbind --mode=normal <C-f>
+
+" delete is useful but will use ctl+w.
+" outlook.com work email sometimes in normal mode
+unbind --mode=normal d
