@@ -204,6 +204,7 @@
 (use-package "mu4e-conversation" :ensure t)
 
 (defun my/html-email-org-msg ()
+  "Switch compose to org-msg (outlook like styling)."
   (interactive)
   ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
   (org-msg-edit-mode)
@@ -216,16 +217,27 @@
     (search-backward "reply-to:")
     (kill-whole-line)
     (search-backward "OPTIONS")
-    (org-ctrl-c-ctrl-c)))
+    (org-ctrl-c-ctrl-c)
+    ;; must set sendmail after C-c C-c
+    (goto-char 0)
+    (when (looking-at "^From:.*upmc.edu")
+      (my/work-mail-setup)
+      (message "switched to work sendmail")))
+  ;; 20241010 sent but unsent buffers stays. maybe because of error:
+  ;; primitive-undo: Unrecognized entry in undo list undo-tree-canary
+  ;; (setq undo-tree-enable-undo-in-region nil) ; doesn't help
+  (setq-local evil-undo-system 'undo-redo))
 
 (defun my/mail-org-header ()
+  "Send a mail to emily from an org header.
+Pipeline is intented to be firefox-> org-protocol-> capture -> email."
   (interactive)
   (let* ((this-head (org-get-heading))
-        (content (progn  (org-mark-subtree) (buffer-substring (point) (mark))))
-        ;; remove head - canpt use (length this-head) b/c var num of '*' have been stripped
-        (content  (substring content (+ 1 (string-match "\n" content))))
-        ;; remove date
-        (content (replace-regexp-in-string "^\s*[[0-9-]\+ [MTWFS][a-z][a-z]\]\s*" "" content)))
+         (content (progn  (org-mark-subtree) (buffer-substring (point) (mark))))
+         ;; remove head - canpt use (length this-head) b/c var num of '*' have been stripped
+         (content  (substring content (+ 1 (string-match "\n" content))))
+         ;; remove date
+         (content (replace-regexp-in-string "^\s*[[0-9-]\+ [MTWFS][a-z][a-z]\]\s*" "" content)))
     (compose-mail "emily.mente@gmail.com" this-head)
     (insert content)))
 
