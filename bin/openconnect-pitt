@@ -18,7 +18,10 @@
 #     https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
 #     suggests:
 #     { pass work/pitt; sleep 1; echo $mfa_method; } | openconnect
-set dryrun $::env(DRYRUN) ;  if { $dryrun ne ""} { set dryrun "echo" }
+set dry_or_sudo "sudo"
+if { [ array names ::env DRYRUN ] != "" } {
+   if { $::env(DRYRUN) ne ""} { set dry_or_sudo "echo" }
+}
 set vpn_host portal-palo.pitt.edu
 set user foran
 set pass [exec pass work/pitt]; # 'pass' cli password manager
@@ -53,15 +56,17 @@ if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
    set cmd "openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24\\\'"
 }
 
-spawn sudo $dryrun bash -c [list {*}$precmd && {*}$cmd \
+spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
   -v --protocol=gp \
   $vpn_host \
   --csd-wrapper=$wrap \
   --authgroup=$gateway \
+  --servercert pin-sha256:F9oz5fbgohG3Or2A+qFJTNnUSXyapIWkNoRyuyv7Lt8=  \
+  --servercert pin-sha256:ereUbF+/IxYME66sG12X+pjBrlpq2CYouxb25MgxvrY= \
   -u $user  \
 ]
 
-if [regexp {echo} $dryrun ] { exit }
+if [regexp {echo} $dry_or_sudo ] { exit }
 # haven't found challenge/choice forum option
 # use expect to endter instead
 # tried:
