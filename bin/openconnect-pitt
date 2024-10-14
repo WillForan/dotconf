@@ -39,10 +39,11 @@ if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
 if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
 
 # use custom built openconnect? debian is too old (20240703 v9.01-3 vs v9.12-137-g42623144)
-set openconnect [file normalize ~/src/utils/openconnect]
+# https://gitlab.com/openconnect/openconnect/-/issues/495 ("Failed to parse server response")
+set openconnect [file normalize ~/src/utils/openconnect/openconnect ]
 if ![file exist $openconnect] { set openconnect openconnect }
 
-set cmd "openconnect"
+set cmd "$openconnect"
 set precmd ":"
 
 # use python script 'vpn-slice' to use vpn only for specific range
@@ -53,7 +54,7 @@ if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
    #set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
    # 20240703 - htc.crc.pitt.edu        = 136.142.28.148
    # 20240926 - ewi-prod.cssd.pitt.edu  = 130.49.230.169
-   set cmd "openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24\\\'"
+   set cmd "$openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24\\\'"
 }
 
 spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
