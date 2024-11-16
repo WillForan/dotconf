@@ -21,6 +21,8 @@ alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 alias en="emacsclient -n"
 # 20230809
 alias rslack="ssh h -t tmux -2u a -t work"
+# 20231203 - separate weechat profile
+alias irc-s2="weechat -d ~/.config/weechat_foss"
 
 # browse with images
 alias w3m='w3m -sixel -o display_image=1 -o display_link_number=1'
