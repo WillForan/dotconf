@@ -37,7 +37,7 @@ done
 test -d $UTILDIR/bash-autopairs || git clone https://github.com/nkakouros-original/bash-autopairs $_
 
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
-  yay_ver=10.2.3 # 20210614
+  yay_ver=12.3.5 # 20210614
   curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
@@ -46,7 +46,7 @@ if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
 fi
 
 # check for needed system packages
-SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk silver-searcher-git inetutils)
+SYSPKGS=(fasd fzf rofi easystroke xbindkeys i3 xdotool dynamic-colors stow sshpass syncthing autokey-gtk ripgrep  inetutils) # silver-searcher-git
 # pip install keepmenu
 # also want libinput-guesture and manager if have a touchpad. NB. probably need to install xorg-xinput
 #      xinput wont run if no X11 instance

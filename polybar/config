@@ -54,8 +54,9 @@ font-0 = "Noto Sans:size=11;1"
 font-1 = "Symbola:size=11;1"
 font-3 = "FontAwesome:pixelsize=14;0"
 
+# nextical
 modules-left = xworkspaces nextical
-modules-right = filesystem pulseaudio memory cpu wlan eth date
+modules-right = filesystem pulseaudio memory cpu wlan eth battery battery2 systray date 
 
 cursor-click = pointer
 cursor-scroll = ns-resize
@@ -71,8 +72,8 @@ wm-restack = i3
 [module/systray]
 type = internal/tray
 
-format-margin = 8pt
-tray-spacing = 16pt
+format-margin = 1pt
+tray-spacing = 1pt
 
 [module/xworkspaces]
 type = internal/xworkspaces
@@ -177,14 +178,42 @@ date-alt = %Y-%m-%d %H:%M:%S
 label = %date%
 label-foreground = ${colors.primary}
 
+[module/battery]
+type = internal/battery
+;label-discharging = %percentage%% 
+time-format = %H:%M
+label-discharging = "%{A1:xterm -e 'sudo powertop':}%time%%{A1}"
+
+
+# defaults: 100, 10
+full-at = 99
+low-at = 5
+
+; Use the following command to list batteries and adapters:
+; $ ls -1 /sys/class/power_supply/
+; for x260, there are two!
+battery = BAT0
+adapter = AC
+poll-interval = 30
+
+[module/battery2]
+type = internal/battery
+full-at = 99
+low-at = 5
+battery = BAT1
+adapter = AC
+poll-interval = 30
+time-format = %H:%M
+label-discharging = "%time%"
+
 [module/nextical]
 interval = 30
 type = custom/script
-exec = ~/.config/polybar/next_ical.pl
+exec = ~/.config/polybar/next_ical.sh polybar
 format = <label>
 format-foreground = #FFF
 format-prefix = ""
-click-left = ~/.config/polybar/next_ical.pl act
+click-left = ~/.config/polybar/next_ical.sh act
 
 [settings]
 screenchange-reload = true
