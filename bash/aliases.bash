@@ -17,6 +17,9 @@ alias feh='feh --keep-zoom-vp -. -Z --zoom full'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
+# 20241118
+alias foran='neomutt -f ~/Maildir/foran.cc/INBOX/'
+
 # inside emacs open new file # 20210401
 alias en="emacsclient -n"
 # 20230809
