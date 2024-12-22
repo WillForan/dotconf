@@ -144,23 +144,44 @@ if any NOTES will insert that"
 
 (defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))
 
+;; 20241222
+(defun my/tileblog ()
+  "Use TRAMP to edit tilde blog."
+  (interactive)
+  (find-file "/ssh:tilde:public_html/index.html"))
+
+(defun my/tileblog-new ()
+  "New entry in tilde blog. Also see `entry' yas snippet."
+  (interactive)
+  (if-let* ((title (ivy-completing-read "title:" '()))
+            (name (replace-regexp-in-string " " "-" title))
+            (today (format-time-string "%Y%m%d")))
+      (progn (insert "<!-- ----------------- -->\n")
+             (insert (format "<hr><a href=#%s name=%s><h2>%s: %s</h2></a>\n<p></p>\n"
+                             name name today title))
+             (backward-char 6))))
+
+
 ;; 20231210 - quick blog
 (defun my/weblog ()
-  "open new wf log org "
+  "Open new wf log org file."
   (interactive)
-  ;(helm-find-files "~/src/play/WillForan.github.io/reports")
+                                        ;(helm-find-files "~/src/play/WillForan.github.io/reports")
   (let* ((root "~/src/play/WillForan.github.io/reports")
          (titles (directory-files root))
          (pick (ivy-completing-read "title: " titles))
+         ;; clean up name: add .org if not already there, repalce spaces
+         (pick (replace-regexp-in-string ".org$\\|$" ".org" pick))
+         (pick (replace-regexp-in-string " " "-" pick))
          (fname (expand-file-name pick root)))
     (when pick
       (find-file fname)
       (if (not (file-exists-p pick))
-        (insert (concat
-                 "#+TITLE: " (file-name-base pick)  "\n"
-           "#+DATE: "  (format-time-string "%Y-%m-%d") "\n"
-           "#+OPTIONS: _:{} ^:{} toc:nil num:nil\n"
-           "#+DRAFT: true"))))))
+          (insert (concat
+                   "#+TITLE: " (file-name-base pick)  "\n"
+                   "#+DATE: "  (format-time-string "%Y-%m-%d") "\n"
+                   "#+OPTIONS: _:{} ^:{} toc:nil num:nil\n"
+                   "#+DRAFT: true"))))))
 
 ;; 20240715
 (defun my/ring-to-buff ()
