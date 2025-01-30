@@ -2,6 +2,13 @@
 # online?
 ip addr |grep -v 127.0.0.1 | grep -q inet[^6] || exit 0
 
+sync_what="${1:-mailcal}"
+case $sync_what in
+   -h) echo "$0 [mailcal|mail|cal|-h]"; exit 0;;
+   *mail*|*cal*)  ;;
+   *) echo "ERROR: input arg '$1' unknown"; $0 -h; exit 1;;
+esac
+
 # connect to davmail server how?
 # (if not already)
 host=reese
@@ -24,11 +31,19 @@ fi
 # for laptop, limited to 200 messages from personal accounts
 # (see "notmuch-remote" for work)
 #mbsync -a
-grep -q UPMC ~/.mbsyncrc && echo "# syncing calendar" && mbsync UPMC
+if [[ $sync_what =~ mail ]]; then
+  if grep -q UPMC ~/.mbsyncrc; then
+     echo "# syncing mail" && mbsync UPMC
+  else
+     echo "# 'UPMC' not in ~/.mbsyncrc; no mail sync"
+  fi
+fi
 
 # sync calendars
-echo "# syncing calendar"
-vdirsyncer sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+if [[ $sync_what =~ cal ]]; then
+  echo "# syncing calendar"
+  vdirsyncer sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+fi
 
 # close ssh port forwards
 test -r $ssh_socket && ssh -S $ssh_socket -O exit $host

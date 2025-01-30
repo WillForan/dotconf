@@ -53,3 +53,7 @@ for dev in "${devs[@]}"; do
       continue
    xinput --set-button-map "$devid" 3 2 1
 done
+
+# 20241008 - mixing concernes 🤮
+# likely want to rerun caps binding too
+setxkbmap -layout us,apl -variant ,dyalog -option grp:switch -option caps:ctrl_modifier -option compose:menu
