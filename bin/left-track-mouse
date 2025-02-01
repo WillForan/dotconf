@@ -31,13 +31,15 @@ fi
 # but actually don't care if there is only one of them
 
 # 20240221: xinput list might take a few seconds
-for _ in {0..5}; do
+for i in {0..5}; do
+  [ $i -gt 0 ] && sleep 1
+  # 20240815 - want Kensington Expert
+  #            not Kensington ProFit Ergo Vertical Wireless Trackball
   mapfile -t devs < \
      <(xinput --list|
-       grep -Po 'Kensington|A4Tech'|
+       grep -Po 'Kensington Expert|A4Tech'|
        sort -u)
   [ -n "${devs[*]}" ] && break
-  sleep 1;
 done
 
 [ -z "${devs[*]}" ] &&
@@ -51,3 +53,7 @@ for dev in "${devs[@]}"; do
       continue
    xinput --set-button-map "$devid" 3 2 1
 done
+
+# 20241008 - mixing concernes 🤮
+# likely want to rerun caps binding too
+setxkbmap -layout us,apl -variant ,dyalog -option grp:switch -option caps:ctrl_modifier -option compose:menu

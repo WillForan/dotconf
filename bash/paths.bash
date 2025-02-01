@@ -23,7 +23,7 @@ test -d  "$HOME/.cargo/bin" &&
 # pyenv is very slow. replace with the exports it produced
  command -v pyenv >/dev/null && {
    export PYENV_ROOT="$HOME/.pyenv"
-   export PATH="$PYENV_ROOT/bin:$PATH"
+   test -d $PYENV_ROOT/bin && export PATH="$PYENV_ROOT/bin:$PATH"
    [ -n "${USEPYENVINIT:-}" ] && {
       eval "$(pyenv init --path)"
       eval "$(pyenv init -)"
@@ -44,6 +44,7 @@ for d in \
  $HOME/src/utils/org-export   `# github pages: willforan.github.io `\
  $HOME/src/work/lncdtools     `# work functions (mkifdiff, mkls, mkstat, m, etc)` \
  /opt/ni_tools/afni           `# NIMH nueroimaging` \
+ $HOME/abin \
  /opt/ni_tools/fmri_processing_scripts  \
  /opt/ni_tools/c3d/bin \
  /opt/ANTs/bin\
@@ -60,6 +61,7 @@ export PATH
 # only needs to happen once. slow to run. grep first to check
 __config_node(){
    command -v npm >/dev/null || return
+   [ -r ~/.npmrc ] || return
    # perl 2x (5ms vs 10ms) faster than:
    #   grep prefix= "$HOME/.npmrc" -sq
    # but only checking first line
@@ -69,18 +71,22 @@ __config_node(){
 }
 __config_node
 export NODE_PATH="$HOME/.local/lib/node_modules:$NODE_PATH"
-export PATH=$PATH:/opt/afni/
 
 # 20230909 radicle git "souvenir forge"
 # installed with https://radicle.xyz/install
 test -d "$HOME/.radicle/bin" && PATH="$PATH:$_"
 
 # 20230620 rash-repl
-export PATH="$PATH:$HOME/.local/share/racket/8.9/bin/"
+# export PATH="$PATH:$HOME/.local/share/racket/8.9/bin/"
 
 
 # 20211002 - want auto updates from zotero and firefox
-test -r "$HOME/bin/firefox" && export PATH="$_:$PATH"
-test -r "$HOME/bin/zotero" && export PATH="$_:$PATH"
+test -d "$HOME/bin/firefox" && export PATH="$_:$PATH"
+test -d "$HOME/bin/zotero" && export PATH="$_:$PATH"
 
+[ -d /home/foranw/.radicle/ ] &&
+   export PATH="$PATH:/home/foranw/.radicle/bin"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# export PATH="$PATH:$HOME/.rvm/bin"
 
