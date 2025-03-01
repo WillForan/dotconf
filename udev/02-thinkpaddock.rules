@@ -1,0 +1,46 @@
+# 20250301 - finally working!?
+# need ENV{PRODUCT}. ID_MODEL, ID_VENDOR_ID, nor ID_USB_CLASS_FROM_DATABASE caught rule
+#
+#
+# # identify device
+# sudo udevadm monitor | tee udmon-20241206-add.txt
+# udevadm info --export-db | less +/Dock
+# grep UDEV.*add.*0000:00:14.0/usb1/1-4 ./udmon-20241206-add.txt
+#
+# # get ENV info
+# udevadm test -a add /devices/pci0000:00/0000:00:14.0/usb1/1-4/1-4.4/1-4.4:1.0
+#    ACTION=add
+#    SUBSYSTEM=usb
+#    PRODUCT=17ef/100f/1
+#    ID_USB_CLASS_FROM_DATABASE=Hub
+#    ID_USB_PROTOCOL_FROM_DATABASE=TT per port
+#    ID_VENDOR_FROM_DATABASE=Lenovo
+#    ID_MODEL_FROM_DATABASE=ThinkPad Ultra Dock Hub
+#    ...
+#  Queued commands:
+#    RUN{program} : /home/foranw/bin/set-monitors
+#    RUN{builtin} : kmod load
+
+# same as? '-d test'
+# udevadm -d test /devices/pci0000:00/0000:00:14.0/usb1/1-4/1-4.4/1-4.4:1.0 |& less
+#
+#  Queued commands:
+#    RUN{program} : /home/foranw/bin/set-monitors
+#    RUN{builtin} : kmod load
+
+#
+# # Debug rule after installed
+# udevadm control --log-priority=debug
+# journalctl -f
+#
+# #install rule
+# upbin udev
+# sudo udevadm control --reload
+#   ID_VENDOR_FROM_DATABASE=Lenovo
+#   ID_MODEL_FROM_DATABASE=ThinkPad Ultra Dock Hub
+#
+#ID_MODEL=Lenovo_ThinkPad_Doc
+ACTION=="add", SUBSYSTEM=="usb", ENV{PRODUCT}=="17ef/100f/1", RUN+="/home/foranw/bin/set-monitors"
+ACTION=="remove", ENV{PRODUCT}=="17ef/100f/1", RUN+="/home/foranw/bin/set-monitors off"
+#ACTION=="remove", ENV{ID_VENDOR_ID}=="17ef", ENV{ID_USB_MODEL_ID}=="1010", RUN+="/home/foranw/bin/set-monitors"
+
