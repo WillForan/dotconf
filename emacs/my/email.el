@@ -136,6 +136,7 @@
   ;; (setq mail-user-agent 'mu4e-user-agent) ; 20220501
   ;; ; (org-msg-mode-notmuch) adds advice to notmuch-mua-{reply,mail}
   ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
+  ;; (setq-local org-msg-enforce-css "~/Downloads/org-msg.css")
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
   (setq org-msg-convert-citation t))
 
@@ -208,6 +209,8 @@
   (interactive)
   ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
   (org-msg-edit-mode)
+  ;; 20250302: set email style (box for code and results)
+  ;; (setq org-msg-enforce-css "/home/foranw/Downloads/org-msg.css")
   (save-excursion
     (beginning-of-buffer)
     (search-forward "--text follows this line--")
@@ -217,6 +220,10 @@
     (search-backward "reply-to:")
     (kill-whole-line)
     (search-backward "OPTIONS")
+    ;; 20250302: org-babel settings for email
+    (end-of-line)
+    (insert "\n#+PROPERTY: header-args    :exports both :eval no-export")
+    ;; load above settings and org-msg-options inserted by org-msg-header
     (org-ctrl-c-ctrl-c)
     ;; must set sendmail after C-c C-c
     (goto-char 0)
@@ -245,3 +252,7 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
     (interactive)
     ;; likley mu4e-user-agent
     (setq mail-user-agent 'message-user-agent))
+
+
+;; 20241211
+;; (use-package himalaya :ensure t)
