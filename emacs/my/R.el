@@ -30,3 +30,6 @@
   ;;                    ;; '("<-"  . ?←)
   ;;                    prettify-symbols-alist))))
   )
+
+;; 20250225
+;; (add-to-list 'comint-output-filter-functions #'ansi-color-process-output)
