@@ -36,6 +36,12 @@
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "https://www.neuro-programmers.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+
+(defun radwiki ()
+  "Open wpic programmers wiki."
+  (interactive)
+  (require 'dokuwiki)
+  (dokuwiki-launch "https://www.rad.pitt.edu/wiki/lib/exe/xmlrpc.php" "foran"))
 (defun lncd ()
   "Open lncd wiki."
   (interactive)
