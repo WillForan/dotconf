@@ -222,3 +222,11 @@ Useufl for interactively building a script"
                     "The semi-automatic VPN connecting script might also be useful:\n"
 "https://github.com/WillForan/dotconf/blob/master/bin/openconnect-pitt\n\n"
                     ))))
+
+;; 20250304 - auto install/use *-ts-mode
+;; pacman -Ss tree-sitter-grammars # group includes tree-sitter-bash
+;; 20250316 - when enabled caues
+;; redisplay--pre-redisplay-functions: (void-function treesit-parser-changed-ranges)
+;; (use-package treesit-auto
+;;   :config
+;;   (global-treesit-auto-mode))

@@ -136,6 +136,7 @@
   ;; (setq mail-user-agent 'mu4e-user-agent) ; 20220501
   ;; ; (org-msg-mode-notmuch) adds advice to notmuch-mua-{reply,mail}
   ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
+  ;; (setq-local org-msg-enforce-css "~/Downloads/org-msg.css")
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
   (setq org-msg-convert-citation t))
 
@@ -207,7 +208,18 @@
   "Switch compose to org-msg (outlook like styling)."
   (interactive)
   ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
+
+  ;; 20241010 sent but unsent buffers stays. maybe because of error:
+  ;; primitive-undo: Unrecognized entry in undo list undo-tree-canary
+  ;; (setq undo-tree-enable-undo-in-region nil) ; doesn't help
+
+  ;; 20250312 - weird undo behavior when generating email preview
+  ;; disabling this in case that's it
+  (setq-local evil-undo-system 'undo-redo)
+
   (org-msg-edit-mode)
+  ;; 20250302: set email style (box for code and results)
+  ;; (setq org-msg-enforce-css "/home/foranw/Downloads/org-msg.css")
   (save-excursion
     (beginning-of-buffer)
     (search-forward "--text follows this line--")
@@ -217,16 +229,16 @@
     (search-backward "reply-to:")
     (kill-whole-line)
     (search-backward "OPTIONS")
+    ;; 20250302: org-babel settings for email
+    (end-of-line)
+    (insert "\n#+PROPERTY: header-args :exports both :eval no-export")
+    ;; load above settings and org-msg-options inserted by org-msg-header
     (org-ctrl-c-ctrl-c)
     ;; must set sendmail after C-c C-c
     (goto-char 0)
     (when (looking-at "^From:.*upmc.edu")
       (my/work-mail-setup)
-      (message "switched to work sendmail")))
-  ;; 20241010 sent but unsent buffers stays. maybe because of error:
-  ;; primitive-undo: Unrecognized entry in undo list undo-tree-canary
-  ;; (setq undo-tree-enable-undo-in-region nil) ; doesn't help
-  (setq-local evil-undo-system 'undo-redo))
+      (message "switched to work sendmail"))))
 
 (defun my/mail-org-header ()
   "Send a mail to emily from an org header.
@@ -245,3 +257,7 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
     (interactive)
     ;; likley mu4e-user-agent
     (setq mail-user-agent 'message-user-agent))
+
+
+;; 20241211
+;; (use-package himalaya :ensure t)

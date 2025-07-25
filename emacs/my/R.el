@@ -42,3 +42,6 @@ out <- styler::style_text(readLines(con))
 close(con)
 out")
     :lighter " styler"))
+
+;; 20250225 - tidyverse colors into comint buffer
+;; (add-to-list 'comint-output-filter-functions #'ansi-color-process-output)
