@@ -30,3 +30,15 @@
   ;;                    ;; '("<-"  . ?←)
   ;;                    prettify-symbols-alist))))
   )
+
+;; 20240105 - M-x styler-buffer
+(use-package reformatter
+  :config
+  (defconst Rscript-command "Rscript")
+  (reformatter-define styler
+    :program Rscript-command
+    :args (list "--vanilla" "-e" "con <- file(\"stdin\")
+out <- styler::style_text(readLines(con))
+close(con)
+out")
+    :lighter " styler"))
