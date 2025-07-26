@@ -110,7 +110,7 @@
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
   :config
   ;; use remote server's database. todo: not if (system-name) is work?
-  (setq notmuch-command (if (not (string= (system-name) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
+  (setq notmuch-command (if (not (string= (substring (system-name) 0 5) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
@@ -138,7 +138,13 @@
   ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
   ;; (setq-local org-msg-enforce-css "~/Downloads/org-msg.css")
   (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
-  (setq org-msg-convert-citation t))
+  (setq org-msg-convert-citation t)
+
+  ;; 20250725: keep in org mode for plaintext version
+  ;; this makes duplicate text entriesj
+  (add-to-list 'org-msg-alternative-exporters
+             '(text "text/plain" . identity))
+  )
 
 ;; 20211026
 ;; https://emacs.stackexchange.com/questions/52657/attaching-files-in-mu4e-from-the-clipboard
@@ -225,11 +231,12 @@
     (search-forward "--text follows this line--")
     (end-of-line)
     (insert "\n")
-    (insert (org-msg-header 'new '(html)))
+    (insert (org-msg-header 'new '(text html)))
     (search-backward "reply-to:")
-    (kill-whole-line)
-    (search-backward "OPTIONS")
+    ;; 20250725: replace (kill-whole-linwce) with non-kill ring version
+    (delete-region (line-beginning-position) (line-end-position))
     ;; 20250302: org-babel settings for email
+    (search-backward "OPTIONS")
     (end-of-line)
     (insert "\n#+PROPERTY: header-args :exports both :eval no-export")
     ;; load above settings and org-msg-options inserted by org-msg-header
