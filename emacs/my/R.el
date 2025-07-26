@@ -19,6 +19,11 @@
   (define-key ess-mode-map (kbd "⊃") " %>% ")
   (define-key inferior-ess-mode-map (kbd "⊃") "%>%")
 
+  ;; 20250225, revisited 20250413 with fboundp guard
+  ;; alt in R: options(crayon.enabled = FALSE)
+  (when (fboundp 'ansi-color-process-output)
+    (add-to-list 'comint-output-filter-functions #'ansi-color-process-output))
+
   ;; this messes up emacs in temrinal
   ;; and make it look like what we pushed for maximum confusion
   ;; (add-hook 'ess-mode-hook
@@ -31,5 +36,3 @@
   ;;                    prettify-symbols-alist))))
   )
 
-;; 20250225
-;; (add-to-list 'comint-output-filter-functions #'ansi-color-process-output)
