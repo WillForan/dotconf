@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# find all remote branches, display sorted by last modification date
+# 20250311WF - init 
+
+git branch -r --format='%(refname)' |
+ xargs -rn1 git log -n1 --format="%cs %cn %cr %d" |
+ sort -nr
