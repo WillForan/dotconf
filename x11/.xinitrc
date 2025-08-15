@@ -41,8 +41,8 @@ case $HOSTNAME in
          xinput --set-button-map $_ 3 2 1
       #xrandr --output DVI-0 --rotate left  --right-of VGA-0
       #xrandr --output DVI-I-1 --rotate left  --right-of VGA-1
-      xrandr --output VGA-1 --mode 1920x1080 --output HDMI-1 --right-of VGA-1
-      xrandr --output HDMI-2 --rotate left
+      xrandr --output VGA-1 --mode 1920x1080 --output HDMI-2 --right-of VGA-1
+      xrandr --output HDMI-1 --rotate left
 
 
       nitrogen --restore &
@@ -162,4 +162,6 @@ command -v picom && picom -bi .95 # -b =daemon, -i1 = inactive opacity disabled
 # window management only if needed 
 # could call .xinitrc from i3/config
 (sleep 5; pgrep -af autokey.gtkui || /usr/bin/python -m autokey.gtkui) &
+
+command -v left-track-mouse && $_
 pgrep i3 || i3
