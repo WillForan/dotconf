@@ -114,6 +114,9 @@ case $HOSTNAME in
       cbatticon &
       dunst &
       nitrogen --restore &
+      autokey-gtk &
+      # 20250504 - guix load path causes problems
+      EMACSLOADPATH= emacsclient -a'' -c &
       ;;
   s2)
       # 'systemctl --user start greenclip' cannot find Xorg. so run deamon here
