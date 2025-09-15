@@ -1,5 +1,19 @@
 ; 20180629 -- enable wiki editing 
 ; 20230204 -- major upgrade to dokuwiki (local fork) removed a lot of custom code
+(defun my/present-text ()
+  "Change window/buffer for presenting agendas.  Use variable width font."
+  (interactive)
+  (setq-local line-spacing 3)
+  (display-line-numbers-mode -1)
+  ;; (font-face-attributes "-UKWN-URW Gothic-regular-normal-normal-*-23-*-*-*-*-0-iso10646-1")
+  ;; (set-frame-font "-UKWN-URW Gothic-regular-normal-normal-*-23-*-*-*-*-0-iso10646-1")
+  ;; (set-face-attribute 'default (selected-frame) :font "URW Gothic" :height 173)
+  ;; Following mouse-set-font into mouse.el and searching "Set Buffer Font..."
+  (buffer-face-mode-invoke (list :family "URW Gothic" :height 100) t nil)
+  ;; also readable: M+  -M+ 1m-bold-normal-normal-*-25-*-*-*-d-0-iso10646-1
+
+  )
+
 (use-package dokuwiki
   ;; :quelpa ((dokuwiki :fetcher github :repo "WillForan/emacs-dokuwiki") :upgrade t)
   :load-path "~/src/utils/emacs-dokuwiki"
@@ -8,8 +22,9 @@
   ((dokuwiki-page-opened .
     (lambda ()
       (dokuwiki-setup)
+      (dokuwiki-mode 1)
       (company-mode 1)
-      (display-line-numbers-mode -1)
+      (my/present-text)
       (flyspell-mode 1)))))
 
 (use-package dokuwiki-mode
@@ -46,7 +61,16 @@
   "Open lncd wiki."
   (interactive)
   (require 'dokuwiki)
-  (dokuwiki-launch "http://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+  (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+
+(defun mrrcwiki ()
+  "Open MRRC wiki."
+  (interactive) (require 'dokuwiki) (dokuwiki-launch "https://wiki.mrrc.pitt.edu/lib/exe/xmlrpc.php" "foran"))
+
+; 20250827 - like zim and roam bindings
+(global-set-key (kbd "C-c N l") #'lncd)
+(global-set-key (kbd "C-c N m") #'mrrcwiki)
+
 
 
 ;; 20230906 - editing github markdown as a wiki
