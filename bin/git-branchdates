@@ -4,4 +4,4 @@
 
 git branch -r --format='%(refname)' |
  xargs -rn1 git log -n1 --format="%cs %cn %cr %d" |
- sort -nr
+ sort -unr
