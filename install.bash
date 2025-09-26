@@ -37,7 +37,7 @@ done
 test -d $UTILDIR/bash-autopairs || git clone https://github.com/nkakouros-original/bash-autopairs $_
 
 if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
-  yay_ver=12.3.5 # 20210614
+  yay_ver=12.4.2 # 20241116
   curl -L https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz > yay.tar.gz
   tar -xzvf yay.tar.gz
   mv yay*/yay $HOME/bin
