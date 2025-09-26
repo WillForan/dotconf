@@ -113,6 +113,8 @@
         (go . t)
 	; 20230519
 	(scheme . t)
+        ;; 20241115 - calc-eval internal to emacs
+        (calc . t)
         ))
   ;; 20220911 org-protocol bookmarklet and desktop files
   ;; 20220922 require so it's actually loaded
@@ -246,3 +248,22 @@ Modified from https://kisaragi-hiu.com/links-in-both-hugo-and-org/"
     elem))
 
 (advice-add 'org-element-link-parser :around #'k/alternate-path-element-wrapper)
+
+;; 20241103 - documenting inline code
+(use-package outshine :ensure t)
+(use-package poporg :ensure t)        ; edit comment/string block as own buffer
+;; use with (outorg-edit-as-org)
+(use-package outorg :after outshine  :ensure t
+  :init
+  (defvar outline-minor-mode-prefix "\M-#")
+  :config
+  (defun my/setup-outorg ()
+    (setq-local outline-minor-mode-prefix "\M-#")
+    (outline-minor-mode 1)
+    (outshine-mode 1))
+  (add-hook 'prog-mode-hook #'my/setup-outorg))
+(defun my/outorg-export ()
+  ;; TODO: check for export_file_name, not more than one top level header
+    (progn (goto-line 0) (search-forward-regexp "^. \\* ") (outorg-edit-as-org) (org-html-export-to-html) (kill-buffer) ))
+
+;; my/org.el ends here

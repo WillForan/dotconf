@@ -3,6 +3,8 @@
 # automate some parts of global protect VPN
 # using openconnect and pass
 #
+# 20250129: use $argv for additional slices like huggingface models from cloundflare: 
+#    openconnect-pitt 172.66.1.0/24
 # 20240927:
 #   argv for 'noslice' to disable vpn-slice even if it exists
 #   add DRYRUN=1 support to just print what we'd do instead of doing it
@@ -27,6 +29,18 @@ set user foran
 set pass [exec pass work/pitt]; # 'pass' cli password manager
 set gateway BYOD-GATEWAY-CL 
 set mfa_method push1
+# duo pass code
+set duo_py [file normalize ~/src/utils/duo-hotp/duo.py]
+set duo_pass [file normalize ~/passwd/pitt_duo.json]
+if { [file isfile $duo_py] && [file isfile $duo_pass] && ![regexp {noduo} $argv ] } {
+   if { $dry_or_sudo eq "echo"} {
+      puts "# dryrun: not using $duo_py with $duo_pass"
+   } else {
+      set mfa_method [exec $duo_py next -s $duo_pass]
+   }
+} else {
+    puts "# no duo code. using $mfa_method -- check your phone"
+}
 
 # TODO: use WillForan/duo-hotp/duo.py
 # to get passphrase instead of push
@@ -54,7 +68,7 @@ if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
    #set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
    # 20240703 - htc.crc.pitt.edu        = 136.142.28.148
    # 20240926 - ewi-prod.cssd.pitt.edu  = 130.49.230.169
-   set cmd "$openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24\\\'"
+   set cmd [string cat "$openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24 " {*}$argv "\\\'" ]
 }
 
 spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
@@ -62,8 +76,10 @@ spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
   $vpn_host \
   --csd-wrapper=$wrap \
   --authgroup=$gateway \
-  --servercert pin-sha256:F9oz5fbgohG3Or2A+qFJTNnUSXyapIWkNoRyuyv7Lt8=  \
+  --servercert pin-sha256:F9oz5fbgohG3Or2A+qFJTNnUSXyapIWkNoRyuyv7Lt8= \
   --servercert pin-sha256:ereUbF+/IxYME66sG12X+pjBrlpq2CYouxb25MgxvrY= \
+  --servercert pin-sha256:EiYfp70/HBWS9GVAq6lHhOGiwXUOQpHBbwn5n2Rpj78= \
+  --servercert pin-sha256:3oTBS+XZtHYSEeVpU7t2kChwNsE+lsXlZawoi/HAljA= \
   -u $user  \
 ]
 
