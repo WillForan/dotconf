@@ -41,6 +41,7 @@ if [ -r /etc/arch-release ] && ! command -v yay >/dev/null; then
   #yay_ver=10.2.3 # 20210614
   #yay_ver=12.3.5 # 20240404 
   #yay_ver=12.4.1 # 20240918
+  #yay_ver=12.4.2 # 20241116
   yay_ver="$(curl -s https://aur.archlinux.org/packages/yay |grep -Po '(?<=yay )[0-9.]{4,}')"
   curl -L "https://github.com/Jguer/yay/releases/download/v$yay_ver/yay_${yay_ver}_x86_64.tar.gz" > yay.tar.gz
   tar -xzvf yay.tar.gz
