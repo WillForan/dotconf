@@ -19,11 +19,14 @@
 
 (defun my/get-wiki-tag ()
   "Completing read of wiki pages using completeion-canidates. Ignore calendar pages."
+  (when (not zim-wiki-completion-canidates)
+    (message "refreshing zim wiki page cache")
+    (zim-wiki-refresh-completions))
   (let (;; (completion-ignore-case t)
         (wiki-pages (seq-filter (lambda(x) (not (string-match-p "^:Calendar:" x)))
                                 zim-wiki-completion-canidates)))
     ;; was ido-completing-read. but completion-ignore-case would need to be more global?
-    (ivy-completing-read "wiki tag:" wiki-pages)))
+    (completing-read "wiki tag:" wiki-pages)))
 
 (defun my/notmuch-wiki-tag ()
   "Prompt for a tag derived from wiki pages and add to mail."
