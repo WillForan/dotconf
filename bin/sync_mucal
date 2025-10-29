@@ -11,7 +11,7 @@ esac
 
 # connect to davmail server how?
 # (if not already)
-host=reese
+host=reeser
 ssh_socket=${TMPDIR:-/tmp}/sync_$$
 
 # reverse proxy for mail (1143) and calendar (1080)
@@ -52,7 +52,7 @@ if [[ $sync_what =~ cal ]]; then
   #   exit 1
 
   echo "# syncing calendar"
-  dryrun uvx vdirsyncer sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+  dryrun uvx vdirsyncer -vdebug sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
 fi
 
 # close ssh port forwards

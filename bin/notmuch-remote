@@ -9,7 +9,7 @@ printf -v ARGS "%q " "$@"
 
 # vpn via nebula, reverse ssh, or intranet? determined by .ssh/config
 ip addr|grep nebula -q && host=reese-nebula || host=reese
-ip addr |grep -q '192.168\.1\.' && host=reese
+ip addr |grep -q '192.168\.1\.' && host=reeser
 exec ssh "$host" notmuch ${ARGS}
 
 # in emacs

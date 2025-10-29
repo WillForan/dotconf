@@ -38,6 +38,7 @@
 ;; (setenv "GPG_AGENT_INFO" nil)
 ;; (setq epg-gpg-program "gpg2")
 ;; edit ~/.authinfo
+;; auth-source-forget-all-cached
 
 
 (defun moonhog ()
@@ -62,6 +63,11 @@
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+
+(defun dokuwiki-today-insert ()
+  "Insert today yyyy-mm-dd as header."
+  (interactive)
+  (insert (format-time-string "===== %Y-%m-%d =====")))
 
 (defun mrrcwiki ()
   "Open MRRC wiki."

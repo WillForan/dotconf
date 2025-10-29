@@ -111,8 +111,11 @@
   (notmuch-saved-searches '((:name "week" :query "(date:1w.. -tag:delete) OR tag:todo" :key "w")
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
   :config
-  ;; use remote server's database. todo: not if (system-name) is work?
-  (setq notmuch-command (if (not (string= (substring (system-name) 0 5) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
+  ;; use remote server's database.
+  (setq notmuch-command
+	(if (not (string-prefix-p "reese" (system-name)))
+	    (expand-file-name "~/bin/notmuch-remote")
+	  "notmuch"))
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
@@ -120,7 +123,7 @@
   ;; 20220808 - x and a actions
   (setq notmuch-archive-tags '("-inbox" "-new"))
 
-  ;; 20211202 use jao's outline mode trick
+  ;; 20211202 use jao's outline mode trick to collapse threads
   (advice-add 'notmuch-tree-insert-msg :before #'jao-notmuch-tree--msg-prefix)
   (add-hook 'notmuch-tree-mode-hook #'jao-notmuch-tree--mode-setup)
   (define-key notmuch-tree-mode-map (kbd "TAB") #'outline-cycle)
@@ -166,7 +169,7 @@
     (mail-add-attachment image-file)
     (goto-char pos)))
 
-(use-package "mu4e"
+(use-package mu4e
  :load-path "/usr/share/emacs/site-lisp/"
  :config
  (setq mu4e-compose-reply-to-address "will.foran@gmail.com"
@@ -204,13 +207,13 @@
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
-(use-package "org-mu4e" :load-path "/usr/share/emacs/site-lisp/mu4e"
+(use-package org-mu4e :load-path "/usr/share/emacs/site-lisp/mu4e"
   :config
   (evil-leader/set-key "M" #'mu4e)
   (evil-leader/set-key "M-M" #'notmuch)
   :custom
   (mu4e-get-mail-command "ssh s2 mbsync -a"))
-(use-package "mu4e-conversation" :ensure t)
+(use-package mu4e-conversation :ensure t)
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
