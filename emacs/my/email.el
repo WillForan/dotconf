@@ -39,9 +39,11 @@
   (setq-local
    ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
    message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
-   user-mail-address "willforan@gmail.com"
+   user-mail-address "will@foran.cc"
    send-mail-function 'sendmail-send-it
-   sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
+   mail-specify-envelope-from t
+   mail-envelope-from 'header
+   sendmail-program (if (string= (system-name) "reese.acct.upmchs.net") "~/bin/s2sendmail" "sendmail")))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
  (require 'yasnippet)
