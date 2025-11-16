@@ -44,12 +44,12 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
      ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
      message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
      user-mail-address emailaddress
-     send-mail-function 'sendmail-send-it
+     send-mail-function 'sendmail-send-it ; orig: sendmail-query-once
      ;; 20251112 - copied from work-mail-setup
      mail-specify-envelope-from t
-     message-sendmail-envelope-from 'header
-     mail-envelope-from 'header
-     sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail"))))
+     mail-envelope-from 'header         ; only if mail-specify-e... t
+     message-sendmail-envelope-from 'header ; "use the From: header"
+     sendmail-program (if (string= (system-name) "reese.acct.upmchs.net") "~/bin/s2sendmail" "sendmail")))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
  (require 'yasnippet)
