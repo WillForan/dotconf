@@ -42,7 +42,7 @@ fi
 # sync calendars
 if [[ $sync_what =~ cal ]]; then
   echo "# syncing calendar"
-  vdirsyncer -vdebug sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+  vdirsyncer `#-vdebug` sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
 fi
 
 # close ssh port forwards
