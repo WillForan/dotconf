@@ -19,29 +19,37 @@
 ;; META: if we want to refactor this to use let/variables for actual email and sendmail
 ;; how could we use structural editing to do it quickly
 (defun my/quick-email ()
+  "Send a mail from personal account.
+Modifies current buffers From: line and sets buffer-local sendmail options."
   (interactive)
-  ;; change from is address is not set
-  (save-excursion (beginning-of-buffer)
-                  (if (re-search-forward "^From:.*tickle-me" nil t)
-                      (replace-match "From: will.foran+from.emacs@gmail.com"))
-                  (if (re-search-forward "^From:.*foranw@u.*" nil t)
-                      (replace-match "From: will.foran+from.emacs@gmail.com"))
-                  (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t)
-                      (replace-match "From: will.foran+from.emacs@gmail.com")))
-  ;; start a the To: line
-  (beginning-of-buffer)
-  (if (re-search-forward "^To:" nil t)
-      (goto-char (match-end 0)))
-  (evil-insert-state)
-  ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
-  ;; (ie. where gmail is blocked)
+  (let* ((emailaddress "will@foran.cc")
+         (from-line (concat "From: " emailaddress)))
+    ;; change from is address is not set
+    (save-excursion (goto-char (point-min))
+                    (if (re-search-forward "^From:.*tickle-me" nil t)
+                        (replace-match from-line))
+                    (if (re-search-forward "^From:.*foranw@u.*" nil t)
+                        (replace-match from-line))
+                    (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t)
+                        (replace-match from-line)))
+    ;; start a the To: line
+    (goto-char (point-min))
+    (if (re-search-forward "^To:" nil t)
+        (goto-char (match-end 0)))
+    (evil-insert-state)
+    ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
+    ;; (ie. where gmail is blocked)
 
-  (setq-local
-   ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
-   message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
-   user-mail-address "willforan@gmail.com"
-   send-mail-function 'sendmail-send-it
-   sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail")))
+    (setq-local
+     ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
+     message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
+     user-mail-address emailaddress
+     send-mail-function 'sendmail-send-it
+     ;; 20251112 - copied from work-mail-setup
+     mail-specify-envelope-from t
+     message-sendmail-envelope-from 'header
+     mail-envelope-from 'header
+     sendmail-program (if (string= (system-name) "reese") "~/bin/s2sendmail" "sendmail"))))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
  (require 'yasnippet)
@@ -103,11 +111,71 @@
   (org-msg-mode-notmuch)
   (notmuch-tree "date:1week.. -tag:delete"))
 
+;; 20251115
+(defun show-recipient-if-sent (format-string result)
+  "Custom function for `notmuch-unthreaded-result-format' to use instead of \"authors\".
+Show \"From:\" address from RESULT, unless we sent the message. Then show \"To:\".
+Formated with FORMAT-STRING.
+
+Example on wiki https://notmuchmail.org/emacstips/"
+  (let* ((headers (plist-get result :headers))
+         (to (plist-get headers :To))
+         (author (plist-get headers :From))
+         ;; NB. user-mail-address has to be set correctly
+         (is-me? (string-match user-mail-address author))
+         (face (if (plist-get result :match)
+                   'notmuch-tree-match-author-face
+                 'notmuch-tree-no-match-author-face)))
+    (propertize
+     (format format-string
+             (if is-me?
+                  (concat "📫" (notmuch-tree-clean-address to))
+                  (notmuch-tree-clean-address author)))
+     'face face)))
+(defun notmuch-absdate (_ msg)
+  "Replace \"date\" column with formatted timestamp from MSG.
+Format conditional on if message is older or newer than a month."
+  (let* ((match (plist-get msg :match))
+         (stamp (seconds-to-time (plist-get msg :timestamp)))
+         (now (float-time (current-time)))
+         (tdiff (- now (float-time stamp)))
+         ;; day 86400; month 2592000; year 31536000
+         (fmt (cond
+               ((> tdiff 2592000)    "%Y-%m-%d    ")
+               ;; ((> tdiff    86400) "%m/%d %H      ")
+               (t                 "%u %m/%d %H:%M ")))
+         (face (if (< tdiff 86400)
+                   'bold
+                 'italic)))
+    (propertize
+     (format-time-string fmt stamp)
+     'face face)))
+
+(defun notmuch-count-people (format-string msg)
+  "Count total number of people on MSG.
+Format as FORMAT-STRING.  Does not deal with duplicates."
+  (let* ((headers (plist-get msg :headers))
+         (authors (concat (plist-get headers :To)
+                          (plist-get headers :Cc)
+                          (plist-get headers :From)))
+         (n (length (split-string authors "@"))))
+    (propertize
+     (format format-string (- n 1))
+     'face 'bold)))
+
 (use-package notmuch :ensure t
   :custom
   ;; 20220107 - redefine jumps on 'j'
   (notmuch-saved-searches '((:name "week" :query "(date:1w.. -tag:delete) OR tag:todo" :key "w")
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
+  (notmuch-unthreaded-result-format
+   '(;; ("date" . "%12s  ")
+     (notmuch-absdate . "")
+     ;; ("authors" . "%-20s")
+     (show-recipient-if-sent . "%-20.20s")
+     (notmuch-count-people . "%-3s")
+     ((("subject" . "%s")) . " %-25s ")
+     ("tags" . "(%s)")))
   :config
   ;; use remote server's database.
   (setq notmuch-command
