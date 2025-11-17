@@ -1,16 +1,25 @@
 #!/bin/bash
+# notmuch over ssh: vpn (nebula, stopped 2024), reverse ssh, or intranet?
+# connection ip and settings configured in .ssh/config
 # https://notmuchmail.org/remoteusage/
+
+# in emacs, configure notmuch like
+# (setq notmuch-command "~/bin/notmuch-remote")
+
+# get args ready to go over the wire as arguments to command with ssh
+printf -v ARGS "%q " "$@"
 # %q is new to me (20211110). 
 # ...  ARGUMENT is printed in a format that can be reused as shell input, escaping non-printable characters with the proposed POSIX $'' syntax.
-# foobar() { printf "%q " "$@"; }; foobar "a" "b c"
-# a b\ c
+# foobar() { printf "%q " "$@"; }; foobar "a" "b c" # a b\ c
 
-printf -v ARGS "%q " "$@"
+# 20251117 - macOS at MRRC
+command -v ip >/dev/null && ipcmd='ip addr' || ipcmd='ifconfig'
 
-# vpn via nebula, reverse ssh, or intranet? determined by .ssh/config
-ip addr|grep nebula -q && host=reese-nebula || host=reese
-ip addr |grep -q '192.168\.1\.' && host=reeser
+if $ipcmd |grep nebula -q; then
+    host=reese-nebula
+elif $ipcmd |grep -q '10\.48'; then
+    host=reese
+else
+    host=reese
+fi
 exec ssh "$host" notmuch ${ARGS}
-
-# in emacs
-# (setq notmuch-command "~/bin/notmuch-remote")
