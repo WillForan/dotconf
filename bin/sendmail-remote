@@ -3,7 +3,7 @@
 printf -v ARGS "%q " "$@"
 
 # connect depends on how we're connected
-host=reese
+host=reeser
 pgrep nebula >/dev/null && host=reese-nebula
 
 exec ssh $host msmtp ${ARGS}

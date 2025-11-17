@@ -4,7 +4,14 @@
 ;;    (global-git-gutter-mode t))
 (use-package diff-hl :ensure t
   :config (global-diff-hl-mode))
-(use-package magit :ensure t :defer t)
+(use-package magit :ensure t :defer t
+  :config
+  ;; mouse highlight text of menu
+  ;; https://github.com/magit/transient/issues/126
+  (keymap-set transient-predicate-map
+              "<mouse-set-region>"
+              #'transient--do-stay)
+  )
 (use-package forge :ensure t :defer t :after magit)
 
 ;; 20230207 - picked up conventonal-commit and folowed it to link and timemachine
