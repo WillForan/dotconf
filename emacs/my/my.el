@@ -18,7 +18,7 @@
     (projectile-find-file)
   )
 )
-(use-package projectile
+(use-package projectile :ensure t
   :config
   (setq projectile-project-search-path
        '("~/config/"
