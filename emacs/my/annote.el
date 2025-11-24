@@ -61,11 +61,13 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 
 ;; read epub
+;; [, ] - jump chapters; l,r back and forward in history
 (use-package nov :ensure t :defer t 
   :init 
     (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   :config
     (setq nov-text-width 80))
+
 
 ;; 20201114S 
 ;; https://github.com/tmalsburg/helm-bibtex
@@ -140,3 +142,17 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
     (setq calibredb-root-dir "/mnt/storage/dl/books/calibre/")
     (setq calibredb-db-dir (expand-file-name "metadata.db" calibredb-root-dir))
     (setq calibredb-library-alist '((calibredb-root-dir))))
+
+;; 20251123 - colored highlights and bookmarks
+;; ' b - bookamrk
+;; ' g - access; ' l - back; ' d - delete; ' r - rename
+(use-package nov-highlights
+  :quelpa (nov-highlights :fetcher github :repo  "emacselements/nov-highlights")
+  :init
+  (with-eval-after-load 'nov (nov-highlights-global-mode-enable))
+  :config
+  (setq nov-highlights-bookmarks-storage-directory "~/passwd/nov-bookmarks/")
+  (setq nov-highlights-annotation-mode 'org-mode)
+  ;; (setq sentence-end "\\([.!?,;:""''][]\"')}]*\\|[:][[:space:]]\\)[[:space:]]*")
+  ;; TODO: advise nov-goto-document to save bookmark?
+  )
