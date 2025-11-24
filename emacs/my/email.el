@@ -110,7 +110,7 @@
                 (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
   :config
   ;; use remote server's database. todo: not if (system-name) is work?
-  (setq notmuch-command (if (not (string= (substring (system-name) 0 5) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
+  (setq notmuch-command (if (not (string= (substring (system-name) 0 (min 5 (length (system-name)))) "reese")) (expand-file-name "~/bin/notmuch-remote") "notmuch"))
 
   ;; 20220328 - sendmail using remote if needed
   (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)

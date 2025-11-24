@@ -11,7 +11,7 @@ esac
 
 # connect to davmail server how?
 # (if not already)
-host=reese
+host=reeser
 ssh_socket=${TMPDIR:-/tmp}/sync_$$
 
 # reverse proxy for mail
