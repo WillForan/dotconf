@@ -54,8 +54,7 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
   (require 'yasnippet)
   (yas-define-snippets 'message-mode
    (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
-         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '
-'")))))
+         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'")))))
 ;; https://jao.io/blog/2021-08-19-notmuch-threads-folding-in-emacs.html
 ;; use outline mode for thread folding
 ;; invisible "> " prefix on message lines that are the first in a thread (notmuch handily marks them with :first in the message metadata passed to notmuch-tree-insert-msg).
@@ -385,6 +384,7 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
       (notmuch-tree thread nil id)
       (notmuch-tree-show-message id))))
 (defun my/mailread ()
+  "Reduce noise in notmuch mail reading buffer."
   (interactive)
   (goto-line 2)
   (let ((buffer-read-only nil))
@@ -393,7 +393,6 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
     (re-search-forward "To:")
     (replace-match " ->")
     (when
-        ;; (re-search-forward "--*\nFrom: \|^\".* writes:$" nil nil)
       (re-search-forward "^___\*\nFrom: \\|^\".* writes:$\\|^From:.*@"
                          nil nil)
       (delete-region (match-beginning 0) (point-max))
@@ -403,3 +402,18 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
 
 ;; 20241211
 ;; (use-package himalaya :ensure t)
+
+
+;; 20251218 - Alt-Enter to open at thread
+(require 'hyperbole)
+(defib notmuch-thread ()
+  "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
+  (when
+      (save-excursion
+        (skip-chars-backward "thread:0-9a-z")
+        (looking-at "thread:[0-9a-z]+"))
+    (let* ((a (match-beginning 0))
+           (b (match-end 0))
+           (thread (buffer-substring-no-properties a b)))
+      (ibut:label-set thread a b)
+      (hact #'notmuch-tree thread))))
