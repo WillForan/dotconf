@@ -24,7 +24,7 @@
        '("~/config/"
          ("~/src/" . 1 )
          ;("~/src/utils/" . 1 )
-         ("~/src/work/" . 1 )
+         ("~/src/work/" . 2 )
          ("~/src/play/" . 1)))
 ; (projectile-discover-projects-in-search-path)
 )
@@ -144,6 +144,10 @@ if any NOTES will insert that"
 
 (defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))
 
+(defun my/tildeblog ()
+  "Quickly open tilde index.html."
+  (interactive)
+  (find-file "/ssh:tilde:public_html/index.html"))
 ;; 20231210 - quick blog
 (defun my/weblog ()
   "open new wf log org "
