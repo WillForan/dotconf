@@ -40,6 +40,7 @@
                 inferior-ess-mode-hook
                 inferior-python-mode-hook
                 deft-mode
+                cfw:calendar-mode
                 erc-mode-hook))
   (add-hook mode #'my/no-lines))
 
