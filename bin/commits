@@ -16,7 +16,7 @@ OPTIONS:
 HERE
 
 FROMTIME=${1:-0}
-USERS=(users/WillForan orgs/LabNeuroCogDevel)
+USERS=(users/WillForan orgs/LabNeuroCogDevel orgs/NPACore)
 get_commits(){
   curl -sL https://api.github.com/$1/events | 
     jq -r '

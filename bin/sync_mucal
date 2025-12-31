@@ -2,21 +2,60 @@
 # online?
 ip addr |grep -v 127.0.0.1 | grep -q inet[^6] || exit 0
 
-# sync mail. see ~/.mbsyncrc
+sync_what="${1:-mailcal}"
+case $sync_what in
+   -h) echo "$0 [mailcal|mail|cal|-h]"; exit 0;;
+   *mail*|*cal*)  ;;
+   *) echo "ERROR: input arg '$1' unknown"; $0 -h; exit 1;;
+esac
+
+# connect to davmail server how?
+# (if not already)
+host=reeser
+ssh_socket=${TMPDIR:-/tmp}/sync_$$
+
+# reverse proxy for mail (1143) and calendar (1080)
+if [[ ${HOSTNAME//.*/} != $host ]]; then
+ if ! sudo fuser -v -n tcp 1080 >/dev/null 2>&1; then
+
+  ip addr|grep -q nebula && host=192.168.100.2
+  echo "# opening reverse ssh ports on '$host' over '$ssh_socket'"
+  ssh -L 1143:localhost:1143 -L 1080:localhost:1080 \
+   -MNfT -S $ssh_socket \
+   $host
+  sleep 1
+ fi
+
+ # did proxy get applied?
+ ! pgrep ssh -af|grep -q 1080:localhost:1080 && echo "no davmail connection!" && exit 1
+fi
+
+# sync work mail. see ~/.mbsyncrc
 # for laptop, limited to 200 messages from personal accounts
 # (see "notmuch-remote" for work)
-mbsync -a
-
-# reverse proxy for mail
-if ! sudo fuser -v -n tcp 1080 >/dev/null 2>&1; then
-  host=localhost
-  ip addr|grep -q nebula && host=192.168.100.2
-  ssh -L 1080:localhost:1080 $host -MNf
-  sleep 1
+#mbsync -a
+if [[ $sync_what =~ mail ]]; then
+  if grep -q UPMC ~/.mbsyncrc; then
+     echo "# syncing mail" && dryrun mbsync UPMC
+  else
+     echo "# 'UPMC' not in ~/.mbsyncrc; no mail sync"
+  fi
 fi
-# did proxy get applied?
-! pgrep ssh -af|grep -q 1080:localhost:1080 && echo "no davmail connection!" && exit 1
 
 # sync calendars
-vdirsyncer sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+if [[ $sync_what =~ cal ]]; then
 
+  #! (echo -e 'OPTIONS / HTTP/1.1\n\n'; sleep .2) |
+  #    timeout .2s telnet localhost 1080 |
+  #    grep -q DAV &&
+  #   echo no DAV server on localhost:1080 &&
+  #   exit 1
+
+  echo "# syncing calendar"
+  dryrun uvx vdirsyncer `#-vdebug` sync upmc2local/upmc local2single/upmc && khal calendar  >/dev/null
+fi
+
+# close ssh port forwards
+test -r $ssh_socket && ssh -S $ssh_socket -O exit $host
+
+exit 0

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: entry
+# key: entry
+# expand-env: ((yas-indent-line 'fixed))
+# --
+<!-- ----------------- -->
+<hr><a href=#${1:$(replace-regexp-in-string " " "-" yas-text)} name=${1:$(replace-regexp-in-string " " "-" yas-text)}><h2>`(insert (format-time-string "%Y%m%d"))`: ${1:title}</h2></a>
+<p>$0</p>

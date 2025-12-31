@@ -19,10 +19,16 @@ alias kweek='khal list  -f "{calendar-color}{cancelled}{start-end-time-style} {t
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 
+# 20241118
+alias foran='neomutt -f ~/Maildir/foran.cc/INBOX/'
+
 # inside emacs open new file # 20210401
 alias en="emacsclient -n"
 # 20230809
-alias rslack="ssh h -t tmux -2u a -t work"
+#alias rslack="ssh h -t tmux -2u a -t work"
+alias rslack="mosh h -- tmux -2u a -t work"
+# 20231203 - separate weechat profile
+alias irc-s2="weechat -d ~/.config/weechat_foss"
 
 # browse with images
 alias w3m='w3m -sixel -o display_image=1 -o display_link_number=1'

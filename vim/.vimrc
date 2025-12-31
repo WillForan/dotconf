@@ -66,3 +66,6 @@ nmap <silent> <leader>tn :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
 nmap <silent> <leader>ta :TestSuite<CR>
 nmap <silent> <leader>tl :TestLast<CR>
+
+" 20250126 - send buffer to terminal (eg. R REPL)
+nnoremap <leader>sk :%y \| :call term_sendkeys(2, @")<CR>
