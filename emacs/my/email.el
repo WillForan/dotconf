@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (setq  send-mail-function 'sendmail-send-it)
 (defun no-auto-fill () (auto-fill-mode -1))
 
@@ -25,13 +26,11 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
   (let* ((emailaddress "will@foran.cc")
          (from-line (concat "From: " emailaddress)))
     ;; change from is address is not set
-    (save-excursion (goto-char (point-min))
-                    (if (re-search-forward "^From:.*tickle-me" nil t)
-                        (replace-match from-line))
-                    (if (re-search-forward "^From:.*foranw@u.*" nil t)
-                        (replace-match from-line))
-                    (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t)
-                        (replace-match from-line)))
+    (save-excursion
+      (goto-char (point-min))
+      (if (re-search-forward "^From:.*tickle-me" nil t) (replace-match from-line))
+      (if (re-search-forward "^From:.*foranw@u.*" nil t) (replace-match from-line))
+      (if (re-search-forward "^From:.*mail-host-address-is-not-set" nil t) (replace-match from-line)))
     ;; start a the To: line
     (goto-char (point-min))
     (if (re-search-forward "^To:" nil t)
@@ -39,79 +38,91 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
     (evil-insert-state)
     ;; all using msmtprc. but might need to pipe to 'ssh homeserver sendmail'
     ;; (ie. where gmail is blocked)
-
     (setq-local
      ;; mail-user-agent 'message-user-agent ;; intstead of e.g. mu4e
-     message-send-mail-function 'message-send-mail-with-sendmail ;; really want below?
+     message-send-mail-function 'message-send-mail-with-sendmail
+     ;; really want below?
      user-mail-address emailaddress
      send-mail-function 'sendmail-send-it ; orig: sendmail-query-once
      ;; 20251112 - copied from work-mail-setup
      mail-specify-envelope-from t
-     mail-envelope-from 'header         ; only if mail-specify-e... t
+     mail-envelope-from 'header ; only if mail-specify-e... t
      message-sendmail-envelope-from 'header ; "use the From: header"
-     sendmail-program (if (string= (system-name) "reese.acct.upmchs.net") "~/bin/s2sendmail" "sendmail"))))
-
-;; empty for some reason w/text-mode in message-mode dont even complete
- (require 'yasnippet)
- (yas-define-snippets
-  'message-mode
-  (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
-        (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'"))))
-
-
+     sendmail-program (if (string= (system-name) "reese.acct.upmchs.net")
+                          "~/bin/s2sendmail" "sendmail")))
+  ;; empty for some reason w/text-mode in message-mode dont even complete
+  (require 'yasnippet)
+  (yas-define-snippets 'message-mode
+   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
+         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'")))))
 
 ;; https://jao.io/blog/2021-08-19-notmuch-threads-folding-in-emacs.html
 ;; use outline mode for thread folding
 ;; invisible "> " prefix on message lines that are the first in a thread (notmuch handily marks them with :first in the message metadata passed to notmuch-tree-insert-msg).
 ;; tell outline mode to use a regular expression that recognises the marker above:
 (defun jao-notmuch-tree--msg-prefix (msg)
-  (insert (propertize (if (plist-get msg :first) "> " "  ") 'display "")))
+  (insert
+   (propertize (if (plist-get msg :first) "> " "  ") 'display "")))
 (defun jao-notmuch-tree--mode-setup ()
   (setq-local outline-regexp "^> \\|^En")
   (outline-minor-mode t))
-
-
 ;; toggle a tag by keybinding
 ;; modfied from hints on https://notmuchmail.org/emacstips
 (defun notmuch-toggle-tag (tag tag-func)
   "toggle tag for message. tag-func like #'notmuch-show-tag"
-  (let ((add-or-rm (if (member tag (notmuch-show-get-tags))
-                       "-" "+")))
-      (funcall tag-func (list (concat add-or-rm tag)))))
+  (let ((add-or-rm (if (member tag (notmuch-show-get-tags)) "-" "+")))
+    (funcall tag-func (list (concat add-or-rm tag)))))
+
 (defun notmuch-keybind-tag-everywhere (key tag)
-    (define-key notmuch-show-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-show-tag)))
-    (define-key notmuch-tree-mode-map key   `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-tree-tag) (notmuch-tree-next-message)))
-    (define-key notmuch-search-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-search-tag))))
+  (define-key notmuch-show-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-show-tag)))
+  (define-key notmuch-tree-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-tree-tag) (notmuch-tree-next-message)))
+  (define-key notmuch-search-mode-map key `(lambda () (interactive) (notmuch-toggle-tag ,tag #'notmuch-search-tag))))
 
 (setq my-notmuch-inbox-search "(date:1w.. -tag:delete) OR tag:todo")
+
 (defun my-notmuch-tree ()
   (interactive)
-  (progn (notmuch-search my-notmuch-inbox-search)
-         (notmuch-tree-from-search-current-query)))
+  (progn
+    (notmuch-search
+     my-notmuch-inbox-search)
+    (notmuch-tree-from-search-current-query)))
 
 ;; 20220328 - sendmail w/ notmuch (work email)
 ;; https://notmuchmail.org/pipermail/notmuch/2019/028633.html
 (defun my/work-mail-setup ()
+  "Use work address and remote notmuch if needed."
   (interactive)
-  (setq-local sendmail-program (if (string= (system-name) "reese")
-                                   "/usr/sbin/sendmail"
-                                 "~/bin/sendmail-remote")
-              user-mail-address "foranw@upmc.edu"
-              mail-specify-envelope-from t
-              message-sendmail-envelope-from 'header
-              mail-envelope-from 'header
-              send-mail-function 'message-send-mail-with-sendmail)
+  (setq-local
+   sendmail-program (if (string= (system-name) "reese")
+                        "/usr/sbin/sendmail"
+                      "~/bin/sendmail-remote")
+   user-mail-address "foranw@upmc.edu"
+   mail-specify-envelope-from t
+   message-sendmail-envelope-from 'header
+   mail-envelope-from 'header
+   send-mail-function 'message-send-mail-with-sendmail)
   (no-auto-fill)
   (flyspell-mode-on))
 
 ;; 20211110 - work uses notmuch on remote computer. personal uses mu
 (defun my/notmuch ()
+  "Notmuch with work address and this weeks search"
   (interactive)
-  (setq user-mail-address "foranw@upmc.edu" user-full-name  "Will Foran")
+  (setq user-mail-address "foranw@upmc.edu"
+        user-full-name "Will Foran")
   (org-msg-mode-notmuch)
   (notmuch-tree "date:1week.. -tag:delete"))
 
 ;; 20251115
+(defun notmuch-address-only (header-address)
+  "Extract email address only from HEADER-ADDRESS.
+Simplify pitt and upmc address."
+  (let* ((email (car (notmuch-clean-address
+                      header-address)))
+         (email (replace-regexp-in-string "@pitt.edu" "@p" email))
+         (email (replace-regexp-in-string "@upmc.edu" "@u" email)))
+    email))
+
 (defun show-recipient-if-sent (format-string result)
   "Custom function for `notmuch-unthreaded-result-format' to use instead of \"authors\".
 Show \"From:\" address from RESULT, unless we sent the message. Then show \"To:\".
@@ -127,95 +138,115 @@ Example on wiki https://notmuchmail.org/emacstips/"
                    'notmuch-tree-match-author-face
                  'notmuch-tree-no-match-author-face)))
     (propertize
-     (format format-string
-             (if is-me?
-                  (concat "📫" (notmuch-tree-clean-address to))
-                  (notmuch-tree-clean-address author)))
+     (format format-string (if is-me?
+                               (concat "↪" (notmuch-address-only to))
+                             ;; notmuch-tree-clean-address
+                             (notmuch-address-only author)))
      'face face)))
+
 (defun notmuch-absdate (_ msg)
   "Replace \"date\" column with formatted timestamp from MSG.
 Format conditional on if message is older or newer than a month."
   (let* ((match (plist-get msg :match))
-         (stamp (seconds-to-time (plist-get msg :timestamp)))
+         (stamp (seconds-to-time
+                 (plist-get msg :timestamp)))
          (now (float-time (current-time)))
          (tdiff (- now (float-time stamp)))
+         (dow (nth (string-to-number (format-time-string "%w" stamp)) '("N" "M" "T" "W" "R" "F" "S")))
          ;; day 86400; month 2592000; year 31536000
-         (fmt (cond
-               ((> tdiff 2592000)    "%Y-%m-%d    ")
-               ;; ((> tdiff    86400) "%m/%d %H      ")
-               (t                 "%u %m/%d %H:%M ")))
-         (face (if (< tdiff 86400)
-                   'bold
-                 'italic)))
-    (propertize
-     (format-time-string fmt stamp)
-     'face face)))
+         (fmt (cond ((> tdiff 2592000) "%Y-%m-%d    ")
+                    ;; ((> tdiff    86400) "%m/%d %H      ")
+                    (t (concat dow "%m/%d %H:%M "))))
+         (face (if (< tdiff 86400) 'bold 'italic)))
+    (propertize (format-time-string fmt stamp) 'face face)))
 
 (defun notmuch-count-people (format-string msg)
   "Count total number of people on MSG.
 Format as FORMAT-STRING.  Does not deal with duplicates."
   (let* ((headers (plist-get msg :headers))
-         (authors (concat (plist-get headers :To)
-                          (plist-get headers :Cc)
-                          (plist-get headers :From)))
-         (n (length (split-string authors "@"))))
+         (authors (concat
+                   (plist-get headers :To)
+                   (plist-get headers :Cc)
+                   (plist-get headers :From)))
+         (n (length
+             (split-string authors "@"))))
     (propertize
-     (format format-string (- n 1))
-     'face 'bold)))
+     (format format-string (- n 1)) 'face
+     (if (> n 3) 'font-lock-keyword-face 'bold))))
 
 (use-package notmuch :ensure t
-  :custom
-  ;; 20220107 - redefine jumps on 'j'
-  (notmuch-saved-searches '((:name "week" :query "(date:1w.. -tag:delete) OR tag:todo" :key "w")
-                (:name "unread" :query "tag:inbox AND tag:unread AND -tag:delete" :key "u")))
+  :custom ;; 20220107 - redefine jumps on 'j'
+  (notmuch-saved-searches
+   '((:name "week"
+            :query "(date:1w.. -tag:delete) OR tag:todo"
+            :key "w")
+     (:name "unread"
+            :query "tag:inbox AND tag:unread AND -tag:delete"
+            :key "u")))
   (notmuch-unthreaded-result-format
    '(;; ("date" . "%12s  ")
      (notmuch-absdate . "")
      ;; ("authors" . "%-20s")
+<<<<<<< HEAD
      (show-recipient-if-sent . "%-20.20s")
      (notmuch-count-people . "%-3s")
      ((("subject" . "%s")) . " %-25s ")
      ("tags" . "(%s)")))
   :config
 ;; use remote server's database.
+=======
+     (show-recipient-if-sent . "%-15.15s")
+     (notmuch-count-people . "%3s")
+     ((("subject" . "%s")) . " %-40.40s ")
+     ("tags" . "%s")))
+  :config ;; use remote server's database.
+>>>>>>> 1672883a73ec611ce601bba3a87e616cb3dc733e
   (setq notmuch-command
-	(if (not (string-prefix-p "reese" (system-name)))
-	    (expand-file-name "~/bin/notmuch-remote")
-	  "notmuch"))
-
+        (if (not (string-prefix-p
+                  "reese"
+                  (system-name)))
+            (expand-file-name
+             "~/bin/notmuch-remote")
+          "notmuch"))
   ;; 20220328 - sendmail using remote if needed
-  (add-hook 'notmuch-message-mode-hook 'my/work-mail-setup)
-
+  (add-hook
+   'notmuch-message-mode-hook
+   'my/work-mail-setup)
   ;; 20220808 - x and a actions
-  (setq notmuch-archive-tags '("-inbox" "-new"))
-
+  (setq notmuch-archive-tags
+        '("-inbox" "-new"))
   ;; 20211202 use jao's outline mode trick to collapse threads
-  (advice-add 'notmuch-tree-insert-msg :before #'jao-notmuch-tree--msg-prefix)
-  (add-hook 'notmuch-tree-mode-hook #'jao-notmuch-tree--mode-setup)
-  (define-key notmuch-tree-mode-map (kbd "TAB") #'outline-cycle)
-  (define-key notmuch-tree-mode-map (kbd "M-TAB") #'outline-cycle-buffer)
-
+  (advice-add
+   'notmuch-tree-insert-msg
+   :before #'jao-notmuch-tree--msg-prefix)
+  (add-hook
+   'notmuch-tree-mode-hook
+   #'jao-notmuch-tree--mode-setup)
+  (define-key notmuch-tree-mode-map (kbd "TAB")
+              #'outline-cycle)
+  (define-key notmuch-tree-mode-map (kbd "M-TAB")
+              #'outline-cycle-buffer)
   ;; quick tags defined for show, tree, and search modes
-  (notmuch-keybind-tag-everywhere "d"  "delete")
-  (notmuch-keybind-tag-everywhere "T"  "todo"))
+  (notmuch-keybind-tag-everywhere "d" "delete")
+  (notmuch-keybind-tag-everywhere "T" "todo"))
 
-(use-package org-download :ensure t)    ; 20220501 - org-download-paste for clipboard images
+; 20220501 - org-download-paste for clipboard images
+(use-package org-download :ensure t)
 (use-package org-msg :ensure t
-  :config
-  ;; (setq mail-user-agent 'message-user-agent) ; default
+  :config ;; (setq mail-user-agent 'message-user-agent) ; default
   ;; (setq mail-user-agent 'notmuch-user-agent) ; doesn't work. sends =-=-= blank message
   ;; (setq mail-user-agent 'mu4e-user-agent) ; 20220501
   ;; ; (org-msg-mode-notmuch) adds advice to notmuch-mua-{reply,mail}
   ;; ; notmuch-mua-reply called by try reply, defined by macro for 'r'
   ;; (setq-local org-msg-enforce-css "~/Downloads/org-msg.css")
-  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
+  (setq org-msg-options
+        "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
   (setq org-msg-convert-citation t)
-
   ;; 20250725: keep in org mode for plaintext version
   ;; this makes duplicate text entriesj
-  (add-to-list 'org-msg-alternative-exporters
-             '(text "text/plain" . identity))
-  )
+  (add-to-list
+   'org-msg-alternative-exporters
+   '(text "text/plain" . identity)))
 
 ;; 20211026
 ;; https://emacs.stackexchange.com/questions/52657/attaching-files-in-mu4e-from-the-clipboard
@@ -223,83 +254,90 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
 ;; TODO: inspect filetype on clipboard. panic if not image
 (defun my/clip-to-PNG ()
   (interactive)
-  (let
-      ((image-file (concat "/tmp/" (format-time-string "tmp_%Y%m%d_%H%M%S.png"))))
-    (shell-command-to-string (concat "xclip -o -selection clipboard -t image/png > " image-file))
+  (let ((image-file (concat
+                     "/tmp/"
+                     (format-time-string
+                      "tmp_%Y%m%d_%H%M%S.png"))))
+    (shell-command-to-string
+     (concat
+      "xclip -o -selection clipboard -t image/png > "
+      image-file))
     image-file))
 (defun my/mu4e-attach-image-from-clipboard ()
   (interactive)
-  (let ((image-file (my/clip-to-PNG)) ;; paste clipboard to temp file
-    (pos (point-marker)))
+  (let ((image-file (my/clip-to-PNG))
+        ;; paste clipboard to temp file
+        (pos (point-marker)))
     (goto-char (point-max))
-    (mail-add-attachment image-file)
+    (mail-add-attachment
+     image-file)
     (goto-char pos)))
+(use-package
+  mu4e
+  ;; :load-path "/usr/share/emacs/site-lisp/"
+  :load-path "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"
+  :config
+  (setq mu4e-compose-reply-to-address "will@foran.cc"
+        user-mail-address "will@foran.cc"
+        user-full-name "Will Foran"
+        mail-user-agent 'mu4e-user-agent
+        ;; 20230226 - from mu manual: Type: text/plain; format=flowed
+        mu4e-compose-format-flowed t)
 
-(use-package mu4e
- :load-path "/usr/share/emacs/site-lisp/"
- :config
- (setq mu4e-compose-reply-to-address "will.foran@gmail.com"
-       user-mail-address "will.foran@gmail.com"
-       user-full-name  "Will Foran"
-       mail-user-agent 'mu4e-user-agent
-       ;; 20230226 - from mu manual: Type: text/plain; format=flowed
-       mu4e-compose-format-flowed t)
-
- ;; 20230226 -- annotated by not added.
- ;; inline email not displaying in outlook? change the replay format
- ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
-
- ;; 20230225 from 'man mbsync'
- ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
- ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
- (setq mu4e-change-filenames-when-moving t)
-
- ; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
- (add-to-list 'mu4e-marks
-  '(tag
-     :char       "g"
-     :prompt     "gtag"
-     :ask-target (lambda () (read-string "What tag do you want to add?"))
-     :action      (lambda (docid msg target)
-		    (mu4e-action-retag-message msg (concat "+" target)))))
- (mu4e~headers-defun-mark-for tag)
- (define-key mu4e-headers-mode-map (kbd "G") 'mu4e-headers-mark-for-tag)
- ; g is default refresh
- ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
-
- ;; 20211026 - disable auto-newline at longer lines
- (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
-
+  ;; 20230226 -- annotated by not added.
+  ;; inline email not displaying in outlook? change the replay format
+  ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
+  ;; 20230225 from 'man mbsync'
+  ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
+  ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
+  (setq mu4e-change-filenames-when-moving t)
+  ; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
+  (add-to-list 'mu4e-marks
+   '(tag :char "g" :prompt "gtag"
+     :ask-target (lambda ()
+                   (read-string
+                    "What tag do you want to add?"))
+     :action (lambda (docid msg target)
+               (mu4e-action-retag-message
+                msg
+                (concat "+" target)))))
+  (mu4e~headers-defun-mark-for tag)
+  (define-key mu4e-headers-mode-map (kbd "G")
+              'mu4e-headers-mark-for-tag)
+                                        ; g is default refresh
+                                        ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
+  ;; 20211026 - disable auto-newline at longer lines
+  (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
-(use-package org-mu4e :load-path "/usr/share/emacs/site-lisp/mu4e"
-  :config
-  (evil-leader/set-key "M" #'mu4e)
+(use-package org-mu4e
+  :load-path "/usr/share/emacs/site-lisp/mu4e"
+  :config (evil-leader/set-key "M" #'mu4e)
   (evil-leader/set-key "M-M" #'notmuch)
-  :custom
-  (mu4e-get-mail-command "ssh s2 mbsync -a"))
+  :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
+
 (use-package mu4e-conversation :ensure t)
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
   (interactive)
   ;; (setq mail-user-agent 'notmuch-user-agent) ; mu4e-user-agent
-
   ;; 20241010 sent but unsent buffers stays. maybe because of error:
   ;; primitive-undo: Unrecognized entry in undo list undo-tree-canary
   ;; (setq undo-tree-enable-undo-in-region nil) ; doesn't help
-
   ;; 20250312 - weird undo behavior when generating email preview
   ;; disabling this in case that's it
-  (setq-local evil-undo-system 'undo-redo)
-
+  (setq-local
+   evil-undo-system
+   'undo-redo)
   (org-msg-edit-mode)
   ;; 20250302: set email style (box for code and results)
   ;; (setq org-msg-enforce-css "/home/foranw/Downloads/org-msg.css")
   (save-excursion
     (beginning-of-buffer)
-    (search-forward "--text follows this line--")
+    (search-forward
+     "--text follows this line--")
     (end-of-line)
     (insert "\n")
     (insert (org-msg-header 'new '(text html)))
@@ -309,33 +347,83 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     ;; 20250302: org-babel settings for email
     (search-backward "OPTIONS")
     (end-of-line)
-    (insert "\n#+PROPERTY: header-args :exports both :eval no-export")
+    (insert
+     "
+#+PROPERTY: header-args :exports both :eval no-export")
     ;; load above settings and org-msg-options inserted by org-msg-header
     (org-ctrl-c-ctrl-c)
     ;; must set sendmail after C-c C-c
     (goto-char 0)
     (when (looking-at "^From:.*upmc.edu")
       (my/work-mail-setup)
-      (message "switched to work sendmail"))))
-
+      (message
+       "switched to work sendmail"))))
 (defun my/mail-org-header ()
   "Send a mail to emily from an org header.
 Pipeline is intented to be firefox-> org-protocol-> capture -> email."
   (interactive)
   (let* ((this-head (org-get-heading))
-         (content (progn  (org-mark-subtree) (buffer-substring (point) (mark))))
+         (content (progn
+                    (org-mark-subtree)
+                    (buffer-substring
+                     (point)
+                     (mark))))
          ;; remove head - canpt use (length this-head) b/c var num of '*' have been stripped
-         (content  (substring content (+ 1 (string-match "\n" content))))
+         (content (substring content (+ 1 (string-match "\n" content))))
          ;; remove date
-         (content (replace-regexp-in-string "^\s*[[0-9-]\+ [MTWFS][a-z][a-z]\]\s*" "" content)))
-    (compose-mail "emily.mente@gmail.com" this-head)
+         (content (replace-regexp-in-string
+                   "^\s*[[0-9-]\+ [MTWFS][a-z][a-z]\]\s*"
+                   ""
+                   content)))
+    (compose-mail
+     "emily.mente@gmail.com"
+     this-head)
     (insert content)))
 
 (defun my/simple-mail ()
-    (interactive)
-    ;; likley mu4e-user-agent
-    (setq mail-user-agent 'message-user-agent))
+  (interactive)
+  ;; likley mu4e-user-agent
+  (setq mail-user-agent
+        'message-user-agent))
+(defun my/tree-thread ()
+  "Show tree view of selected thread."
+  (interactive)
+  (let ((id (notmuch-tree-get-message-id))
+        (thread (notmuch-tree-get-messages-ids-thread-search)))
+    (when id
+      (notmuch-tree thread nil id)
+      (notmuch-tree-show-message id))))
+(defun my/mailread ()
+  "Reduce noise in notmuch mail reading buffer."
+  (interactive)
+  (goto-line 2)
+  (let ((buffer-read-only nil))
+    (re-search-forward "Subject: ")    (replace-match "")
+    (end-of-line) (kill-line)
+    (re-search-forward "To:")
+    (replace-match " ->")
+    (when
+      (re-search-forward "^___\*\nFrom: \\|^\".* writes:$\\|^From:.*@"
+                         nil nil)
+      (delete-region (match-beginning 0) (point-max))
+      )
+    ))
 
 
 ;; 20241211
 ;; (use-package himalaya :ensure t)
+
+
+;; 20251218 - Alt-Enter to open at thread
+(require 'hyperbole)
+(defib notmuch-thread ()
+  "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
+  (when
+      (save-excursion
+        (skip-chars-backward "thread:0-9a-z")
+        (looking-at "thread:[0-9a-z]+"))
+    (let* ((a (match-beginning 0))
+           (b (match-end 0))
+           (thread (buffer-substring-no-properties a b)))
+      (ibut:label-set thread a b)
+      (hact #'notmuch-tree thread))))

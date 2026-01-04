@@ -24,7 +24,7 @@
        '("~/config/"
          ("~/src/" . 1 )
          ;("~/src/utils/" . 1 )
-         ("~/src/work/" . 1 )
+         ("~/src/work/" . 2 )
          ("~/src/play/" . 1)))
 ; (projectile-discover-projects-in-search-path)
 )

@@ -9,7 +9,7 @@
   ;; (set-frame-font "-UKWN-URW Gothic-regular-normal-normal-*-23-*-*-*-*-0-iso10646-1")
   ;; (set-face-attribute 'default (selected-frame) :font "URW Gothic" :height 173)
   ;; Following mouse-set-font into mouse.el and searching "Set Buffer Font..."
-  (buffer-face-mode-invoke (list :family "URW Gothic" :height 100) t nil)
+  (buffer-face-mode-invoke (list :family "Helvetica" :height 120) t nil) ; URW Gothic
   ;; also readable: M+  -M+ 1m-bold-normal-normal-*-25-*-*-*-d-0-iso10646-1
 
   )
@@ -18,14 +18,25 @@
   ;; :quelpa ((dokuwiki :fetcher github :repo "WillForan/emacs-dokuwiki") :upgrade t)
   :load-path "~/src/utils/emacs-dokuwiki"
   :ensure t
-  :hook
-  ((dokuwiki-page-opened .
-    (lambda ()
-      (dokuwiki-setup)
-      (dokuwiki-mode 1)
-      (company-mode 1)
-      (my/present-text)
-      (flyspell-mode 1)))))
+  :init
+  (add-hook 'dokuwiki-page-opened-hook #'my/present-text)
+  (add-hook 'dokuwiki-page-opened-hook #'my/no-lines)
+  (add-hook 'dokuwiki-page-opened-hook #'flyspell-mode)
+  (add-hook 'dokuwiki-page-opened-hook #'company-mode)
+            ;; (lambda ()
+            ;;   (message "setup")
+            ;;   (dokuwiki-setup)
+            ;;   (message "company")
+            ;;   (company-mode 1)
+            ;;   (message "present")
+            ;;   (my/present-text)
+            ;;   (message "spell")
+            ;;   (flyspell-mode 1)
+            ;;   ;; (message "dokuwiki")
+            ;;   ;; (dokuwiki-mode)
+            ;;   )
+  )
+
 
 (use-package dokuwiki-mode
   ;; :quelpa ((dokuwiki-mode :fetcher github :repo "WillForan/emacs-dokuwiki-mode") :upgrade t)
