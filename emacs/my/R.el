@@ -19,6 +19,12 @@
   (define-key ess-mode-map (kbd "⊃") " %>% ")
   (define-key inferior-ess-mode-map (kbd "⊃") "%>%")
 
+  ;; 20250225 - tidyverse colors into comint buffer
+  ;; 20250413 - revisited with fboundp guard
+  ;; alt, disable in R: options(crayon.enabled = FALSE)
+  (when (fboundp 'ansi-color-process-output)
+    (add-to-list 'comint-output-filter-functions #'ansi-color-process-output))
+
   ;; this messes up emacs in temrinal
   ;; and make it look like what we pushed for maximum confusion
   ;; (add-hook 'ess-mode-hook
@@ -30,3 +36,15 @@
   ;;                    ;; '("<-"  . ?←)
   ;;                    prettify-symbols-alist))))
   )
+
+;; 20240105 - M-x styler-buffer
+(use-package reformatter
+  :config
+  (defconst Rscript-command "Rscript")
+  (reformatter-define styler
+    :program Rscript-command
+    :args (list "--vanilla" "-e" "con <- file(\"stdin\")
+out <- styler::style_text(readLines(con))
+close(con)
+out")
+    :lighter " styler"))

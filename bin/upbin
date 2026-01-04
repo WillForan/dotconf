@@ -25,6 +25,7 @@ cd $configdir
 case $pkg in
   # in there own place
   bash) test ! -h ~/.bashrc && ln -s $configdir/bash/.bashrc ~/.bashrc || echo "# have $_";;
+  udev) sudo stow -d "$configdir" -t /etc/udev/rules.d/ "$pkg";;
   bin)   stowto ~/bin;;
   emacs) stowto ~/.emacs.d;;
   # in own folder but not in config
@@ -34,7 +35,11 @@ case $pkg in
   # .desktop files inside XDG directory (20211204 xinit)
   app.desktop) stowto  ~/.local/share/applications/;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv|tridactyl)
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv)
+      stowto ~/.config/$pkg;;
+  tridactyl)
+      test -r ${XDG_DATA_HOME:-$HOME/.local/share}/tridactyl/native_main ||
+        bash "$(curl -fsSl https://raw.githubusercontent.com/tridactyl/native_messenger/master/installers/install.sh)"
       stowto ~/.config/$pkg;;
   # picom.config and greenclip.toml lives inside .config instead of it's own directory
   greenclip|picom) stowto ~/.config/;;

@@ -19,7 +19,7 @@ set_font(){
 list_fonts(){
   # most monospaced fonts have 'Mono' somewhere in the name
   # notable exceptions hard-coded in regexp
-  fc-list|grep -iP 'flexi|M\+|mono|hack|iosevka|Pragmata|Exo|spleen|scientifica|DEC'  |cut -f2 -d:|sort -u
+  fc-list|grep -iP 'flexi|anon|M\+|mono|monaspace|moralerspace|hack|iosevka|Pragmata|Exo|spleen|scientifica|DEC'  |cut -f2 -d:|sort -u
 }
 
 # not called. here for reference

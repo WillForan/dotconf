@@ -77,3 +77,36 @@
     ;; (local-set-key (kbd "<backtab>") #'outline-cycle)
     ;; (local-set-key (kbd "M-<iso-lefttab>") #'(lambda () (interactive) (outline-cycle '(4))))
     )
+
+
+(defun ws-notebook ()
+  "Run ws:: lines in zim wiki text file and jump to dedictated i3 workspace.
+For running a single ws:: line, see `my/zim-ws-plum'."
+  (interactive)
+  ;; forks do not run in (start-process) or (async-shell-command)
+  ;; shell-command waits for forked children to end too
+  (call-process "/home/foranw/src/utils/wf-utils/i3/zim-i3-go.bash"
+                nil 0 nil           ; no output, no wait, no redisplay
+                ""                  ; gen workspace name from filename
+                (buffer-file-name)))
+
+
+(defun day-summary ()
+  "Collect days work from IM, email, and git."
+  (interactive)
+  (let ((shell-command-dont-erase-buffer t))
+    (with-output-to-temp-buffer "*day-log*"
+      ;; (princ "* Email\n")
+      ;; (princ "#+begin_example\n")
+      (shell-command "ssh reeser -- notmuch search from:foranw date:$(date +%F); echo" "*day-log*" "*day-log*")
+      ;; (princ "\n#+end_example\n")
+      ;; (princ "* Git\n")
+      ;; (princ "#+begin_example\n")
+      (shell-command "echo; commits; echo" "*day-log*" "*day-log")
+      ;; (princ "\n#+end_example\n")
+      ;; (princ "* Slack\n")
+      ;; (princ "#+begin_example\n")
+      (shell-command  "ssh s2 -- grep -iPR '\"$(date +%F)[0-9: \t-]*Will\"' .local/share/weechat/logs/ | sed s:.*logs/::;s/\twill\t/\t\\n/' &" "*day-log*" "*day-log")
+      ;; (princ "#+end_example")
+      ))
+   (with-current-buffer "*day-log*" (org-mode)))

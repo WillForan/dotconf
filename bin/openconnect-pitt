@@ -1,0 +1,100 @@
+#!/usr/bin/env expect
+
+# automate some parts of global protect VPN
+# using openconnect and pass
+#
+# 20250129: use $argv for additional slices like huggingface models from cloundflare: 
+#    openconnect-pitt 172.66.1.0/24
+# 20240927:
+#   argv for 'noslice' to disable vpn-slice even if it exists
+#   add DRYRUN=1 support to just print what we'd do instead of doing it
+# 20240416:
+#   add $argv obsensibly for
+#    -s "vpn-slice 136.142.217.118/24"
+# 20240410: from bash to tcl expect b/c
+#  pass cannot be sent unless it's the only prompt on stdin.
+#  I could get niether of below to correctly send inputs.
+#     https://gitlab.com/openconnect/openconnect/-/issues/270
+#     suggests: pass work/pitt | cat - /dev/tty | openconnect
+#
+#     https://askubuntu.com/questions/1043024/how-to-run-openconnect-with-username-and-password-in-a-line-in-the-terminal
+#     suggests:
+#     { pass work/pitt; sleep 1; echo $mfa_method; } | openconnect
+set dry_or_sudo "sudo"
+if { [ array names ::env DRYRUN ] != "" } {
+   if { $::env(DRYRUN) ne ""} { set dry_or_sudo "echo" }
+}
+set vpn_host portal-palo.pitt.edu
+set user foran
+set pass [exec pass work/pitt]; # 'pass' cli password manager
+set gateway BYOD-GATEWAY-CL 
+set mfa_method push1
+# duo pass code
+set duo_py [file normalize ~/src/utils/duo-hotp/duo.py]
+set duo_pass [file normalize ~/passwd/pitt_duo.json]
+if { [file isfile $duo_py] && [file isfile $duo_pass] && ![regexp {noduo} $argv ] } {
+   if { $dry_or_sudo eq "echo"} {
+      puts "# dryrun: not using $duo_py with $duo_pass"
+   } else {
+      set mfa_method [exec $duo_py next -s $duo_pass]
+   }
+} else {
+    puts "# no duo code. using $mfa_method -- check your phone"
+}
+
+# TODO: use WillForan/duo-hotp/duo.py
+# to get passphrase instead of push
+
+# debain
+set wrap /usr/libexec/openconnect/hipreport.sh
+# arch
+if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
+# unknown
+if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
+
+# use custom built openconnect? debian is too old (20240703 v9.01-3 vs v9.12-137-g42623144)
+# https://gitlab.com/openconnect/openconnect/-/issues/495 ("Failed to parse server response")
+set openconnect [file normalize ~/src/utils/openconnect/openconnect ]
+if ![file exist $openconnect] { set openconnect openconnect }
+
+set cmd "$openconnect"
+set precmd ":"
+
+# use python script 'vpn-slice' to use vpn only for specific range
+# need to pass 'vpn-slice ip_range' as single argument
+set vpnslice [file normalize ~/src/utils/vpn-slice/bin/activate]
+if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
+   set precmd "source $vpnslice"
+   #set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
+   # 20240703 - htc.crc.pitt.edu        = 136.142.28.148
+   # 20240926 - ewi-prod.cssd.pitt.edu  = 130.49.230.169
+   set cmd [string cat "$openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24 " {*}$argv "\\\'" ]
+}
+
+spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
+  -v --protocol=gp \
+  $vpn_host \
+  --csd-wrapper=$wrap \
+  --authgroup=$gateway \
+  --servercert pin-sha256:F9oz5fbgohG3Or2A+qFJTNnUSXyapIWkNoRyuyv7Lt8= \
+  --servercert pin-sha256:ereUbF+/IxYME66sG12X+pjBrlpq2CYouxb25MgxvrY= \
+  --servercert pin-sha256:EiYfp70/HBWS9GVAq6lHhOGiwXUOQpHBbwn5n2Rpj78= \
+  --servercert pin-sha256:3oTBS+XZtHYSEeVpU7t2kChwNsE+lsXlZawoi/HAljA= \
+  -u $user  \
+]
+
+if [regexp {echo} $dry_or_sudo ] { exit }
+# haven't found challenge/choice forum option
+# use expect to endter instead
+# tried:
+#  --form-entry main:Challenge=$mfa_method \
+#  --form-entry hidden_form:choice=$mfa_method \
+#  --form-entry hidden_form:challenge=$mfa_method
+
+expect -re "Enter login credentials(\n|\r)*Password:" 
+send "$pass\r"
+expect "Choose a secondary factor from ('push1', 'push2', 'push3', 'phone2', 'sms2') or enter passcode:"
+send "$mfa_method\r"
+
+# without giving back tty, program will exit
+interact

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+if [[ "$UID" == 0 ]]; then
+   user=$(ps -o user $(pgrep i3)|sed '1d;2q')
+   [ -z "$user" ] && echo "no x11 running" >&2 && exit 1
+   sudo -u $user $0 "$@"
+   exit $?
+fi
+
+# if running from udev, need to set xorg display
+if [[ ${PWD:-} == "/" ]]; then
+   ! [[ $* =~ off ]] && sleep 1 # only wait if connecting
+   export DISPLAY=:0
+fi
+
+# for debugging
+echo -e "\n\n$USER; $0 $*" >> /tmp/setmonitors.log
+date >> /tmp/setmonitors.log
+env  >> /tmp/setmonitors.log
+echo "$DISPLAY xrandr" >> /tmp/setmonitors.log
+xrandr | grep -P '^[^ ]' >> /tmp/setmonitors.log
+echo "xinput"
+xinput --list >> /tmp/setmonitors.log 2>&1 
+
+# 20240815 - x260 laptop in dock mount?
+if xrandr | grep -q DP-2-3\ connected && ! [[ "$*" =~ off ]]; then
+  xrandr --output DP-2-3 --mode 1920x1080 --right-of eDP-1 \
+         --output DP-2-2 --rotate right --right-of DP-2-3 --mode 1680x1050
+
+  left-track-mouse
+  sudo dhcpcd wlan0 -k ; sudo dhcpcd enp0s31f6
+  mount |grep -q /mnt/storage || mount /mnt/storage
+  nitrogen --restore
+else
+  xrandr --output DP-2-3 --off
+  xrandr --output DP-2-2 --off
+  sudo dhcpcd enp0s31f6 -k; sudo dhcpcd wlan0
+fi

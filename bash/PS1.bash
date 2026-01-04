@@ -4,7 +4,14 @@
 ####pretty prompt
 # transform hostname into a "unique" color
 #colnum=$(echo $(whoami)$(hostname) | ruby -ne 'puts $_.split("").map {|x| x.ord}.reduce(:+) % 256')
-colnum=$(perl -se '$x+=$_ for map {ord} split //, $X; END{print $x%256;}' -- -X="$USER$(hostname)")
+# perl is ~16ms. hard code vaules for known hosts
+colnum=$(
+ case $USER$HOSTNAME in
+    foranwyogert) echo 39;;
+    foranwrhea) echo 96;;
+    *) perl -se '$x+=$_ for map {ord} split //, $X; END{print $x%256;}' -- -X="$USER$HOSTNAME";;
+ esac
+   )
 # info on one line
   blue="\[[38;5;27m\]"
   pink="\[[38;5;197m\]"
@@ -46,6 +53,15 @@ case $TERM in
      #  similiar w/ xdotool set_window --name "test" $WINDOWID;
      #  instead use noop ':' with previous $_ to reinstantiate. 
      trap '__prevarg="$_"; prev_cmd_in_title; : "$__prevarg"' DEBUG
+
+     # 20231126 - background color per host
+     case $HOSTNAME in
+        rhea)   BGCOLOR=292222;;
+        reese)  BGCOLOR=222229;;
+        yogert) BGCOLOR=222222;;
+        *) printf -v BGCOLOR "%02x%02x%02x"  $((colnum%51))  $((colnum%25+25)) $((colnum%33+18));;
+     esac
+     printf '\e]11;#%s\007' "$BGCOLOR"
      ;;
   *) _x11title="";;
 esac

@@ -43,6 +43,7 @@ repo_select(){
 
 case "$1" in
   u*) repo_update_cache;;
+  pipe) cat $REPO_CACHE;;
   s*|l*) repo_select;;
   c*) shift; commits "$@";; # off load onto commits script
   *) echo "$1 unknown command" >&2; exit 1;;

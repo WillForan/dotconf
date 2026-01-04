@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # EDITOR is vim if no display or no other emacsclient
 # 20230302 - init
 disp=${DISPLAY:-noX}

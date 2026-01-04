@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+chathist(){
+ grep -iPR "$(date +%F)[0-9: \t-]*Will" $HOME/.local/share/weechat/logs/ |
+  sed 's:.*logs/::;s/\t[Ww]ill\t/\t/' |
+  perl -lne '
+    push @{$a{$1}}, "$2 $3" if m/(.*?):[0-9-]{10} ([0-9:]+)\t(.*)/;
+    END{
+      print $_=~s/python.slack|.lncd.|.weechatlog//gr,
+            " (", $#{$a{$_}}+1,")\n\t",
+            join("\n\t",@{$a{$_}})
+        for (sort {$#{$a{$b}} <=> $#{$a{$a}}} (keys %a))
+    }'
+}
+
+chathist
