@@ -49,7 +49,7 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
      mail-specify-envelope-from t
      mail-envelope-from 'header         ; only if mail-specify-e... t
      message-sendmail-envelope-from 'header ; "use the From: header"
-     sendmail-program (if (string= (system-name) "reese.acct.upmchs.net") "~/bin/s2sendmail" "sendmail")))
+     sendmail-program (if (string= (system-name) "reese.acct.upmchs.net") "~/bin/s2sendmail" "sendmail"))))
 
 ;; empty for some reason w/text-mode in message-mode dont even complete
  (require 'yasnippet)
