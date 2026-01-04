@@ -12,7 +12,7 @@
 
 "rofi rofi -combi-modi window,run,ssh -show combi"
   Mod4 + Tab
-"rofi -combi-modi 'run,ssh,Workspaces:/usr/share/doc/rofi/examples/i3_switch_workspaces.sh,window' -show combi "
+"rofi -combi-modi 'run,ssh,Workspaces:~/bin/i3_switch_workspaces.sh,window' -show combi "
   Mod4+d
 "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}'"
   Mod4+Shift+v

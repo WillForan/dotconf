@@ -15,6 +15,7 @@ test -r /etc/bashrc && . $_
 # 20230519 - guix sd
 export GUIX_PROFILE="$HOME/.guix-profile"
 test -r "$GUIX_PROFILE/etc/profile" && source "$_"
+export TERMINAL=xterm
 
 
 # where to find binaires outside of package manager
