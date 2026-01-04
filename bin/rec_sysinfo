@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+if [ "$(id -u)" != 0 ]; then  sudo "$0" "$@"; exit $?; fi
+outdir=${1:-/mnt/storage/devinfo}
+if [ "$outdir" == "-" ] || [ "$outdir" == "/dev/stdout" ]; then
+   out=/dev/stdout
+else
+   id=$(dmidecode -s system-product-name | sed -E 's/[^0-9A-Za-z]//g')
+   ! test -d $outdir && echo "no output dir $outdir'. mkdir or specify different dir as first arg. use - for stdout" && exit 1
+   out=$outdir/$id.txt
+fi
+
+(
+  free
+  lscpu
+  lsblk
+  dmidecode
+) > "$out"
+echo "# wrote $out" >&2
