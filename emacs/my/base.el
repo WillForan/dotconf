@@ -44,6 +44,7 @@
                 notmuch-seach-mode-hook
                 notmuch-tree-mode-hook
                 deft-mode-hook
+                cfw:calendar-mode-hook
                 erc-mode-hook))
   (add-hook mode #'my/no-lines))
 

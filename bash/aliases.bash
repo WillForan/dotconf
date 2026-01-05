@@ -15,6 +15,8 @@ alias x='xargs -r'
 alias px='env_parallel -X -r'
 alias psh="rlwrap -pgreen -A -S '> ' perl -MData::Printer -wnE 'say eval()//\$@'"
 alias feh='feh --keep-zoom-vp -. -Z --zoom full'
+# 20240221 - work calendar for week
+alias kweek='khal list  -f "{calendar-color}{cancelled}{start-end-time-style} {title}" today 7d'
 # prefer: use pavucontrol config profile = hdmi
 alias playhdmi='SDL_AUDIODRIVER="alsa" AUDIODEV="hw:0,3" ffplay'
 

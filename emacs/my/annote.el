@@ -61,12 +61,23 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 
 
 ;; read epub
+(defun my/line-next-center (&rest args) "Down and center (esp for epub)."
+       (interactive)
+       (progn (forward-line) (recenter)))
+(defun my/line-prev-center (&rest args) "Up and center (esp. for epub)."
+       (interactive)
+       (progn (forward-line -1) (recenter)))
+
 ;; [, ] - jump chapters; l,r back and forward in history
 (use-package nov :ensure t :defer t 
-  :init 
-    (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+  :init
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
   :config
-    (setq nov-text-width 80))
+  (setq nov-text-width 80)
+  :bind (:map nov-mode-map
+               ("j" . #'my/line-next-center) ; #'evil-scroll-line-down
+               ("k" . #'my/line-prev-center) ; #'evil-scroll-line-up)))
+               ))
 
 
 ;; 20201114S 
@@ -97,13 +108,16 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 )
 
 ;; RSVP reading a la spritz
-(defun my/no-cursor  () "hide text cursor" (lambda () (internal-show-cursor nil nil)))
-(defun my/yes-cursor () "show text cursor" (lambda () (internal-show-cursor nil t)))
+(defun my/no-cursor  () "Hide text cursor." (lambda () (internal-show-cursor nil nil)))
+(defun my/yes-cursor () "Show text cursor." (lambda () (internal-show-cursor nil t)))
+(defun my/toggle-cursor () "Toggle cursor (for spray)."
+  (interactive)
+  (internal-show-cursor nil (not (internal-show-cursor-p))))
 (use-package spray :ensure t :defer t
  :config
   (advice-add 'spray-mode :after 'my/no-cursor)
   (advice-add 'spray-quit :after 'my/yes-cursor)
- :bind (:map spray-mode-map ("C-c c" . my/toggle-cursor))
+ :bind (:map spray-mode-map ("C-c c" . #'my/toggle-cursor))
 )
 
 ; https://emacs.stackexchange.com/questions/42281/org-mode-is-it-possible-to-display-online-images

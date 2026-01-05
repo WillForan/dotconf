@@ -55,6 +55,7 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
   (yas-define-snippets 'message-mode
    (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
          (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'")))))
+
 ;; https://jao.io/blog/2021-08-19-notmuch-threads-folding-in-emacs.html
 ;; use outline mode for thread folding
 ;; invisible "> " prefix on message lines that are the first in a thread (notmuch handily marks them with :first in the message metadata passed to notmuch-tree-insert-msg).
@@ -186,11 +187,20 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
    '(;; ("date" . "%12s  ")
      (notmuch-absdate . "")
      ;; ("authors" . "%-20s")
+<<<<<<< HEAD
+     (show-recipient-if-sent . "%-20.20s")
+     (notmuch-count-people . "%-3s")
+     ((("subject" . "%s")) . " %-25s ")
+     ("tags" . "(%s)")))
+  :config
+;; use remote server's database.
+=======
      (show-recipient-if-sent . "%-15.15s")
      (notmuch-count-people . "%3s")
      ((("subject" . "%s")) . " %-40.40s ")
      ("tags" . "%s")))
   :config ;; use remote server's database.
+>>>>>>> 1672883a73ec611ce601bba3a87e616cb3dc733e
   (setq notmuch-command
         (if (not (string-prefix-p
                   "reese"
