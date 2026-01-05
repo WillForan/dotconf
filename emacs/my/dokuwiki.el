@@ -69,11 +69,21 @@
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "https://www.rad.pitt.edu/wiki/lib/exe/xmlrpc.php" "foran"))
-(defun lncd ()
+(defun lncd (&optional start-page)
   "Open lncd wiki."
   (interactive)
   (require 'dokuwiki)
-  (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+  (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will" start-page))
+
+(defun dw-browse-url (url &optional func)
+  "Open FUNC:// URL. default to lncd://"
+  (let* ((func (if func func #'lncd))
+         (url-prefix (concat (symbol-name func) "://"))
+         (url-suffix (string-replace url-prefix "" url)))
+    (funcall func url-suffix)))
+;; lncd://:tools:switchtask
+(defun lncd-browse-url (url &rest _ignore) (dw-browse-url url #'lncd))
+(add-to-list 'browse-url-handlers '("\\`lncd://" . lncd-browse-url))
 
 (defun dokuwiki-today-insert ()
   "Insert today yyyy-mm-dd as header."
