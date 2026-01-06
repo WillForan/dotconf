@@ -9,7 +9,7 @@
   ;; (set-frame-font "-UKWN-URW Gothic-regular-normal-normal-*-23-*-*-*-*-0-iso10646-1")
   ;; (set-face-attribute 'default (selected-frame) :font "URW Gothic" :height 173)
   ;; Following mouse-set-font into mouse.el and searching "Set Buffer Font..."
-  (buffer-face-mode-invoke (list :family "URW Gothic" :height 100) t nil)
+  (buffer-face-mode-invoke (list :family "Helvetica" :height 120) t nil) ; URW Gothic
   ;; also readable: M+  -M+ 1m-bold-normal-normal-*-25-*-*-*-d-0-iso10646-1
 
   )
@@ -18,14 +18,25 @@
   ;; :quelpa ((dokuwiki :fetcher github :repo "WillForan/emacs-dokuwiki") :upgrade t)
   :load-path "~/src/utils/emacs-dokuwiki"
   :ensure t
-  :hook
-  ((dokuwiki-page-opened .
-    (lambda ()
-      (dokuwiki-setup)
-      (dokuwiki-mode 1)
-      (company-mode 1)
-      (my/present-text)
-      (flyspell-mode 1)))))
+  :init
+  (add-hook 'dokuwiki-page-opened-hook #'my/present-text)
+  (add-hook 'dokuwiki-page-opened-hook #'my/no-lines)
+  (add-hook 'dokuwiki-page-opened-hook #'flyspell-mode)
+  (add-hook 'dokuwiki-page-opened-hook #'company-mode)
+            ;; (lambda ()
+            ;;   (message "setup")
+            ;;   (dokuwiki-setup)
+            ;;   (message "company")
+            ;;   (company-mode 1)
+            ;;   (message "present")
+            ;;   (my/present-text)
+            ;;   (message "spell")
+            ;;   (flyspell-mode 1)
+            ;;   ;; (message "dokuwiki")
+            ;;   ;; (dokuwiki-mode)
+            ;;   )
+  )
+
 
 (use-package dokuwiki-mode
   ;; :quelpa ((dokuwiki-mode :fetcher github :repo "WillForan/emacs-dokuwiki-mode") :upgrade t)
@@ -58,11 +69,21 @@
   (interactive)
   (require 'dokuwiki)
   (dokuwiki-launch "https://www.rad.pitt.edu/wiki/lib/exe/xmlrpc.php" "foran"))
-(defun lncd ()
+(defun lncd (&optional start-page)
   "Open lncd wiki."
   (interactive)
   (require 'dokuwiki)
-  (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will"))
+  (dokuwiki-launch "https://lncd.pitt.edu/wiki/lib/exe/xmlrpc.php" "will" start-page))
+
+(defun dw-browse-url (url &optional func)
+  "Open FUNC:// URL. default to lncd://"
+  (let* ((func (if func func #'lncd))
+         (url-prefix (concat (symbol-name func) "://"))
+         (url-suffix (string-replace url-prefix "" url)))
+    (funcall func url-suffix)))
+;; lncd://:tools:switchtask
+(defun lncd-browse-url (url &rest _ignore) (dw-browse-url url #'lncd))
+(add-to-list 'browse-url-handlers '("\\`lncd://" . lncd-browse-url))
 
 (defun dokuwiki-today-insert ()
   "Insert today yyyy-mm-dd as header."

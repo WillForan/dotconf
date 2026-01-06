@@ -24,7 +24,7 @@
        '("~/config/"
          ("~/src/" . 1 )
          ;("~/src/utils/" . 1 )
-         ("~/src/work/" . 1 )
+         ("~/src/work/" . 2 )
          ("~/src/play/" . 1)))
 ; (projectile-discover-projects-in-search-path)
 )
@@ -145,12 +145,12 @@ if any NOTES will insert that"
 (defun my/backspace-key () (interactive) (keyboard-translate ?\C-h ?\C-?))
 
 ;; 20241222
-(defun my/tileblog ()
+(defun my/tildeblog ()
   "Use TRAMP to edit tilde blog."
   (interactive)
   (find-file "/ssh:tilde:public_html/index.html"))
 
-(defun my/tileblog-new ()
+(defun my/tildeblog-new ()
   "New entry in tilde blog. Also see `entry' yas snippet."
   (interactive)
   (if-let* ((title (ivy-completing-read "title:" '()))
@@ -203,7 +203,14 @@ Useufl for interactively building a script"
 (define-key comint-mode-map (kbd "C-c :") #'my/ring-to-buff)
 ;; (define-key inferior-python-mode-map (kbd "C-c :") 'my/ring-to-buff)
 
+(defun my/recent-uptime-p ()
+  "Did we start up in the last 5 minutes?"
+  (let ((upthres 300)); seconds
+  (> upthres (string-to-number (shell-command-to-string "uptime -r|cut -f2 -d' '"))) ))
+
 (defun my/crc-email ()
+  "Build template email to welcom new NPAC members to the CRC.
+Uses CRC email as input."
   (interactive)
   (goto-char 0)
   (let ((id (->>
@@ -220,9 +227,15 @@ Useufl for interactively building a script"
                     "Afterward, connect like:\n   ssh " id "@h2p.crc.pitt.edu\n"
                     "\nTry some neuroimaging with the module system:\n   module load afni\n   3dinfo -help\n\n"
                     "The semi-automatic VPN connecting script might also be useful:\n"
-"https://github.com/WillForan/dotconf/blob/master/bin/openconnect-pitt\n\n"
+		    "https://github.com/WillForan/dotconf/blob/master/bin/openconnect-pitt\n\n"
                     ))))
 
+;; 20250504 - load init when emacs is launched after a fresh reboot
+(when (my/recent-uptime-p) (my/loadinit))
+
+;; 20250425 - distinquish between buffers
+(set-face-attribute 'window-divider nil :foreground "orange")
+(window-divider-mode t)
 ;; 20250304 - auto install/use *-ts-mode
 ;; pacman -Ss tree-sitter-grammars # group includes tree-sitter-bash
 ;; 20250316 - when enabled caues
@@ -230,3 +243,7 @@ Useufl for interactively building a script"
 ;; (use-package treesit-auto
 ;;   :config
 ;;   (global-treesit-auto-mode))
+
+(use-package howm :defer t :ensure t
+  :init
+  (setq howm-directory "~/notes/WorkWiki/howm/"))

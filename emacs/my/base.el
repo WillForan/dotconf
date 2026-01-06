@@ -40,10 +40,11 @@
                 inferior-ess-mode-hook
                 inferior-python-mode-hook
                 summary-mode-hook
-                notmuch-show-mode
-                notmuch-seach-mode
-                notmuch-tree-mode
-                deft-mode
+                notmuch-show-mode-hook
+                notmuch-seach-mode-hook
+                notmuch-tree-mode-hook
+                deft-mode-hook
+                cfw:calendar-mode-hook
                 erc-mode-hook))
   (add-hook mode #'my/no-lines))
 

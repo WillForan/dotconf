@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # notmuch over ssh: vpn (nebula, stopped 2024), reverse ssh, or intranet?
 # connection ip and settings configured in .ssh/config
 # https://notmuchmail.org/remoteusage/
@@ -20,6 +20,6 @@ if $ipcmd |grep nebula -q; then
 elif $ipcmd |grep -q '10\.48'; then
     host=reese
 else
-    host=reese
+    host=reeser
 fi
 exec ssh "$host" notmuch ${ARGS}
