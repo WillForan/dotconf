@@ -3,14 +3,19 @@
 
 ;; dark
 (use-package helm-themes :ensure t)
+;; 20250727 - also see modus-vivendi-tritanopia for light theme
+(use-package modus-themes :after helm-themes
+   :defer nil :ensure t :init (require 'helm-themes)
+   (helm-themes--load-theme "modus-vivendi-tritanopia"))
+
 
 ;; 20230211 - zerodark over moe. drakula strong condtender
-(use-package zerodark-theme :after helm-themes
-  :defer nil
-  :ensure t
-  :init
-  (require 'helm-themes)
-  (helm-themes--load-theme "zerodark"))
+;; (use-package zerodark-theme :after helm-themes
+;;   :defer nil
+;;   :ensure t
+;;   :init
+;;   (require 'helm-themes)
+;;   (helm-themes--load-theme "zerodark"))
 
 ;; (use-package moe-theme :after helm-themes
 ;;   :defer f
