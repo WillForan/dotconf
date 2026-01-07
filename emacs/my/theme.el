@@ -2,12 +2,14 @@
 ;(use-package  parchment-theme :ensure t :config (load-theme 'parchment t))
 
 ;; dark
-(use-package helm-themes :ensure t)
+(use-package helm-themes
+  :ensure t
+  :quelpa ((helm-themes :fetcher github :repo "emacsattic/helm-themes") :upgrade nil))
+
 ;; 20250727 - also see modus-vivendi-tritanopia for light theme
 (use-package modus-themes :after helm-themes
    :defer nil :ensure t :init (require 'helm-themes)
    (helm-themes--load-theme "modus-vivendi-tritanopia"))
-
 
 ;; 20230211 - zerodark over moe. drakula strong condtender
 ;; (use-package zerodark-theme :after helm-themes
