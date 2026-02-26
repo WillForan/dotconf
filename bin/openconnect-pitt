@@ -36,7 +36,8 @@ if { [file isfile $duo_py] && [file isfile $duo_pass] && ![regexp {noduo} $argv 
    if { $dry_or_sudo eq "echo"} {
       puts "# dryrun: not using $duo_py with $duo_pass"
    } else {
-      set mfa_method [exec $duo_py next -s $duo_pass]
+      #set mfa_method [exec $duo_py next -s $duo_pass]
+      set mfa_method [exec pass work/pitt-otp | oathtool --base32 --totp - ]
    }
 } else {
     puts "# no duo code. using $mfa_method -- check your phone"
