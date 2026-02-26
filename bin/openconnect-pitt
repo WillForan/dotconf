@@ -36,7 +36,7 @@ if { [file isfile $duo_py] && [file isfile $duo_pass] && ![regexp {noduo} $argv 
    if { $dry_or_sudo eq "echo"} {
       puts "# dryrun: not using $duo_py with $duo_pass"
    } else {
-      set mfa_method [exec $duo_py next -s $duo_pass]
+      set mfa_method [exec uv run $duo_py next -s $duo_pass]
    }
 } else {
     puts "# no duo code. using $mfa_method -- check your phone"
@@ -49,6 +49,7 @@ if { [file isfile $duo_py] && [file isfile $duo_pass] && ![regexp {noduo} $argv 
 set wrap /usr/libexec/openconnect/hipreport.sh
 # arch
 if ![file exist $wrap] { set wrap /usr/lib/openconnect/hipreport.sh }
+if ![file exist $wrap] { set wrap [file normalize ~/src/utils/openconnect/trojans/hipreport.sh] }
 # unknown
 if ![file exist $wrap] { puts "unknown hipreport.sh location"; exit 1 }
 
@@ -63,12 +64,14 @@ set precmd ":"
 # use python script 'vpn-slice' to use vpn only for specific range
 # need to pass 'vpn-slice ip_range' as single argument
 set vpnslice [file normalize ~/src/utils/vpn-slice/bin/activate]
-if { [file isfile $vpnslice] && ![regexp {noslice} $argv ] } {
-   set precmd "source $vpnslice"
+set uv [file normalize ~/.local/bin/uv]
+if { [file isfile $uv] && ![regexp {noslice} $argv ] } {
+   # 20250826 - use usv instead of pyenv. no source
+   #set precmd "source $vpnslice"
    #set cmd "openconnect -s \\\'vpn-slice 136.142.217.118/24\\\'"
    # 20240703 - htc.crc.pitt.edu        = 136.142.28.148
    # 20240926 - ewi-prod.cssd.pitt.edu  = 130.49.230.169
-   set cmd [string cat "$openconnect -s \\\'vpn-slice 136.142.0.0/16 130.49.230.0/24 " {*}$argv "\\\'" ]
+   set cmd [string cat "$openconnect -s \\\'" $uv " tool run vpn-slice 136.142.0.0/16 130.49.230.0/24 " {*}$argv "\\\'" ]
 }
 
 spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
