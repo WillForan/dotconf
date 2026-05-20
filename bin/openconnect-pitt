@@ -85,6 +85,7 @@ spawn $dry_or_sudo bash -c [list {*}$precmd && {*}$cmd \
   --servercert pin-sha256:ereUbF+/IxYME66sG12X+pjBrlpq2CYouxb25MgxvrY= \
   --servercert pin-sha256:EiYfp70/HBWS9GVAq6lHhOGiwXUOQpHBbwn5n2Rpj78= \
   --servercert pin-sha256:3oTBS+XZtHYSEeVpU7t2kChwNsE+lsXlZawoi/HAljA= \
+  --servercert pin-sha256:Hb6z9eq8nQwMvPRiFzYsew7Nr8REd+QWTErJ//ylyUg= \
   -u $user  \
 ]
 
