@@ -107,6 +107,7 @@
 	(shell . t) ; req newer org mode
 	;; (J . t) ; will fail if not j-mode
         (plantuml . t)
+        (dot . t)                       ; 20251225-graphviz
         ;; 20220510 - with ob-tmux
         (tmux . t)
         ;; 20230629
@@ -115,10 +116,23 @@
 	(scheme . t)
         ;; 20241115 - calc-eval internal to emacs
         (calc . t)
+        ;; 20250830 ob-eshell part of defautl install?
+        (eshell . t)
         ))
   ;; 20220911 org-protocol bookmarklet and desktop files
   ;; 20220922 require so it's actually loaded
+  ;; 20260117 https://addons.mozilla.org/en-US/firefox/addon/org-capture/
+  ;;          https://github.com/alphapapa/org-protocol-capture-html
+  ;;          https://github.com/sprig/org-capture-extension
+  ;;          add square bracket, "p" and "L"
   (require 'org-protocol)
+  (use-package org-protocol-capture-html :ensure t :vc (:url "https://github.com/alphapapa/org-protocol-capture-html"))
+  (defun transform-square-brackets-to-round-ones(string-to-transform)
+    "Transforms [ into ( and ] into ), other chars left unchanged for org-capture-templates protocol link."
+    (concat
+     (mapcar #'(lambda (c) (if (equal c ?[) ?\( (if (equal c ?]) ?\) c))) string-to-transform)))
+
+  (setq org-directory (expand-file-name"~/notes/org-files/"))
   (setq org-capture-templates (quote
                                (("w"
                                  "www"
@@ -132,9 +146,12 @@
                                 ("n" "general note"
                                  entry (file+headline "~/notes/org-files/capture.org" "Notes")
                                  "* %?\n  %u\n")
-                                ;; ... more templates here ...
+                                ;; org-protcol
+                                ("p" "Protocol" entry (file+headline "~/notes/org-files/capture.org" "Inbox")
+                                 "* %^{Title}\nSource: %u, %c\n #+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n\n%?")
+                                ("L" "Protocol Link" entry (file+headline "~/notes/org-files/capture.org" "Inbox")
+                                 "* %? [[%:link][%(transform-square-brackets-to-round-ones \"%:description\")]]\n")
                                 )))
-
 
   ;; 20210408 - after installing with pacman
   (setq org-plantuml-jar-path  "/usr/share/java/plantuml/plantuml.jar")
@@ -262,6 +279,7 @@ Modified from https://kisaragi-hiu.com/links-in-both-hugo-and-org/"
     (outline-minor-mode 1)
     (outshine-mode 1))
   (add-hook 'prog-mode-hook #'my/setup-outorg))
+;; 20260504 - problem with outorg?  (remove-hook 'prog-mode-hook #'my/setup-outorg)
 (defun my/outorg-export ()
   ;; TODO: check for export_file_name, not more than one top level header
     (progn (goto-line 0) (search-forward-regexp "^. \\* ") (outorg-edit-as-org) (org-html-export-to-html) (kill-buffer) ))
