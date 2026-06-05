@@ -1,15 +1,17 @@
-;; light 
-;(use-package  parchment-theme :ensure t :config (load-theme 'parchment t))
-
-;; dark
+;; https://github.com/melpa/melpa/issues/9496
+;; https://github.com/melpa/melpa/pull/9520
+;; also consider counsle-load-themes
 (use-package helm-themes
   :ensure t
   :quelpa ((helm-themes :fetcher github :repo "emacsattic/helm-themes") :upgrade nil))
 
-;; 20250727 - also see modus-vivendi-tritanopia for light theme
+;; 20250727 - modus-vivendi-tritanopia for light theme
 (use-package modus-themes :after helm-themes
    :defer nil :ensure t :init (require 'helm-themes)
    (helm-themes--load-theme "modus-vivendi-tritanopia"))
+
+;; light
+;(use-package  parchment-theme :ensure t :config (load-theme 'parchment t))
 
 ;; 20230211 - zerodark over moe. drakula strong condtender
 ;; (use-package zerodark-theme :after helm-themes
