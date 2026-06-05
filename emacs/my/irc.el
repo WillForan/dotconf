@@ -34,10 +34,18 @@ Hardcode bouncer username."
 ;; [[gnus:comp.infosystems.gopher#slrn107uq6q.m5r.anthk@openbsd.home][Email from Anthk NM: Re: Old Computer Challenge]]
 (irc-soju "wwfn" "irc.libera.chat")
 (irc-soju "work" "bit")
-;; (irc-soju "w" "") ; soju itself
+;; (irc-soju "w" "") ; Soju itself
 
 ;; (erc-status-sidebar-open)
 ;; (erc-nickbar-enable)
+
+(defun erc-quit-no-part ()
+  "Kill all ERC buffers without parting channels."
+  (interactive)
+  (dolist (buffer (erc-buffer-list))
+    (with-current-buffer buffer
+      (fundamental-mode) ; Prevents part/quit hooks from running
+      (kill-buffer buffer))))
 
 
 ;;; irc.el ends here
