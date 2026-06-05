@@ -120,32 +120,32 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
  :bind (:map spray-mode-map ("C-c c" . #'my/toggle-cursor))
 )
 
+;; 20260605 - recursive install issue? ignore for now
 ; https://emacs.stackexchange.com/questions/42281/org-mode-is-it-possible-to-display-online-images
-(require 'quelpa-use-package)
-(use-package org-yt :ensure t :defer t
- :quelpa (org-yt :fetcher github :repo  "TobiasZawada/org-yt")
- :after org
- :config
-(defun org-image-link (protocol link _description)
-  "Interpret LINK as base64-encoded image data."
-  (cl-assert (string-match "\\`img" protocol) nil
-             "Expected protocol type starting with img")
-  (let ((buf (url-retrieve-synchronously (concat (substring protocol 3) ":" link))))
-    (cl-assert buf nil
-               "Download of image \"%s\" failed." link)
-    (with-current-buffer buf
-      (goto-char (point-min))
-      (re-search-forward "\r?\n\r?\n")
-      (buffer-substring-no-properties (point) (point-max)))))
+;; (use-package org-yt :ensure t :defer t
+;;  :vc (:url  "https://github.com/TobiasZawada/org-yt")
+;;  :after org
+;;  :config
+;; (defun org-image-link (protocol link _description)
+;;   "Interpret LINK as base64-encoded image data."
+;;   (cl-assert (string-match "\\`img" protocol) nil
+;;              "Expected protocol type starting with img")
+;;   (let ((buf (url-retrieve-synchronously (concat (substring protocol 3) ":" link))))
+;;     (cl-assert buf nil
+;;                "Download of image \"%s\" failed." link)
+;;     (with-current-buffer buf
+;;       (goto-char (point-min))
+;;       (re-search-forward "\r?\n\r?\n")
+;;       (buffer-substring-no-properties (point) (point-max)))))
 
-(org-link-set-parameters
- "imghttp"
- :image-data-fun #'org-image-link)
+;; (org-link-set-parameters
+;;  "imghttp"
+;;  :image-data-fun #'org-image-link)
 
-(org-link-set-parameters
- "imghttps"
- :image-data-fun #'org-image-link)
-)
+;; (org-link-set-parameters
+;;  "imghttps"
+;;  :image-data-fun #'org-image-link)
+;; )
 
 
 ;; calibre
@@ -160,8 +160,9 @@ useful with betterbibtex as the copy export for zotero ctrl+shift+c
 ;; 20251123 - colored highlights and bookmarks
 ;; ' b - bookamrk
 ;; ' g - access; ' l - back; ' d - delete; ' r - rename
+;; 20260601 - can't install?
 (use-package nov-highlights
-  :quelpa (nov-highlights :fetcher github :repo  "emacselements/nov-highlights")
+  :vc (:url  "emacselements/nov-highlights")
   :init
   (with-eval-after-load 'nov (nov-highlights-global-mode-enable))
   :config

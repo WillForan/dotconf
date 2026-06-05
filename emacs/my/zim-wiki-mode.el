@@ -44,12 +44,13 @@
     (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle))
 
 (use-package dokuwiki-mode
-  :quelpa ((dokuwiki-mode :fetcher github :repo "WillForan/emacs-dokuwiki-mode") :upgrade nil)
   :ensure t
+  :vc (:url "https://github.com/WillForan/emacs-dokuwiki-mode")
   :config
    (require 'outline-magic)
    (flyspell-mode 1))
 
+(use-package git-gutter :defer t)       ; used in zim wiki mode below
 (use-package zim-wiki-mode  :defer f
   :load-path "~/src/utils/zim-wiki-mode" ;; 20191019 - use quelpa, reversted 2021102x
   :bind

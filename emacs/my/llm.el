@@ -6,6 +6,7 @@
   (setq ;; gptel-model 'claude-3.7-sonnet
       gptel-backend (gptel-make-gh-copilot "Copilot")))
 
+;; 20260605 - tool use
 (use-package gptel-agent
   :vc ( :url "https://github.com/karthink/gptel-agent"
         :rev :newest)
@@ -17,3 +18,5 @@
   :vc (:url "https://github.com/copilot-emacs/copilot.el"
             :rev :newest
             :branch "main"))
+
+(use-package gptel-magit :ensure t :after gptel)

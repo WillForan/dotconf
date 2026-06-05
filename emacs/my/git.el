@@ -19,10 +19,9 @@
 (use-package git-timemachine :ensure t)
 
 ;; 20230211 - startup compains about :quelpa keyword
-;; quelpa loaded in quelpa.el from my.el. should already exist
-(require 'quelpa-use-package)
+;; 20260605 - use :vc instead of quelpa;
 (use-package conventional-commit :ensure t
-  :quelpa ((conventional-commit :fetcher github :repo "akirak/conventional-commit.el"))
+  :vc (:url "https://github.com/akirak/conventional-commit.el")
   :config
   (add-hook 'company-backends #'company-capf)
   :hook

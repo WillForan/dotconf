@@ -208,28 +208,30 @@
   (org-set-effort)
   (org-clock-in))
 
-(pretty-hydra-define org-clock-hydra
-  (:color blue :title "org-clock" :quit-key "q")
-  ("clock"
-   (("b" my/effort-clock-now "effort&in")
-    ("i" org-clock-in "clock in")
-    ("o" org-clock-out "clock out")
-    ("e" org-set-effort "effort"))
-   "misc"
-   (("z" my/zim-set-header "zim org header")
-    ("r" org-reveal "reveal")
-    ("u" org-clock-update-time-maybe "update")
-    ("t" org-time-stamp "timestamp") 
-    ("c" org-capture "capture"))
-   "link"
-    (("l" org-store-link "get link")
-     ("L" org-insert-link-global "insert link")
-     ("g" org-open-at-point "open")) 
-   "outline"
-    (("h" outline-hide-entry "hide")
-     ("s" outline-show-entry "show"))))
+(use-package pretty-hydra :ensure t
+  :config
+  (pretty-hydra-define org-clock-hydra
+    (:color blue :title "org-clock" :quit-key "q")
+    ("clock"
+     (("b" my/effort-clock-now "effort&in")
+      ("i" org-clock-in "clock in")
+      ("o" org-clock-out "clock out")
+      ("e" org-set-effort "effort"))
+     "misc"
+     (("z" my/zim-set-header "zim org header")
+      ("r" org-reveal "reveal")
+      ("u" org-clock-update-time-maybe "update")
+      ("t" org-time-stamp "timestamp")
+      ("c" org-capture "capture"))
+     "link"
+     (("l" org-store-link "get link")
+      ("L" org-insert-link-global "insert link")
+      ("g" org-open-at-point "open"))
+     "outline"
+     (("h" outline-hide-entry "hide")
+      ("s" outline-show-entry "show"))))
    
-(evil-leader/set-key "c" 'org-clock-hydra/body)
+  (evil-leader/set-key "c" 'org-clock-hydra/body))
 
 
 ;; 20230514 - hugo/go-org functions

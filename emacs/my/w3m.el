@@ -30,8 +30,9 @@
 
 
 (use-package w3m
+  :ensure t
   :custom
-  (w3m-search-default-engine "google")
+  (w3m-search-default-engine "duckduckgo")
   (w3m-quick-start nil)
   (w3m-display-mode 'plain)
   (w3m-use-title-buffer-name t)

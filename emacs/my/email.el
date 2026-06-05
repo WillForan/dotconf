@@ -263,43 +263,46 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     (mail-add-attachment
      image-file)
     (goto-char pos)))
-(use-package
-  mu4e
-  ;; :load-path "/usr/share/emacs/site-lisp/"
-  :load-path "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"
-  :config
-  (setq mu4e-compose-reply-to-address "will@foran.cc"
-        user-mail-address "will@foran.cc"
-        user-full-name "Will Foran"
-	mu4e-mu-binary "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/bin/mu"
-        mail-user-agent 'mu4e-user-agent
-        ;; 20230226 - from mu manual: Type: text/plain; format=flowed
-        mu4e-compose-format-flowed t)
+(let
+    ((mu4e-pkg-dir "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"))
+  (when (file-exists-p mu4e-pkg-dir)
+    `(use-package
+      mu4e
+      ;; :load-path "/usr/share/emacs/site-lisp/"
+      :load-path ,mu4e-pkg-dir
+      :config
+      (setq mu4e-compose-reply-to-address "will@foran.cc"
+            user-mail-address "will@foran.cc"
+            user-full-name "Will Foran"
+            mail-user-agent 'mu4e-user-agent
+	    ;; 20230226 - from mu manual: Type: text/plain; format=flowed
+            mu4e-compose-format-flowed t)
 
-  ;; 20230226 -- annotated by not added.
-  ;; inline email not displaying in outlook? change the replay format
-  ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
-  ;; 20230225 from 'man mbsync'
-  ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
-  ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
-  (setq mu4e-change-filenames-when-moving t)
-  ; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
-  (add-to-list 'mu4e-marks
-   '(tag :char "g" :prompt "gtag"
-     :ask-target (lambda ()
-                   (read-string
-                    "What tag do you want to add?"))
-     :action (lambda (docid msg target)
-               (mu4e-action-retag-message
-                msg
-                (concat "+" target)))))
-  (mu4e~headers-defun-mark-for tag)
-  (define-key mu4e-headers-mode-map (kbd "G")
-              'mu4e-headers-mark-for-tag)
+      ;; 20230226 -- annotated by not added.
+      ;; inline email not displaying in outlook? change the replay format
+      ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
+      ;; 20230225 from 'man mbsync'
+      ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
+      ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
+      (setq mu4e-change-filenames-when-moving t)
+					; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
+      (add-to-list 'mu4e-marks
+		   '(tag :char "g" :prompt "gtag"
+			 :ask-target (lambda ()
+				       (read-string
+					"What tag do you want to add?"))
+			 :action (lambda (docid msg target)
+				   (mu4e-action-retag-message
+				    msg
+				    (concat "+" target)))))
+      (mu4e~headers-defun-mark-for tag)
+      (define-key mu4e-headers-mode-map (kbd "G")
+		  'mu4e-headers-mark-for-tag)
                                         ; g is default refresh
                                         ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
-  ;; 20211026 - disable auto-newline at longer lines
-  (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
+      ;; 20211026 - disable auto-newline at longer lines
+      (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
+    (use-package mu4e-conversation :ensure t)))
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
@@ -309,8 +312,6 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     :config (evil-leader/set-key "M" #'mu4e)
     (evil-leader/set-key "M-M" #'notmuch)
     :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
-
-  (use-package mu4e-conversation :ensure t))
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
@@ -408,7 +409,6 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
 
 
 ;; 20251218 - Alt-Enter to open at thread
-;; 20260211 - only run when hyperbole's already been run
 (when (macrop 'defib)
     ;; (require 'hyperbole)
     (defib notmuch-thread ()

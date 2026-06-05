@@ -34,8 +34,7 @@ Hardcode bouncer username."
 ;; [[gnus:comp.infosystems.gopher#slrn107uq6q.m5r.anthk@openbsd.home][Email from Anthk NM: Re: Old Computer Challenge]]
 (irc-soju "wwfn" "irc.libera.chat")
 (irc-soju "work" "bit")
-;; (irc-soju "w" "") ; Soju itself
-
+;; (irc-soju "w" "") ; soju itself; see: /msg BounceServ on 'w@' buffer
 ;; (erc-status-sidebar-open)
 ;; (erc-nickbar-enable)
 
