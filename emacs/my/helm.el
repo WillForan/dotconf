@@ -26,21 +26,27 @@
     ; C-c p is global: paste from clipboard manager (greenclip); 'P' here for prompt
     (define-key comint-mode-map (kbd "C-c P")    #'helm-comint-prompts-all)
 )
+(use-package helm-projectile :ensure t) ; 20260605 - used by evil but not previously explictly loaded
 
 
+;; 20260605 - not maintained
 ;; jump to buffer (info and shell)
 ; NB. M-RET is mapped to reset cwd?
-(use-package helm-selector :ensure t :defer t ;:after 'helm
-  :bind
-  ("C-h i" . 'helm-selector-info)
-  ("C-<return>" . 'helm-selector-shell) ; also lispy enter
-  ("C-c C-<return>" . 'helm-selector-shell)
-  ("C-M-<return>" . 'helm-selector-shell-other-window))
+;; (use-package helm-selector :ensure t :defer t ;:after 'helm
+;;   :bind
+;;   ("C-h i" . 'helm-selector-info)
+;;   ("C-<return>" . 'helm-selector-shell) ; also lispy enter
+;;   ("C-c C-<return>" . 'helm-selector-shell)
+;;   ("C-M-<return>" . 'helm-selector-shell-other-window))
 
 (use-package helm-ls-git :ensure t :defer t :after 'helm)
 
 ; 20210403 - undo helm for base packages. use  counsel (ivy)
+; 20260605 - require counsel (so M-x not broken -- binds was in ivy!)
 ; NB. helm config still has shift varients for original emacs utilities
+(use-package counsel :ensure t :defer f
+  :bind
+    ("M-x" . counsel-M-x))
 (use-package ivy :ensure t :defer f ;; :after 'helm
   :config
   (ivy-mode) ; enable ivy for completion, e.g. my/edit
@@ -54,5 +60,4 @@
      ("y" ivy-yank-action "yank")))
 
   :bind
-    ("M-x" . counsel-M-x)
     ("C-x C-f" . counsel-find-file))

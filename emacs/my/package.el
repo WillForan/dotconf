@@ -10,12 +10,14 @@
 
 ;; 20211024
 ;; (setq package-quickstart t)
+(setq package-user-dir (concat "~/.emacs.d/pkgs-" emacs-version) )
 (package-initialize)
 
-;; make sure we have use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; make sure we have use-package; 20260605 - long since part of base emacs
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package)
+;;   )
 (require 'use-package)
 
 ; need to make recipies?

@@ -3,3 +3,6 @@
   (gptel-make-gh-copilot "Copilot")
   (setq ;; gptel-model 'claude-3.7-sonnet
       gptel-backend (gptel-make-gh-copilot "Copilot")))
+
+
+(use-package gptel-magit :ensure t :after gptel)

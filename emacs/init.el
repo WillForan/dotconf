@@ -1,6 +1,7 @@
 ;; 100MB to garbage collect less (faster startup)
 ;; default is             800000
 (setq gc-cons-threshold 100000000)
+(require 'cl) ; deprecated but needed for eg. 'incf' instead of 'cl-incf'
 
 ;; custom settings saved elsewhere today
 (setq custom-file "~/.emacs.d/custom.el") 
