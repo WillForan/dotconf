@@ -187,20 +187,11 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
    '(;; ("date" . "%12s  ")
      (notmuch-absdate . "")
      ;; ("authors" . "%-20s")
-<<<<<<< HEAD
-     (show-recipient-if-sent . "%-20.20s")
-     (notmuch-count-people . "%-3s")
-     ((("subject" . "%s")) . " %-25s ")
-     ("tags" . "(%s)")))
-  :config
-;; use remote server's database.
-=======
      (show-recipient-if-sent . "%-15.15s")
      (notmuch-count-people . "%3s")
      ((("subject" . "%s")) . " %-40.40s ")
      ("tags" . "%s")))
   :config ;; use remote server's database.
->>>>>>> 1672883a73ec611ce601bba3a87e616cb3dc733e
   (setq notmuch-command
         (if (not (string-prefix-p
                   "reese"
@@ -280,6 +271,7 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
   (setq mu4e-compose-reply-to-address "will@foran.cc"
         user-mail-address "will@foran.cc"
         user-full-name "Will Foran"
+	mu4e-mu-binary "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/bin/mu"
         mail-user-agent 'mu4e-user-agent
         ;; 20230226 - from mu manual: Type: text/plain; format=flowed
         mu4e-compose-format-flowed t)
@@ -311,13 +303,14 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
-(use-package org-mu4e
-  :load-path "/usr/share/emacs/site-lisp/mu4e"
-  :config (evil-leader/set-key "M" #'mu4e)
-  (evil-leader/set-key "M-M" #'notmuch)
-  :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
+(when (file-exists-p "/usr/share/emacs/site-lisp/mu4e")
+  (use-package org-mu4e
+    :load-path "/usr/share/emacs/site-lisp/mu4e/"
+    :config (evil-leader/set-key "M" #'mu4e)
+    (evil-leader/set-key "M-M" #'notmuch)
+    :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
 
-(use-package mu4e-conversation :ensure t)
+  (use-package mu4e-conversation :ensure t))
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
@@ -415,15 +408,17 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
 
 
 ;; 20251218 - Alt-Enter to open at thread
-(require 'hyperbole)
-(defib notmuch-thread ()
-  "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
-  (when
-      (save-excursion
-        (skip-chars-backward "thread:0-9a-z")
-        (looking-at "thread:[0-9a-z]+"))
-    (let* ((a (match-beginning 0))
-           (b (match-end 0))
-           (thread (buffer-substring-no-properties a b)))
-      (ibut:label-set thread a b)
-      (hact #'notmuch-tree thread))))
+;; 20260211 - only run when hyperbole's already been run
+(when (macrop 'defib)
+    ;; (require 'hyperbole)
+    (defib notmuch-thread ()
+	   "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
+	   (when
+	       (save-excursion
+		 (skip-chars-backward "thread:0-9a-z")
+		 (looking-at "thread:[0-9a-z]+"))
+	     (let* ((a (match-beginning 0))
+		    (b (match-end 0))
+		    (thread (buffer-substring-no-properties a b)))
+	       (ibut:label-set thread a b)
+	       (hact #'notmuch-tree thread)))))
