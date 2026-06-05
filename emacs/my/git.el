@@ -27,3 +27,11 @@
   (add-hook 'company-backends #'company-capf)
   :hook
   (git-commit-mode . conventional-commit-setup))
+
+;; 20251107 from https://github.com/magit/forge/issues/75
+(use-package code-review
+  :after forge
+  :quelpa ((code-review
+            :fetcher github
+            :repo "phelrine/code-review"
+            :branch "fix/closql-update")))
