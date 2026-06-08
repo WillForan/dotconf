@@ -1,14 +1,16 @@
-;; light 
-;(use-package  parchment-theme :ensure t :config (load-theme 'parchment t))
-
 ;; 20250727 - also see modus-vivendi-tritanopia for light theme
-;; 20260605 use counsel-load-theme  instead of helm-themes
+;; 20260605 use counsel-load-theme instead of helm-themes
+;; https://github.com/melpa/melpa/issues/9496
+;; https://github.com/melpa/melpa/pull/9520
 (use-package modus-themes
    :defer nil :ensure t :init (require 'counsel)
    :config
    (counsel-load-theme-action "modus-vivendi-tritanopia"))
 
-;; 20230211 - zerodark over moe. drakula strong condtender
+;; light
+;(use-package  parchment-theme :ensure t :config (load-theme 'parchment t))
+
+;; 20230211 - zerodark over moe. drakula strong contender
 ;; (use-package zerodark-theme :after helm-themes
 ;;   :defer nil
 ;;   :ensure t
@@ -39,4 +41,4 @@
   (require 'helm-themes)
   (let ((rand-theme (symbol-name (seq-random-elt (custom-available-themes)))))
     (message (concat "random theme: " rand-theme))
-    (helm-themes--load-theme rand-theme)))
+    (counsel-load-theme-action rand-theme)))

@@ -187,12 +187,11 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
    '(;; ("date" . "%12s  ")
      (notmuch-absdate . "")
      ;; ("authors" . "%-20s")
-     (show-recipient-if-sent . "%-20.20s") ; was -15.15
-     (notmuch-count-people . "%-3s")
-     ((("subject" . "%s")) . " %-25s ") ; wa -40.40s
-     ("tags" . "(%s)")))
-  :config
-;; use remote server's database.
+     (show-recipient-if-sent . "%-15.15s")
+     (notmuch-count-people . "%3s")
+     ((("subject" . "%s")) . " %-40.40s ")
+     ("tags" . "%s")))
+  :config ;; use remote server's database.
   (setq notmuch-command
         (if (not (string-prefix-p
                   "reese"
@@ -264,7 +263,6 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     (mail-add-attachment
      image-file)
     (goto-char pos)))
-
 (let
     ((mu4e-pkg-dir "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"))
   (when (file-exists-p mu4e-pkg-dir)
@@ -308,12 +306,12 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
-(use-package org-mu4e
-  :load-path "/usr/share/emacs/site-lisp/mu4e"
-  :config (evil-leader/set-key "M" #'mu4e)
-  (evil-leader/set-key "M-M" #'notmuch)
-  :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
-
+(when (file-exists-p "/usr/share/emacs/site-lisp/mu4e")
+  (use-package org-mu4e
+    :load-path "/usr/share/emacs/site-lisp/mu4e/"
+    :config (evil-leader/set-key "M" #'mu4e)
+    (evil-leader/set-key "M-M" #'notmuch)
+    :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
@@ -411,16 +409,16 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
 
 
 ;; 20251218 - Alt-Enter to open at thread
-;; (use-package hyperbole :defer t :ensure t)
-(use-package hyperbole :defer t :ensure t :config
-  (defib notmuch-thread ()
-	 "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
-	 (when
-	     (save-excursion
-               (skip-chars-backward "thread:0-9a-z")
-               (looking-at "thread:[0-9a-z]+"))
-	   (let* ((a (match-beginning 0))
-		  (b (match-end 0))
-		  (thread (buffer-substring-no-properties a b)))
-	     (ibut:label-set thread a b)
-	     (hact #'notmuch-tree thread)))))
+(when (macrop 'defib)
+    ;; (require 'hyperbole)
+    (defib notmuch-thread ()
+	   "Hyperbole implict button to notmuch-tree on thread:xxxxxxxx text."
+	   (when
+	       (save-excursion
+		 (skip-chars-backward "thread:0-9a-z")
+		 (looking-at "thread:[0-9a-z]+"))
+	     (let* ((a (match-beginning 0))
+		    (b (match-end 0))
+		    (thread (buffer-substring-no-properties a b)))
+	       (ibut:label-set thread a b)
+	       (hact #'notmuch-tree thread)))))

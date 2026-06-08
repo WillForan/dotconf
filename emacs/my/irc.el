@@ -35,9 +35,16 @@ Hardcode bouncer username."
 (irc-soju "wwfn" "irc.libera.chat")
 (irc-soju "work" "bit")
 ;; (irc-soju "w" "") ; soju itself; see: /msg BounceServ on 'w@' buffer
-
 ;; (erc-status-sidebar-open)
 ;; (erc-nickbar-enable)
+
+(defun erc-quit-no-part ()
+  "Kill all ERC buffers without parting channels."
+  (interactive)
+  (dolist (buffer (erc-buffer-list))
+    (with-current-buffer buffer
+      (fundamental-mode) ; Prevents part/quit hooks from running
+      (kill-buffer buffer))))
 
 
 ;;; irc.el ends here
