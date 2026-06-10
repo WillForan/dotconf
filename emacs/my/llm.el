@@ -14,9 +14,9 @@
 ;; (use-package aider :ensure t)
 
 ;; 20260115, run copilot-install-server
-(use-package copilot
-  :vc (:url "https://github.com/copilot-emacs/copilot.el"
-            :rev :newest
-            :branch "main"))
+;; (use-package copilot :defer t
+;;   :vc (:url "https://github.com/copilot-emacs/copilot.el"
+;;             :rev :newest
+;;             :branch "main"))
 
 (use-package gptel-magit :ensure t :after gptel)
