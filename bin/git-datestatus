@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+git status -s --porcelain |
+  perl -slane '@m=stat($F[1]); print join "\t", qx/date +%F -d \@$m[10]/=~s/\n//r, @F'|
+  sort -n
