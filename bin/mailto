@@ -1,2 +1,10 @@
 #!/usr/bin/env bash
-emacsclient -c --eval "(progn (my/simple-mail) (browse-url-mail \"$@\"))"
+# also see mailto.app for setting xdg-open
+# 2026-09-11 - added '-n' for noblocking/fork (noticable when 'reply' in offpunk)
+#  TODO: 
+#   * -a'' to launch emacs if a server's not already running?
+#   * check if run from a terminal (pstree $? or tty) use -nw instead of new frame. or mutt?
+
+# if we're running over ssh without X11, dont try to spawn a new window
+[ "${DISPLAY:-noX}" != noX ] && args=(-n -c) || args=(-nw)
+emacsclient "${args[@]}" --eval "(progn (my/simple-mail) (browse-url-mail \"$@\"))"

@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=mailto
+Comment=Run mailto command for mailto:// links
+Exec=mailto %u
+TryExec=mailto %u
+Type=Application
+
+# place in  desktop in ~/.local/share/applications/; ensure mail to is in PATH (~/bin)
+# enable like:
+#  xdg-mime default mailto.desktop 'x-scheme-handler/mailto'
+#  xdg-settings set default-url-scheme-handler mailto mailto.desktop
+# check in
+#  xdg-mime query default 'x-scheme-handler/mailto'
+#  xdg-settings --list
+#  xdg-open mailto://$USER@localhost
