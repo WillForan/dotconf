@@ -35,7 +35,7 @@ case $pkg in
   # .desktop files inside XDG directory (20211204 xinit)
   app.desktop) stowto  ~/.local/share/applications/;;
   # inside ~/.config
-  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv)
+  kitty|keepmenu|libinput-gestures|autokey|antimicrox|i3status|surfraw|mpv|conky)
       stowto ~/.config/$pkg;;
   tridactyl)
       test -r ${XDG_DATA_HOME:-$HOME/.local/share}/tridactyl/native_main ||

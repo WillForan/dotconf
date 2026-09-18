@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# device up and not LOOPBACK
+! ip addr |& grep -q [^K],UP, && echo "# [$(date) $0] no interface up" && continue
+
+mbsync -q foran
+# use sponge so we dont flash conky when file changes
+find $HOME/Maildir/foran.cc/INBOX/ -type f -printf '%TF_%TH %p\n'|
+  sort -nr|
+  perl -slane '++$i; open my $F, $F[1]; while(my $l=<$F>) {next unless $l =~ m/^Subject: (.*)/; print "$F[0] $1"; last}; exit if $i>3' \
+  |sponge ~/Maildir/foran.top
+
+notmuch-remote search --format=json date:1week..today |  jq -r '.[] | [
+   (.timestamp|localtime|strftime("%m/%d %H:%M")),
+   (.authors | split(",")[0] | split(" ")[0] | split("@")[0])[:10],
+   .subject] | @tsv' 2>/dev/null |
+ sort | 
+ sponge ~/Maildir/work.top
+
+ssh s2 -- "find ~/.local/share/weechat/logs/ -mtime -1 -print0 |
+   parallel -x0 --tagstring '{}:' --line-buffer tail {} |
+   perl -lne 's;.*logs/|python.slack.[a-zA-Z]*\.|.?weechatlog:|;;g;
+              @F=split/\t/; print qq/\$F[1] @F/ if \$F[1]=~m/^2/;'|
+   sort -n|
+   grep -Pv '(Connected|Lost connection) to [Ss]lack team' |
+   tail -n 30 |
+   cut -d' ' -f 2-3,6-" |
+   sed 's/:[0-9][0-9] / /' | # remove seconds to save 3 chars
+   sponge /tmp/weechat_tail.log
