@@ -1,0 +1,30 @@
+{
+    "type": "script",
+    "description": "pitt_oath",
+    "store": {},
+    "modes": [
+        1
+    ],
+    "usageCount": 1,
+    "prompt": false,
+    "omitTrigger": true,
+    "showInTrayMenu": false,
+    "abbreviation": {
+        "abbreviations": [
+            "fu1"
+        ],
+        "backspace": true,
+        "ignoreCase": false,
+        "immediate": false,
+        "triggerInside": false,
+        "wordChars": "[\\w]"
+    },
+    "hotkey": {
+        "modifiers": [],
+        "hotKey": null
+    },
+    "filter": {
+        "regex": null,
+        "isRecursive": false
+    }
+}
