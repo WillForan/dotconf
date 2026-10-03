@@ -19,12 +19,16 @@
 
 ;; META: if we want to refactor this to use let/variables for actual email and sendmail
 ;; how could we use structural editing to do it quickly
-(defun my/quick-email ()
+(defun my/quick-email-foran ()
   "Send a mail from personal account.
-Modifies current buffers From: line and sets buffer-local sendmail options."
+Modifies current buffers From: line and sets buffer-local sendmail options.
+Repurpose notmuch fcc hook to also save Sent messages where IMAP can resync."
   (interactive)
   (let* ((emailaddress "will@foran.cc")
-         (from-line (concat "From: " emailaddress)))
+         (from-line (concat "From: " emailaddress
+                            ;; 20260919 - sync to sent. see message-fcc-handler-function
+                            "\nFcc: ~/Maildir/foran.cc/Sent"
+                            )))
     ;; change from is address is not set
     (save-excursion
       (goto-char (point-min))
@@ -46,15 +50,20 @@ Modifies current buffers From: line and sets buffer-local sendmail options."
      send-mail-function 'sendmail-send-it ; orig: sendmail-query-once
      ;; 20251112 - copied from work-mail-setup
      mail-specify-envelope-from t
-     mail-envelope-from 'header ; only if mail-specify-e... t
+     mail-envelope-from 'header         ; only if mail-specify-e... t
      message-sendmail-envelope-from 'header ; "use the From: header"
      sendmail-program (if (string= (system-name) "reese.acct.upmchs.net")
-                          "~/bin/s2sendmail" "sendmail")))
+                          "~/bin/s2sendmail" "sendmail")
+     ;; save sent w/ Maildir, sync with mbsync
+     message-fcc-handler-function
+     (lambda (destdir)
+       (notmuch-maildir-fcc-write-buffer-to-maildir destdir t))))
+
   ;; empty for some reason w/text-mode in message-mode dont even complete
   (require 'yasnippet)
   (yas-define-snippets 'message-mode
-   (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
-         (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'")))))
+                       (list (list "em" (shell-command-to-string "pass contacts/em|tr -d '\n'"))
+                             (list "yearof" (shell-command-to-string "pass contacts/oldbeech|tr -d '\n'")))))
 
 ;; https://jao.io/blog/2021-08-19-notmuch-threads-folding-in-emacs.html
 ;; use outline mode for thread folding
@@ -123,6 +132,10 @@ Simplify pitt and upmc address."
          (email (replace-regexp-in-string "@upmc.edu" "@u" email)))
     email))
 
+(defface my/notmuch-replied
+  '((t (:inherit custom-comment-tag)))
+  "Face for author when reply was  message.")
+
 (defun show-recipient-if-sent (format-string result)
   "Custom function for `notmuch-unthreaded-result-format' to use instead of \"authors\".
 Show \"From:\" address from RESULT, unless we sent the message. Then show \"To:\".
@@ -134,9 +147,9 @@ Example on wiki https://notmuchmail.org/emacstips/"
          (author (plist-get headers :From))
          ;; NB. user-mail-address has to be set correctly
          (is-me? (string-match user-mail-address author))
-         (face (if (plist-get result :match)
-                   'notmuch-tree-match-author-face
-                 'notmuch-tree-no-match-author-face)))
+         (face (cond (is-me? 'my/notmuch-replied)
+                     ((plist-get result :match) 'notmuch-tree-match-author-face)
+                     (t 'notmuch-tree-no-match-author-face))))
     (propertize
      (format format-string (if is-me?
                                (concat "↪" (notmuch-address-only to))
@@ -262,47 +275,47 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     (goto-char (point-max))
     (mail-add-attachment
      image-file)
-    (goto-char pos)))
-(let
-    ((mu4e-pkg-dir "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"))
-  (when (file-exists-p mu4e-pkg-dir)
-    `(use-package
-      mu4e
-      ;; :load-path "/usr/share/emacs/site-lisp/"
-      :load-path ,mu4e-pkg-dir
-      :config
-      (setq mu4e-compose-reply-to-address "will@foran.cc"
-            user-mail-address "will@foran.cc"
-            user-full-name "Will Foran"
-            mail-user-agent 'mu4e-user-agent
-	    ;; 20230226 - from mu manual: Type: text/plain; format=flowed
-            mu4e-compose-format-flowed t)
+    (goto-char pos))
+  (let
+      ((mu4e-pkg-dir "/gnu/store/pqzw8symvpy98q0ab2rbnyvnwb56hcwj-mu-1.12.9/share/emacs/site-lisp/mu4e/"))
+    (when (file-exists-p mu4e-pkg-dir)
+      `(use-package
+         mu4e
+         ;; :load-path "/usr/share/emacs/site-lisp/"
+         :load-path ,mu4e-pkg-dir
+         :config
+         (setq mu4e-compose-reply-to-address "will@foran.cc"
+               user-mail-address "will@foran.cc"
+               user-full-name "Will Foran"
+               mail-user-agent 'mu4e-user-agent
+               ;; 20230226 - from mu manual: Type: text/plain; format=flowed
+               mu4e-compose-format-flowed t)
 
-      ;; 20230226 -- annotated by not added.
-      ;; inline email not displaying in outlook? change the replay format
-      ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
-      ;; 20230225 from 'man mbsync'
-      ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
-      ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
-      (setq mu4e-change-filenames-when-moving t)
+         ;; 20230226 -- annotated by not added.
+         ;; inline email not displaying in outlook? change the replay format
+         ;; (setq  message-citation-line-format "On %Y-%m-%d at %R %Z, %f wrote...")
+         ;; 20230225 from 'man mbsync'
+         ;; When using the more efficient default UID mapping scheme, it is important that the MUA renames files when
+         ;; moving them between Maildir folders.  Mutt always does that, while mu4e needs to be configured to do it:
+         (setq mu4e-change-filenames-when-moving t)
 					; https://www.djcbsoftware.nl/code/mu/mu4e/Adding-a-new-kind-of-mark.html
-      (add-to-list 'mu4e-marks
-		   '(tag :char "g" :prompt "gtag"
-			 :ask-target (lambda ()
-				       (read-string
-					"What tag do you want to add?"))
-			 :action (lambda (docid msg target)
-				   (mu4e-action-retag-message
-				    msg
-				    (concat "+" target)))))
-      (mu4e~headers-defun-mark-for tag)
-      (define-key mu4e-headers-mode-map (kbd "G")
-		  'mu4e-headers-mark-for-tag)
+         (add-to-list 'mu4e-marks
+		      '(tag :char "g" :prompt "gtag"
+			    :ask-target (lambda ()
+				          (read-string
+					   "What tag do you want to add?"))
+			    :action (lambda (docid msg target)
+				      (mu4e-action-retag-message
+				       msg
+				       (concat "+" target)))))
+         (mu4e~headers-defun-mark-for tag)
+         (define-key mu4e-headers-mode-map (kbd "G")
+		     'mu4e-headers-mark-for-tag)
                                         ; g is default refresh
                                         ;(define-key mu4e-headers-mode-map (kbd "g") 'mu4e-view-refresh)
-      ;; 20211026 - disable auto-newline at longer lines
-      (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
-    (use-package mu4e-conversation :ensure t)))
+         ;; 20211026 - disable auto-newline at longer lines
+         (add-hook 'mu4e-compose-mode-hook #'no-auto-fill))
+      (use-package mu4e-conversation :ensure t))))
 ;; mu4e org links functions.
 ;; TODO: evil leader keys should probably go somewhere else (20220502)
 ;;       likewise for get-mail-command
@@ -311,7 +324,7 @@ Format as FORMAT-STRING.  Does not deal with duplicates."
     :load-path "/usr/share/emacs/site-lisp/mu4e/"
     :config (evil-leader/set-key "M" #'mu4e)
     (evil-leader/set-key "M-M" #'notmuch)
-    :custom (mu4e-get-mail-command "ssh s2 mbsync -a"))
+    :custom (mu4e-get-mail-command "ssh s2 mbsync -a")))
 
 (defun my/html-email-org-msg ()
   "Switch compose to org-msg (outlook like styling)."
@@ -374,7 +387,7 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
      this-head)
     (insert content)))
 
-(defun my/simple-mail ()
+(defun my/simple-mail-agent ()
   (interactive)
   ;; likley mu4e-user-agent
   (setq mail-user-agent
@@ -406,7 +419,6 @@ Pipeline is intented to be firefox-> org-protocol-> capture -> email."
 
 ;; 20241211
 ;; (use-package himalaya :ensure t)
-
 
 ;; 20251218 - Alt-Enter to open at thread
 (when (macrop 'defib)
