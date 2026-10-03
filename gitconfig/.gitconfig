@@ -1,0 +1,24 @@
+[user]
+	email = willforan@gmail.com
+	name = WillForan
+[sendemail]
+   sendmailCmd = /usr/bin/msmtp
+	annotate = yes
+
+[init]
+	defaultBranch = main
+[credential]
+	helper = cache
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[alias]
+	b = bug bug
+[github]
+	user = WillForan
+[safe]
+	directory = /home/foranw/src/work/BOLDSliceAngle
+[merge]
+	conflictstyle = zdiff3
