@@ -1,10 +1,16 @@
+[alias]
+	b = bug bug
+   cm = commit -m
+   d = diff
+   l = log --format='%ad %h %s' --date=format:'%Y-%m'
+   s = status -uno
+   bd = branchdates # git-branchdates in ../bin
 [user]
 	email = willforan@gmail.com
 	name = WillForan
 [sendemail]
    sendmailCmd = /usr/bin/msmtp
 	annotate = yes
-
 [init]
 	defaultBranch = main
 [credential]
@@ -14,11 +20,45 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[alias]
-	b = bug bug
 [github]
 	user = WillForan
 [safe]
 	directory = /home/foranw/src/work/BOLDSliceAngle
 [merge]
+   # NOTE: adds '||||' lines (original before either)
 	conflictstyle = zdiff3
+
+# 20261002 - https://blog.gitbutler.com/how-git-core-devs-configure-git (February 22, 2025)
+[column]
+        ui = auto
+[branch]
+        sort = -committerdate
+[tag]
+        sort = version:refname
+[diff]
+        algorithm = histogram
+        colorMoved = plain
+        mnemonicPrefix = true
+        renames = true
+[push]
+        default = simple
+        autoSetupRemote = true
+        followTags = true
+[help]
+        autocorrect = prompt
+[commit]
+        verbose = true
+[rerere]
+        enabled = true
+        autoupdate = true
+[rebase]
+        autoSquash = true
+        autoStash = true
+        updateRefs = true
+
+[pull]
+        # rebase = true
+#[fetch]
+#        prune = true
+#        pruneTags = true
+#        all = true
